@@ -19,7 +19,7 @@ const  LoginForm = ({
     <div className="login-card">
       <div>
         <div>
-          <a className="logo text-start">
+          <a className="logo text-start" href='#/'>
             <img className="img-fluid for-light" src={Login} alt="looginpage" />
           </a>
         </div>

@@ -7,7 +7,7 @@ const initialState = {
   loading: false,
 };
 
-export default (state = initialState, { type }) => {
+const reducers = (state = initialState, { type }) => {
   switch (type) {
     case UI_LOADING_SHOW:
       return { loading: true };
@@ -17,6 +17,8 @@ export default (state = initialState, { type }) => {
       return state;
   }
 };
+
+export default reducers;
 
 // actions
 export const startLoading = () => ({

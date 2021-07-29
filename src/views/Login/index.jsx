@@ -1,11 +1,14 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { Container, Row, Col } from "reactstrap";
 
 import "./login.scss";
 import LoginForm from "./LoginForm";
+import { startLogin } from "../../redux/login";
 import { useForm, useBandera } from "../../components/hooks";
 
 export const LoginPage = () => {
+  const dispatch = useDispatch();
   const [showHide, setShowHide] = useBandera(true);
   const [formValues, setFormValues] = useForm({
     carnet: "",
@@ -14,9 +17,9 @@ export const LoginPage = () => {
 
   const handlerSubmit = (e) => {
     e.preventDefault();
-    console.log(e);
-    console.log(formValues);
-  }
+    const { carnet, password } = formValues;
+    dispatch(startLogin(carnet, password));
+  };
 
   return (
     <>
@@ -32,7 +35,7 @@ export const LoginPage = () => {
                   inputValues={formValues}
                   onChangeInput={setFormValues}
                   showHideFunc={(e) => setShowHide()}
-                  />
+                />
               </div>
             </div>
           </Col>

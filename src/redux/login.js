@@ -1,9 +1,11 @@
-import { LOGIN_REDUX } from "../consts";
+import { axiosConfig } from "../config/axios";
+import { showErrorToast } from "../utils/errors";
 import { startLoading, finishLoading } from "./ui";
+import { LOGIN_REDUX, KeyLocalStorage } from "../consts";
 
 // types
-export const LOGIN_SUCCESS = `${LOGIN_REDUX}-LOGIN_SUCCESS`;
 export const LOGIN_ERROR = `${LOGIN_REDUX}-LOGIN_ERROR`;
+export const LOGIN_SUCCESS = `${LOGIN_REDUX}-LOGIN_SUCCESS`;
 
 // Reducer
 const initialState = {
@@ -12,7 +14,7 @@ const initialState = {
   isAuthenticated: false,
 };
 
-export default (state = initialState, { type, payload }) => {
+const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case LOGIN_SUCCESS:
       return {
@@ -31,20 +33,30 @@ export default (state = initialState, { type, payload }) => {
   }
 };
 
+export default reducer;
+
 // Actions
-export const startLogin = (usuario, pasword) => {
-  return (dispatch) => {
-    dispatch(startLoading());
-    dispatch(login("ASJSB", "Edwin", "Melara"));
-    dispatch(finishLoading());
-  };
+export const startLogin = (username, password) => async (dispatch) => {
+  
+  dispatch(startLoading());
+  axiosConfig.post('auth/login', { username, password })
+    .then(({ data }) => {
+      localStorage.setItem(KeyLocalStorage, data.token);
+      dispatch(login(data.usuario))
+    }).catch(error => {
+      showErrorToast(error);
+    }).finally(() => {
+      dispatch(finishLoading())
+    })
 };
 
-export const login = (token, name, last) => ({
+export const errorToast = (error) => ({
+  type: LOGIN_ERROR,
+})
+
+export const login = (usuario) => ({
   type: LOGIN_SUCCESS,
   payload: {
-    token,
-    name,
-    last,
+    ...usuario,
   },
 });
