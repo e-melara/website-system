@@ -3,7 +3,10 @@ import { showErrorToast } from "../utils/errors";
 import { startLoading, finishLoading } from "./ui";
 import { LOGIN_REDUX, KeyLocalStorage } from "../consts";
 
+import { initUI } from "./ui";
+
 // types
+export const LOGOUT = `[${LOGIN_REDUX}]-LOGOUT`;
 export const LOGIN_SUCCESS = `${LOGIN_REDUX}-LOGIN_SUCCESS`;
 export const LOGIN_CHECKING_FINISH = `${LOGIN_REDUX}-LOGIN_CHECKING_FINISH`;
 
@@ -28,6 +31,12 @@ const reducer = (state = initialState, { type, payload }) => {
         ...state,
         checking: false,
       };
+    case LOGOUT:
+      return {
+        data:null,
+        checking: false,
+        isAuthenticated: false,
+      };
     default:
       return state;
   }
@@ -47,7 +56,7 @@ export const startLogin = (username, password) => async (dispatch) => {
     })
     .catch((error) => {
       const { response } = error;
-      if(response) {
+      if (response) {
         showErrorToast(response);
       }
     })
@@ -63,9 +72,13 @@ export const startChecking = () => {
       .then((response) => {
         const { usuario } = response.data;
         dispatch(login(usuario));
+        dispatch(initUI());
       })
-      .catch(() => {
-        localStorage.removeItem(KeyLocalStorage);
+      .catch((error) => {
+        const { response } = error;
+        if (response.status === 401) {
+          localStorage.removeItem(KeyLocalStorage);
+        }
         dispatch(checkingFinish());
       });
   };
@@ -79,3 +92,11 @@ export const login = (usuario) => ({
     ...usuario,
   },
 });
+
+export const logout = () => {
+  localStorage.removeItem(KeyLocalStorage);
+  localStorage.removeItem('ui')
+  return {
+    type: LOGOUT,
+  };
+};

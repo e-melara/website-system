@@ -1,22 +1,21 @@
 import React from "react";
 
-import './NavBar/NavBar.scss'
 import { NavItem } from "./NavBar/NavItem";
+import { NavBarBody } from "./NavBar/NavBarBody";
 import { NavItemTitle } from "./NavBar/NavItemTitle";
+import { routesExample } from "../../utils/routesExample";
 
 function Navbar() {
   return (
-    <nav className="sidebar-main">
-      <div className="sidebar-menu">
-        <ul className="sidebar-links" id="simple-bar">
-          <NavItemTitle
-            title="General"
-            description="Dashboards,widgets & layout."
-          />
-          <NavItem/>
-        </ul>
-      </div>
-    </nav>
+    <NavBarBody>
+      {routesExample.map((item, index) => {
+        return item.isTitle ? (
+          <NavItemTitle {...item} key={`${index}-${item.icon}-${item.title}`} />
+        ) : (
+          <NavItem {...item} key={`${index}-${item.icon}-${item.title}`} />
+        );
+      })}
+    </NavBarBody>
   );
 }
 

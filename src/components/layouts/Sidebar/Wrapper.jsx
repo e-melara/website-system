@@ -1,9 +1,17 @@
 import React from "react";
+import { Grid } from "react-feather";
+import { useDispatch } from "react-redux";
 
+import { changeOpenCloseAction } from "../../../redux/ui";
 import LoginImageFile from "../../../assets/images/logo/logo.png";
 import LoginImageDarkFile from "../../../assets/images/logo/logo_dark.png";
 
 function Wrapper() {
+  const dispatch = useDispatch();
+
+  const handlerClickOpen = () => {
+    dispatch(changeOpenCloseAction());
+  };
   return (
     <div className="logo-wrapper">
       <a href="/#">
@@ -23,24 +31,12 @@ function Wrapper() {
       <div className="back-btn">
         <i className="fa fa-angle-left"></i>
       </div>
-      <div className="toggle-sidebar" checked="checked">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="feather feather-grid status_toggle middle sidebar-toggle"
-        >
-          <rect x="3" y="3" width="7" height="7"></rect>
-          <rect x="14" y="3" width="7" height="7"></rect>
-          <rect x="14" y="14" width="7" height="7"></rect>
-          <rect x="3" y="14" width="7" height="7"></rect>
-        </svg>
+      <div
+        className="toggle-sidebar"
+        checked="checked"
+        onClick={handlerClickOpen}
+      >
+        <Grid className="status_toggle middle sidebar-toggle" />
       </div>
     </div>
   );

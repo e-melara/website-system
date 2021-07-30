@@ -1,12 +1,16 @@
 import React from 'react';
 import { Row } from "reactstrap";
 
+import HeaderLeft from './Header/HeaderLeft';
 import HeaderRight from './Header/HeaderRight';
+import HeaderLogoWrapper from './Header/HeaderLogoWrapper';
 
-export const Header = () => {
+export const Header = ({ isClose }) => {
   return (
-    <header className='page-header'>
-      <Row className='header-wrapper m-0'>
+    <header className={`page-header ${isClose ? 'close_icon' : ''}`}>
+      <Row className='header-wrapper m-0 row'>
+        <HeaderLogoWrapper />
+        <HeaderLeft />
         <HeaderRight />
       </Row>
     </header>
