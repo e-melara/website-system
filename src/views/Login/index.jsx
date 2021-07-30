@@ -1,19 +1,23 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import { Container, Row, Col } from "reactstrap";
+import { useDispatch, useSelector } from "react-redux";
 
 import "./login.scss";
 import LoginForm from "./LoginForm";
+import Loading from "../../components/common/Loading";
+
 import { startLogin } from "../../redux/login";
 import { useForm, useBandera } from "../../components/hooks";
 
 export const LoginPage = () => {
   const dispatch = useDispatch();
   const [showHide, setShowHide] = useBandera(true);
+  const { loading } = useSelector((state) => state.ui);
   const [formValues, setFormValues] = useForm({
     carnet: "",
     password: "",
   });
+
 
   const handlerSubmit = (e) => {
     e.preventDefault();
@@ -23,6 +27,7 @@ export const LoginPage = () => {
 
   return (
     <>
+      {loading && <Loading />}
       <Container fluid={true}>
         <Row>
           <Col xl={7} className="b-center bg-size login__image_cover"></Col>

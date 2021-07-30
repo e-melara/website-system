@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from 'prop-types';
 import { Button, Form, Label, Input, FormGroup } from "reactstrap";
 
-
 import Login from "../../assets/images/logo/login.png";
 
 const  LoginForm = ({

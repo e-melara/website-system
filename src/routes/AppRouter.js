@@ -1,37 +1,22 @@
-import { useDispatch } from "react-redux";
-import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Redirect } from "react-router-dom";
 
 import { HomePage } from '../views/Home'
 import { AuthRouter } from "./AuthRouter";
 import { PublicRoute } from "./PublicRoute";
-import { KeyLocalStorage } from "../consts";
 import { PrivateRoute } from "./PrivateRoute";
-import { axiosConfig } from "../config/axios";
 
+import { startChecking } from "../redux/login";
 import Loading from "../components/common/Loading";
 
 export const AppRouter = () => {
   const dispatch = useDispatch();
-
-  const [checking, setChecking] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { checking, isAuthenticated } = useSelector(state => state.auth);
 
   useEffect(() => {
-    axiosConfig.post("auth/me")
-      .then(response=> {
-        setChecking(false);
-        setIsLoggedIn(true);
-      })
-      .catch(error => {
-        const {response} = error;
-        if(response.status === 401) {
-          localStorage.removeItem(KeyLocalStorage);
-        }
-        setChecking(false);
-        setIsLoggedIn(false);
-      })
-  }, []);
+    dispatch(startChecking());
+  }, [dispatch])
 
   if (checking) {
     return <Loading />;
@@ -44,13 +29,13 @@ export const AppRouter = () => {
           <PublicRoute
             path="/auth"
             component={AuthRouter}
-            isAuthenticated={isLoggedIn}
+            isAuthenticated={isAuthenticated}
           />
           <PrivateRoute
             exact
             path="/"
             component={HomePage}
-            isAuthenticated={isLoggedIn}
+            isAuthenticated={isAuthenticated}
           />
           <Redirect to="/auth/login" />
         </Switch>

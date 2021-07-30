@@ -1,9 +1,11 @@
 import React from 'react'
 
+import { Layout } from "../../components/layouts";
+
 export const HomePage = () => {
   return (
-    <div>
-      <h2>Home Page Route</h2>
-    </div>
+    <Layout>
+      
+    </Layout>
   );
 }
