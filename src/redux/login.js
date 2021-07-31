@@ -13,6 +13,7 @@ export const LOGIN_CHECKING_FINISH = `${LOGIN_REDUX}-LOGIN_CHECKING_FINISH`;
 // Reducer
 const initialState = {
   data: null,
+  carrera: null,
   checking: true,
   isAuthenticated: false,
 };
@@ -21,9 +22,10 @@ const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case LOGIN_SUCCESS:
       return {
-        data: payload,
         checking: false,
+        data: payload.data,
         isAuthenticated: true,
+        carrera: payload.carrera,
       };
 
     case LOGIN_CHECKING_FINISH:
@@ -34,6 +36,7 @@ const reducer = (state = initialState, { type, payload }) => {
     case LOGOUT:
       return {
         data:null,
+        carrera: null,
         checking: false,
         isAuthenticated: false,
       };
@@ -52,7 +55,7 @@ export const startLogin = (username, password) => async (dispatch) => {
     .then((response) => {
       const { data } = response;
       localStorage.setItem(KeyLocalStorage, data.token);
-      dispatch(login(data.usuario));
+      dispatch(login(data.usuario, data.carrera));
     })
     .catch((error) => {
       const { response } = error;
@@ -70,8 +73,8 @@ export const startChecking = () => {
     axiosConfig
       .post("auth/me")
       .then((response) => {
-        const { usuario } = response.data;
-        dispatch(login(usuario));
+        const { usuario, carrera } = response.data;
+        dispatch(login(usuario, carrera));
         dispatch(initUI());
       })
       .catch((error) => {
@@ -86,10 +89,11 @@ export const startChecking = () => {
 
 export const checkingFinish = () => ({ type: LOGIN_CHECKING_FINISH });
 
-export const login = (usuario) => ({
+export const login = (usuario, carrera) => ({
   type: LOGIN_SUCCESS,
   payload: {
-    ...usuario,
+    data: { ...usuario },
+    carrera: {...carrera},
   },
 });
 
