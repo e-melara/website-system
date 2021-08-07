@@ -1,22 +1,14 @@
 import thunk from "redux-thunk";
-import { createStore, combineReducers, applyMiddleware, compose  } from "redux";
+import createSagaMiddleware from "redux-saga";
+import { createStore, applyMiddleware } from "redux";
 
-// reducers
-import UiReducers from "./ui";
-import LoginReducers from "./login";
-import AsesoriaReducers from "./asesoria";
+import RootSaga from "../saga";
+import RootReducer, { composeEnhancers } from "./rootReducer";
 
-const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
-
-const reducers = combineReducers({
-  ui: UiReducers,
-  auth: LoginReducers, 
-  asesoria: AsesoriaReducers,
-})
-
+const sagaMiddleware = createSagaMiddleware();
 export const store = createStore(
-  reducers, 
-  composeEnhancers(
-    applyMiddleware(thunk)
-  )
-)
+  RootReducer,
+  composeEnhancers(applyMiddleware(sagaMiddleware, thunk))
+);
+
+sagaMiddleware.run(RootSaga);

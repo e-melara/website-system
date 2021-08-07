@@ -13,7 +13,7 @@ import PageTitle from "../../components/common/PageTitle";
 // actios
 import { loaderSubjectsAsesoria } from "../../redux/asesoria";
 
-
+// TODO: Buscar la manera de usar menos useSelector
 export const AsesoriaPage = () => {
   const urls = ["Asesoria"];
 

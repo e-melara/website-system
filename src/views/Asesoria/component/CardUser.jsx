@@ -5,7 +5,7 @@ import ImageProfile from "../../../assets/images/profile/3.png";
 
 export const CardUser = ({ user, carrera }) => {
   return (
-    <Col xl={4} lg={12} className="xl-50 morning-sec box-col-12">
+    <Col xl={3} lg={12} className="xl-50 morning-sec box-col-12">
       <Card className="o-hidden profile-greeting">
         <CardBody className="avatar-showcase">
           <div className="greeting-user text-center avatars">

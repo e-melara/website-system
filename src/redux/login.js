@@ -1,14 +1,44 @@
-import { axiosConfig } from "../config/axios";
-import { showErrorToast } from "../utils/errors";
-import { startLoading, finishLoading } from "./ui";
-import { LOGIN_REDUX, KeyLocalStorage } from "../consts";
+import { KeyLocalStorage } from "../consts";
 
-import { initUI } from "./ui";
+// actions
+const LOGIN = "[AUTH] LOGIN";
+const LOGIN_LOGOUT = "[AUTH] LOGOUT";
+const LOGIN_CHECKING = "[AUTH] CHECKING";
+const LOGIN_ASYNC = "[AUTH] LOGIN_ASYCN";
+const LOGIN_ERROR = "[AUTH] LOGIN ERROR";
+const LOGIN_CHECKING_ASYNC = "[AUTH] CHECKING ASYNC";
 
-// types
-export const LOGOUT = `[${LOGIN_REDUX}]-LOGOUT`;
-export const LOGIN_SUCCESS = `${LOGIN_REDUX}-LOGIN_SUCCESS`;
-export const LOGIN_CHECKING_FINISH = `${LOGIN_REDUX}-LOGIN_CHECKING_FINISH`;
+// actionsTypes
+export const actionType = {
+  LOGIN,
+  LOGIN_ASYNC,
+  LOGIN_ERROR,
+  LOGIN_LOGOUT,
+  LOGIN_CHECKING,
+  LOGIN_CHECKING_ASYNC,
+};
+
+// actions
+export const actionLogin = (username, password) => ({
+  type: LOGIN,
+  payload: { username, password },
+});
+
+export const actionLoginSuccess = ({ carrera, usuario }) => ({
+  type: LOGIN_ASYNC,
+  payload: { carrera, usuario },
+});
+
+export const startChecking = () => ({ type: LOGIN_CHECKING });
+export const checkingFinish = () => ({ type: LOGIN_CHECKING_ASYNC });
+
+export const logout = () => {
+  localStorage.removeItem(KeyLocalStorage);
+  localStorage.removeItem("ui");
+  return {
+    type: LOGIN_LOGOUT,
+  };
+};
 
 // Reducer
 const initialState = {
@@ -20,87 +50,21 @@ const initialState = {
 
 const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
-    case LOGIN_SUCCESS:
+    case LOGIN_ASYNC:
       return {
         checking: false,
-        data: payload.data,
         isAuthenticated: true,
+        data: payload.usuario,
         carrera: payload.carrera,
       };
 
-    case LOGIN_CHECKING_FINISH:
-      return {
-        ...state,
-        checking: false,
-      };
-    case LOGOUT:
-      return {
-        data:null,
-        carrera: null,
-        checking: false,
-        isAuthenticated: false,
-      };
+    case LOGIN_CHECKING_ASYNC:
+      return { ...state, checking: false };
+    case LOGIN_LOGOUT:
+      return initialState;
     default:
       return state;
   }
 };
 
 export default reducer;
-
-// Actions
-export const startLogin = (username, password) => async (dispatch) => {
-  dispatch(startLoading());
-  axiosConfig
-    .post("auth/login", { username, password })
-    .then((response) => {
-      const { data } = response;
-      localStorage.setItem(KeyLocalStorage, data.token);
-      dispatch(login(data.usuario, data.carrera));
-    })
-    .catch((error) => {
-      const { response } = error;
-      if (response) {
-        showErrorToast(response);
-      }
-    })
-    .finally(() => {
-      dispatch(finishLoading());
-    });
-};
-
-export const startChecking = () => {
-  return (dispatch) => {
-    axiosConfig
-      .post("auth/me")
-      .then((response) => {
-        const { usuario, carrera } = response.data;
-        dispatch(login(usuario, carrera));
-        dispatch(initUI());
-      })
-      .catch((error) => {
-        const { response } = error;
-        if (response.status === 401) {
-          localStorage.removeItem(KeyLocalStorage);
-        }
-        dispatch(checkingFinish());
-      });
-  };
-};
-
-export const checkingFinish = () => ({ type: LOGIN_CHECKING_FINISH });
-
-export const login = (usuario, carrera) => ({
-  type: LOGIN_SUCCESS,
-  payload: {
-    data: { ...usuario },
-    carrera: {...carrera},
-  },
-});
-
-export const logout = () => {
-  localStorage.removeItem(KeyLocalStorage);
-  localStorage.removeItem('ui')
-  return {
-    type: LOGOUT,
-  };
-};

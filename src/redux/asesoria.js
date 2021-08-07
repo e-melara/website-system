@@ -1,15 +1,14 @@
 import { values } from "lodash";
 import { axiosConfig } from "../config/axios";
 import { startLoading, finishLoading } from "./ui";
+import { showErrorToast, axiosErrorHandler } from "../utils/errors";
 
 // constantes
 const ASESORIA_SUCCESS = "[ASESORIA] SUCCESS";
-const ASESORIA_SCHULES_SUBJECTS = "[ASESORIA] SCHULES SUBJECTS";
 
 // reducers
 const initialState = {
   subjects: [],
-  schules: [],
 };
 
 function reducers(state = initialState, { type, payload }) {
@@ -17,13 +16,7 @@ function reducers(state = initialState, { type, payload }) {
     case ASESORIA_SUCCESS:
       return {
         ...state,
-        schules: [],
         subjects: payload,
-      };
-    case ASESORIA_SCHULES_SUBJECTS:
-      return {
-        ...state,
-        schules: payload,
       };
     default:
       return state;
@@ -38,41 +31,22 @@ export const addSubjects = (payload) => ({
   payload,
 });
 
-export const addSchules = (payload) => ({
-  type: ASESORIA_SCHULES_SUBJECTS,
-  payload,
-})
-
 export const loaderSubjectsAsesoria = () => {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(startLoading());
-    axiosConfig
-      .get("/asesoria/me")
-      .then((response) => {
-        const { materias } = response.data;
-        const arraySubjects = values(materias);
-        dispatch(addSubjects(arraySubjects));
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(function () {
-        dispatch(finishLoading());
+    try {
+      const {
+        data: { materias },
+      } = await axiosConfig().get("/asesoria/me");
+      dispatch(addSubjects(values(materias)));
+    } catch (error) {
+      axiosErrorHandler(error, function ({ data, status }) {
+        if (status === 403) {
+          showErrorToast(data);
+        }
       });
-  };
-};
-
-export const scheduleSubject = (subject) => {
-  return (dispatch) => {
-    dispatch(startLoading());
-    axiosConfig
-      .post("/asesoria/horario", { subject })
-      .then((response) => {
-        const { schules } = response.data;
-        dispatch(addSchules(schules))
-      })
-      .finally(() => {
-        dispatch(finishLoading());
-      });
+    } finally {
+      dispatch(finishLoading());
+    }
   };
 };

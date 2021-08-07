@@ -1,28 +1,25 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Container, Row, Col } from "reactstrap";
-import { useDispatch, useSelector } from "react-redux";
 
 import "./login.scss";
 import LoginForm from "./LoginForm";
 import Loading from "../../components/common/Loading";
 
-import { startLogin } from "../../redux/login";
+import { actionLogin } from "../../redux/login";
 import { useForm, useBandera } from "../../components/hooks";
 
-export const LoginPage = () => {
-  const dispatch = useDispatch();
+const LoginPage = ({ loading, login }) => {
   const [showHide, setShowHide] = useBandera(true);
-  const { loading } = useSelector((state) => state.ui);
   const [formValues, setFormValues] = useForm({
     carnet: "",
     password: "",
   });
 
-
   const handlerSubmit = (e) => {
     e.preventDefault();
     const { carnet, password } = formValues;
-    dispatch(startLogin(carnet, password));
+    login(carnet, password)
   };
 
   return (
@@ -49,3 +46,19 @@ export const LoginPage = () => {
     </>
   );
 };
+
+function mapStateToProps(state) {
+  return {
+    loading: state.ui.loading,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    login: (username, password) => {
+      dispatch(actionLogin(username, password));
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
 
 import { store } from "./redux/store";
-import { AppRouter } from "./routes/AppRouter";
+import AppRouter from "./routes/AppRouter";
 
 export default function App() {
   return (
@@ -11,7 +11,7 @@ export default function App() {
       <AppRouter />
       <ToastContainer
         position="top-center"
-        autoClose={true}
+        autoClose={5000}
         newestOnTop={false}
         closeOnClick
         rtl={false}
