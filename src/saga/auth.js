@@ -28,6 +28,7 @@ function* asyncChecking() {
     const resolve = yield DBConnection.instance.post("auth/me");
     yield put(actionLoginSuccess(resolve));
     yield put(initUI());
+  } catch (e) {
   } finally {
     yield put(checkingFinish());
   }

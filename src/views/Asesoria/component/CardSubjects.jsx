@@ -1,16 +1,17 @@
 import React from "react";
-import { isEmpty } from "lodash";
-import { useSelector } from "react-redux";
-import {
-  Col,
-  Card,
-  CardHeader,
-} from "reactstrap";
+import { filter } from "lodash";
+import { connect } from "react-redux";
+import { Col, Card, CardHeader } from "reactstrap";
 
 import { TableSchules } from "./TableSchules";
 
-export function CardSubjects() {
-  const { subjects } = useSelector((state) => state.asesoria);
+function CardSubjects({ subjects, dispatch }) {
+  const itemSubject = filter(subjects, { visible: true }).map(function (
+    e,
+    key
+  ) {
+    return <TableSchules key={`${key}-stable-subject`} subject={e} />;
+  });
 
   return (
     <>
@@ -21,13 +22,17 @@ export function CardSubjects() {
               <h5 className="m-0">Materias</h5>
             </div>
           </CardHeader>
-          { !isEmpty(subjects) &&
-            subjects.map((item, index) => {
-              return <TableSchules key={`TableSchules-${index}`} subject={item} />
-            })
-          }
+          {itemSubject}
         </Card>
       </Col>
     </>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    subjects: state.asesoria.subjects,
+  };
+};
+
+export default connect(mapStateToProps)(CardSubjects);

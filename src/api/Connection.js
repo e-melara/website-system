@@ -45,7 +45,6 @@ class DBConnection {
 
   addHeaderAuthorization() {
     const token = localStorage.getItem(KeyLocalStorage) || "";
-    console.log(token, "LLamado desde el addHeaderAuthorization");
     this.axiosConfig.defaults.headers.common[
       "Authorization"
     ] = `bearer ${token}`;

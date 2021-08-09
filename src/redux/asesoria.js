@@ -1,22 +1,44 @@
-import { values } from "lodash";
-import { axiosConfig } from "../config/axios";
-import { startLoading, finishLoading } from "./ui";
-import { showErrorToast, axiosErrorHandler } from "../utils/errors";
+import { isEqual } from "lodash";
 
-// constantes
-const ASESORIA_SUCCESS = "[ASESORIA] SUCCESS";
+// types
+const ASESORIA = "[ASESORIA] ASESORIA";
+const ASESORIA_ASYNC = "[ASESORIA] ASESORIA_ASYNC";
+const ASESORIA_SUBJECT_SCHULES = "[ASESORIA] SUBJECT SCHULES";
+
+export const actionsTypes = { ASESORIA, ASESORIA_ASYNC };
+
+// actions
+export const startLoadingAsesoria = () => ({ type: ASESORIA });
+export const loaderSubjects = (materias) => ({
+  type: ASESORIA_ASYNC,
+  payload: materias,
+});
+
+export const selectionSubjectSchules = (object) => ({
+  type: ASESORIA_SUBJECT_SCHULES,
+  payload: { ...object },
+});
 
 // reducers
 const initialState = {
   subjects: [],
+  schulesStudents: [],
 };
 
 function reducers(state = initialState, { type, payload }) {
   switch (type) {
-    case ASESORIA_SUCCESS:
+    case ASESORIA_ASYNC:
+      return { ...state, subjects: payload };
+    case ASESORIA_SUBJECT_SCHULES:
       return {
         ...state,
-        subjects: payload,
+        schulesStudents: state.schulesStudents.concat(payload),
+        subjects: state.subjects.map(function (item) {
+          if (isEqual(item.materia, payload.subject.materia)) {
+            item.visible = false;
+          }
+          return item;
+        }),
       };
     default:
       return state;
@@ -24,29 +46,3 @@ function reducers(state = initialState, { type, payload }) {
 }
 
 export default reducers;
-
-// actions
-export const addSubjects = (payload) => ({
-  type: ASESORIA_SUCCESS,
-  payload,
-});
-
-export const loaderSubjectsAsesoria = () => {
-  return async (dispatch) => {
-    dispatch(startLoading());
-    try {
-      const {
-        data: { materias },
-      } = await axiosConfig().get("/asesoria/me");
-      dispatch(addSubjects(values(materias)));
-    } catch (error) {
-      axiosErrorHandler(error, function ({ data, status }) {
-        if (status === 403) {
-          showErrorToast(data);
-        }
-      });
-    } finally {
-      dispatch(finishLoading());
-    }
-  };
-};

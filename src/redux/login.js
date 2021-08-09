@@ -61,7 +61,9 @@ const reducer = (state = initialState, { type, payload }) => {
     case LOGIN_CHECKING_ASYNC:
       return { ...state, checking: false };
     case LOGIN_LOGOUT:
-      return initialState;
+      return Object.assign({}, initialState, {
+        checking: false,
+      });
     default:
       return state;
   }

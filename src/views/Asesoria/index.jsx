@@ -1,27 +1,19 @@
-import React from "react";
-import { useEffect } from "react";
+import { connect } from "react-redux";
+import React, { useEffect } from "react";
 import { Container, Row } from "reactstrap";
-import { useDispatch, useSelector } from "react-redux";
 
 import { CardUser } from "./component/CardUser";
 import { Layout } from "../../components/layouts";
-import { CardSubjects } from "./component/CardSubjects";
+import CardSubjects  from "./component/CardSubjects";
 
 // components comunes
 import PageTitle from "../../components/common/PageTitle";
+import { startLoadingAsesoria } from "../../redux/asesoria";
 
-// actios
-import { loaderSubjectsAsesoria } from "../../redux/asesoria";
-
-// TODO: Buscar la manera de usar menos useSelector
-export const AsesoriaPage = () => {
+const AsesoriaPage = ({ data, carrera, dispatch }) => {
   const urls = ["Asesoria"];
-
-  const dispatch = useDispatch();
-  const {data, carrera} = useSelector(state => state.auth)
-
   useEffect(() => {
-    dispatch(loaderSubjectsAsesoria());
+    dispatch(startLoadingAsesoria())
   }, [dispatch])
 
   return (
@@ -38,3 +30,12 @@ export const AsesoriaPage = () => {
     </Layout>
   );
 };
+
+const mapStateToProps = (state) => {
+  const {data, carrera} = state.auth;
+  return {
+    data, carrera
+  }
+}
+
+export default connect(mapStateToProps)(AsesoriaPage);
