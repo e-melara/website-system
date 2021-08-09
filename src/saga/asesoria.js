@@ -2,8 +2,8 @@ import { values } from "lodash";
 import { fork, takeEvery, put } from "redux-saga/effects";
 
 import DBConnection from "../api/Connection";
-import { finishLoading, startLoading } from "../redux/ui";
-import { actionsTypes, loaderSubjects } from "../redux/asesoria";
+import { finishLoading, startLoading } from "../redux/ducks/ui";
+import { actionsTypes, loaderSubjects } from "../redux/ducks/asesoria";
 
 // functions generator
 function* asyncAsesoriaLoading() {

@@ -2,7 +2,7 @@ import React from "react";
 import { Grid } from "react-feather";
 import { useDispatch } from "react-redux";
 
-import { changeOpenCloseAction } from "../../../redux/ui";
+import { changeOpenCloseAction } from "../../../redux/ducks/ui";
 import LoginImageFile from "../../../assets/images/logo/logo.png";
 import LoginImageDarkFile from "../../../assets/images/logo/logo_dark.png";
 

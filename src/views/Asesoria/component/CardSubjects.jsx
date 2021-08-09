@@ -1,37 +1,64 @@
 import React from "react";
 import { filter } from "lodash";
 import { connect } from "react-redux";
-import { Col, Card, CardHeader } from "reactstrap";
+import { Col, Card, CardHeader, CardFooter, Button } from "reactstrap";
 
 import { TableSchules } from "./TableSchules";
+import TableSchulesEnrolled from "./TableSchulesEnrollled";
 
-function CardSubjects({ subjects, dispatch }) {
-  const itemSubject = filter(subjects, { visible: true }).map(function (
-    e,
-    key
-  ) {
+function CardSubjects({ subjects, schulesStudents }) {
+  const itemSubject = filter(subjects, { visible: true }).map((e, key) => {
     return <TableSchules key={`${key}-stable-subject`} subject={e} />;
   });
 
   return (
     <>
-      <Col className="dashboard-sec box-col-12">
-        <Card className="earning-card">
-          <CardHeader style={{ padding: "20px 40px" }}>
-            <div className="header-top">
-              <h5 className="m-0">Materias</h5>
-            </div>
-          </CardHeader>
-          {itemSubject}
-        </Card>
-      </Col>
+      {itemSubject.length > 0 && (
+        <Col className="dashboard-sec box-col-12">
+          <Card className="earning-card">
+            <CardHeader style={{ padding: "20px 40px" }}>
+              <div className="header-top">
+                <h5 className="m-0">Materias</h5>
+              </div>
+            </CardHeader>
+            {itemSubject}
+          </Card>
+        </Col>
+      )}
+
+      {schulesStudents.length > 0 && (
+        <Col>
+          <Card className="earning-card">
+            <CardHeader style={{ padding: "20px 40px" }}>
+              <div className="header-top">
+                <h5 className="m-0">Materias Inscriptas</h5>
+              </div>
+            </CardHeader>
+            <TableSchulesEnrolled
+              items={schulesStudents}
+              key={schulesStudents}
+            />
+            <CardFooter style={{ padding: "20px 40px" }}>
+              <Button
+                color="primary"
+                className="btn-lg"
+                style={{ float: "right" }}
+              >
+                Registrar
+              </Button>
+            </CardFooter>
+          </Card>
+        </Col>
+      )}
     </>
   );
 }
 
 const mapStateToProps = (state) => {
+  const { asesoria } = state;
   return {
-    subjects: state.asesoria.subjects,
+    subjects: asesoria.subjects,
+    schulesStudents: asesoria.schulesStudents,
   };
 };
 

@@ -1,8 +1,10 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Table } from "reactstrap";
 
-import { selectionSubjectSchules } from "../../../redux/asesoria";
+import { verificated } from "../../../utils/verificatedAdvisory";
+import { selectionSubjectSchules } from "../../../redux/ducks/asesoria";
 
 function ItemSchules({ turno, hora, dias, codcarga, selection }) {
   const onClickTap = () => {
@@ -29,17 +31,32 @@ function ItemSchules({ turno, hora, dias, codcarga, selection }) {
 
 export const TableSchules = ({ subject }) => {
   const dispatch = useDispatch();
-  const { ciclopens, nommate, schules, materia } = subject;
+  const { schulesStudents } = useSelector((state) => state.asesoria);
 
+  const { ciclopens, nommate, schules, materia } = subject;
   const handlerSelectionSubject = (schules) => {
-    const object = Object.assign({
-      schules,
-      subject: {
-        materia,
-        nommate,
-      },
-    });
-    dispatch(selectionSubjectSchules(object));
+    const resolve = verificated(schulesStudents, schules);
+    if (resolve.verificated) {
+      dispatch(
+        selectionSubjectSchules({
+          schules,
+          subject: {
+            materia,
+            nommate,
+          },
+        })
+      );
+    } else {
+      const { message } = resolve;
+      toast.error(message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
   };
 
   const itemSchules = schules.map((item, index) => {

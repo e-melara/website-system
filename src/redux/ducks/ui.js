@@ -1,12 +1,16 @@
-import { initThemeUi, changeThemeUI, changeOpenClose } from "../utils/ui";
+import { initThemeUi, changeThemeUI, changeOpenClose } from "../../utils/ui";
 
 // types
+const UI_EMPTY = "[UI] UI EMPTY";
+
 export const UI_LOADING_SHOW = "[UI] SHOW LOADING";
 export const UI_LOADING_HIDE = "[UI] HIDDEN LOADING";
 
 export const UI_INIT = "[UI] INIT CHANGE";
 export const UI_THEME_CHANGE = "[UI] CHANGE THEME";
 export const UI_ICON_CLOSE_PAGE = "[UI] CHANGE PAGE CLOSE";
+
+export const uiEmptyChange = () => ({ type: UI_EMPTY });
 
 // reducers
 const initialState = {
@@ -17,6 +21,8 @@ const initialState = {
 
 const reducers = (state = initialState, { type, payload }) => {
   switch (type) {
+    case UI_EMPTY:
+      return initialState;
     case UI_LOADING_SHOW:
       return { ...state, loading: true };
     case UI_LOADING_HIDE:

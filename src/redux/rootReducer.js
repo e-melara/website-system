@@ -1,8 +1,8 @@
 import { combineReducers, compose } from "redux";
 
-import reducerUi from "./ui";
-import reducerLogin from "./login";
-import reducerAsesoria from "./asesoria";
+import reducerUi from "./ducks/ui";
+import reducerLogin from "./ducks/login";
+import reducerAsesoria from "./ducks/asesoria";
 
 const reducers = combineReducers({
   ui: reducerUi,

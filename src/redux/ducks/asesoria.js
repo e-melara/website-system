@@ -2,10 +2,20 @@ import { isEqual } from "lodash";
 
 // types
 const ASESORIA = "[ASESORIA] ASESORIA";
+const ASESORIA_EMPTY = "[ASESORIA] EMPTY";
 const ASESORIA_ASYNC = "[ASESORIA] ASESORIA_ASYNC";
 const ASESORIA_SUBJECT_SCHULES = "[ASESORIA] SUBJECT SCHULES";
 
-export const actionsTypes = { ASESORIA, ASESORIA_ASYNC };
+// Types actions asesoria Enrolled
+const ASESORIA_SUBJECT_ENROLLED_DELETED = "[ASESORIA ENROLLED] DELETE SCHULES";
+
+export const actionsTypes = {
+  ASESORIA,
+  ASESORIA_EMPTY,
+  ASESORIA_ASYNC,
+  ASESORIA_SUBJECT_SCHULES,
+  ASESORIA_SUBJECT_ENROLLED_DELETED,
+};
 
 // actions
 export const startLoadingAsesoria = () => ({ type: ASESORIA });
@@ -19,6 +29,13 @@ export const selectionSubjectSchules = (object) => ({
   payload: { ...object },
 });
 
+export const deleteSchulesSubject = (payload) => ({
+  type: ASESORIA_SUBJECT_ENROLLED_DELETED,
+  payload,
+});
+
+export const initialStateAsesoria = () => ({ type: ASESORIA_EMPTY });
+
 // reducers
 const initialState = {
   subjects: [],
@@ -27,8 +44,23 @@ const initialState = {
 
 function reducers(state = initialState, { type, payload }) {
   switch (type) {
+    case ASESORIA_EMPTY:
+      return initialState;
     case ASESORIA_ASYNC:
       return { ...state, subjects: payload };
+    case ASESORIA_SUBJECT_ENROLLED_DELETED:
+      return {
+        ...state,
+        schulesStudents: state.schulesStudents.filter(
+          (e) => e.subject.materia !== payload.materia
+        ),
+        subjects: state.subjects.map(function (item) {
+          if (isEqual(item.materia, payload.materia)) {
+            item.visible = true;
+          }
+          return item;
+        }),
+      };
     case ASESORIA_SUBJECT_SCHULES:
       return {
         ...state,

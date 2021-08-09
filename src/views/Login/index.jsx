@@ -6,7 +6,7 @@ import "./login.scss";
 import LoginForm from "./LoginForm";
 import Loading from "../../components/common/Loading";
 
-import { actionLogin } from "../../redux/login";
+import { actionLogin } from "../../redux/ducks/login";
 import { useForm, useBandera } from "../../components/hooks";
 
 const LoginPage = ({ loading, login }) => {
@@ -19,7 +19,7 @@ const LoginPage = ({ loading, login }) => {
   const handlerSubmit = (e) => {
     e.preventDefault();
     const { carnet, password } = formValues;
-    login(carnet, password)
+    login(carnet, password);
   };
 
   return (

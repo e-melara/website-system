@@ -7,7 +7,7 @@ import { PublicRoute } from "./PublicRoute";
 import { PrivateRoute } from "./PrivateRoute";
 import { AuthPrivateRoute } from "./AuthPrivateRoute";
 
-import { startChecking } from "../redux/login";
+import { startChecking } from "../redux/ducks/login";
 import Loading from "../components/common/Loading";
 
 const AppRouter = ({ auth: { isAuthenticated, checking }, dispatch }) => {

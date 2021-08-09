@@ -3,10 +3,27 @@ import { put, takeEvery, fork } from "redux-saga/effects";
 // types actions for watchs
 import DBConnection from "../api/Connection";
 import { showErrorToast } from "../utils/errors";
-import { startLoading, finishLoading, initUI } from "../redux/ui";
-import { actionType, actionLoginSuccess, checkingFinish } from "../redux/login";
+import { startLoading, finishLoading, initUI } from "../redux/ducks/ui";
+import {
+  actionType,
+  actionLoginSuccess,
+  checkingFinish,
+} from "../redux/ducks/login";
+
+import { KeyLocalStorage } from "../consts";
+import { uiEmptyChange } from "../redux/ducks/ui";
+import { initialStateAsesoria } from "../redux/ducks/asesoria";
 
 // functions async
+function* asycnLogout() {
+  localStorage.removeItem("ui");
+  localStorage.removeItem(KeyLocalStorage);
+
+  yield put(uiEmptyChange());
+  yield put(initialStateAsesoria());
+  yield put({ type: actionType.LOGIN_LOGOUT_ASYNC });
+}
+
 function* asyncLogin(action) {
   const { username, password } = action.payload;
   yield put(startLoading());
@@ -43,6 +60,14 @@ function* watchChecking() {
   yield takeEvery(actionType.LOGIN_CHECKING, asyncChecking);
 }
 
-const rootAuthSaga = [fork(watchLogin), fork(watchChecking)];
+function* watchLogoutChecking() {
+  yield takeEvery(actionType.LOGIN_LOGOUT, asycnLogout);
+}
+
+const rootAuthSaga = [
+  fork(watchLogin),
+  fork(watchChecking),
+  fork(watchLogoutChecking),
+];
 
 export default rootAuthSaga;

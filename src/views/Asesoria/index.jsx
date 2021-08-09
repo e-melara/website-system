@@ -4,17 +4,17 @@ import { Container, Row } from "reactstrap";
 
 import { CardUser } from "./component/CardUser";
 import { Layout } from "../../components/layouts";
-import CardSubjects  from "./component/CardSubjects";
+import CardSubjects from "./component/CardSubjects";
 
 // components comunes
 import PageTitle from "../../components/common/PageTitle";
-import { startLoadingAsesoria } from "../../redux/asesoria";
+import { startLoadingAsesoria } from "../../redux/ducks/asesoria";
 
 const AsesoriaPage = ({ data, carrera, dispatch }) => {
   const urls = ["Asesoria"];
   useEffect(() => {
-    dispatch(startLoadingAsesoria())
-  }, [dispatch])
+    dispatch(startLoadingAsesoria());
+  }, [dispatch]);
 
   return (
     <Layout>
@@ -32,10 +32,11 @@ const AsesoriaPage = ({ data, carrera, dispatch }) => {
 };
 
 const mapStateToProps = (state) => {
-  const {data, carrera} = state.auth;
+  const { data, carrera } = state.auth;
   return {
-    data, carrera
-  }
-}
+    data,
+    carrera,
+  };
+};
 
 export default connect(mapStateToProps)(AsesoriaPage);

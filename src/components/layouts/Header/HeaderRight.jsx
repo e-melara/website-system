@@ -3,30 +3,34 @@ import { Col } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Maximize, User, Settings, LogIn } from "react-feather";
 
-import { logout } from "../../../redux/login";
-import { changeTheme } from "../../../redux/ui";
+import { logout } from "../../../redux/ducks/login";
+import { changeTheme } from "../../../redux/ducks/ui";
 import ImageProfile from "../../../assets/images/profile/profile.jpg";
 
 const HeaderRight = () => {
   const dispatch = useDispatch();
-  
-  const { ui, auth } = useSelector(state => state)
-  const {data} = auth
+
+  const { ui, auth } = useSelector((state) => state);
+  const { data } = auth;
 
   const handlerClickMode = () => {
     dispatch(changeTheme());
   };
 
   const handlerLogout = () => {
-    dispatch(logout())
-  }
+    dispatch(logout());
+  };
 
   return (
     <Col className="nav-right pull-right right-header p-0">
       <ul className="nav-menus">
         <li>
           <div className="mode" onClick={handlerClickMode}>
-            <i className={ui.theme === 'ligth' ? "fa fa-moon-o" : "fa fa-lightbulb-o"}></i>
+            <i
+              className={
+                ui.theme === "ligth" ? "fa fa-moon-o" : "fa fa-lightbulb-o"
+              }
+            ></i>
           </div>
         </li>
         <li className="maximize">
@@ -62,7 +66,7 @@ const HeaderRight = () => {
               </a>
             </li>
             <li onClick={handlerLogout}>
-              <a href="#/" >
+              <a href="#/">
                 <LogIn />
                 <span>Salir</span>
               </a>

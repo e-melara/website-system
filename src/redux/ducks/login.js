@@ -1,5 +1,3 @@
-import { KeyLocalStorage } from "../consts";
-
 // actions
 const LOGIN = "[AUTH] LOGIN";
 const LOGIN_LOGOUT = "[AUTH] LOGOUT";
@@ -7,6 +5,7 @@ const LOGIN_CHECKING = "[AUTH] CHECKING";
 const LOGIN_ASYNC = "[AUTH] LOGIN_ASYCN";
 const LOGIN_ERROR = "[AUTH] LOGIN ERROR";
 const LOGIN_CHECKING_ASYNC = "[AUTH] CHECKING ASYNC";
+const LOGIN_LOGOUT_ASYNC = "[AUTH] LOGIN_LOGOUT_ASYNC";
 
 // actionsTypes
 export const actionType = {
@@ -15,6 +14,7 @@ export const actionType = {
   LOGIN_ERROR,
   LOGIN_LOGOUT,
   LOGIN_CHECKING,
+  LOGIN_LOGOUT_ASYNC,
   LOGIN_CHECKING_ASYNC,
 };
 
@@ -32,13 +32,7 @@ export const actionLoginSuccess = ({ carrera, usuario }) => ({
 export const startChecking = () => ({ type: LOGIN_CHECKING });
 export const checkingFinish = () => ({ type: LOGIN_CHECKING_ASYNC });
 
-export const logout = () => {
-  localStorage.removeItem(KeyLocalStorage);
-  localStorage.removeItem("ui");
-  return {
-    type: LOGIN_LOGOUT,
-  };
-};
+export const logout = () => ({ type: LOGIN_LOGOUT });
 
 // Reducer
 const initialState = {
@@ -60,7 +54,7 @@ const reducer = (state = initialState, { type, payload }) => {
 
     case LOGIN_CHECKING_ASYNC:
       return { ...state, checking: false };
-    case LOGIN_LOGOUT:
+    case LOGIN_LOGOUT_ASYNC:
       return Object.assign({}, initialState, {
         checking: false,
       });
