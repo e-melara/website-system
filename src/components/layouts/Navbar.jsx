@@ -1,22 +1,27 @@
 import React from "react";
+import { connect } from "react-redux";
 
 import { NavItem } from "./NavBar/NavItem";
 import { NavBarBody } from "./NavBar/NavBarBody";
-import { NavItemTitle } from "./NavBar/NavItemTitle";
-import { routesExample } from "../../utils/routesExample";
 
-function Navbar() {
-  return (
-    <NavBarBody>
-      {routesExample.map((item, index) => {
-        return item.isTitle ? (
-          <NavItemTitle {...item} key={`${index}-${item.icon}-${item.title}`} />
-        ) : (
-          <NavItem {...item} key={`${index}-${item.icon}-${item.title}`} />
-        );
-      })}
-    </NavBarBody>
-  );
+function Navbar({ routes }) {
+  const mapToRoutes = routes.map(function (item, index) {
+    return (
+      <NavItem
+        key={`${index}-routes`}
+        title={item.nombre}
+        to={item.short_name}
+        icon={item.icon}
+      />
+    );
+  });
+  return <NavBarBody>{mapToRoutes}</NavBarBody>;
 }
 
-export default Navbar;
+const mapStateToProps = (state) => {
+  return {
+    routes: state.auth.routes,
+  };
+};
+
+export default connect(mapStateToProps)(Navbar);

@@ -29,7 +29,16 @@ function* asyncLogin(action) {
   yield put(startLoading());
   try {
     const resolve = yield DBConnection.instance.login(username, password);
-    yield put(actionLoginSuccess(resolve));
+    yield put(
+      actionLoginSuccess(
+        Object.assign({
+          perfil: resolve.rol.perfil,
+          routes: resolve.rol.routes,
+          usuario: resolve.usuario,
+          carrera: resolve.rol.rol === "IS_ADMIN" ? null : resolve.carrera,
+        })
+      )
+    );
   } catch ({ error }) {
     const { data, status } = error;
     if (status === 403) {
@@ -43,7 +52,16 @@ function* asyncLogin(action) {
 function* asyncChecking() {
   try {
     const resolve = yield DBConnection.instance.post("auth/me");
-    yield put(actionLoginSuccess(resolve));
+    yield put(
+      actionLoginSuccess(
+        Object.assign({
+          perfil: resolve.rol.perfil,
+          routes: resolve.rol.routes,
+          usuario: resolve.usuario,
+          carrera: resolve.rol.rol === "IS_ADMIN" ? null : resolve.carrera,
+        })
+      )
+    );
     yield put(initUI());
   } catch (e) {
   } finally {

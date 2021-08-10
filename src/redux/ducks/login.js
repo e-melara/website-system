@@ -24,9 +24,9 @@ export const actionLogin = (username, password) => ({
   payload: { username, password },
 });
 
-export const actionLoginSuccess = ({ carrera, usuario }) => ({
+export const actionLoginSuccess = (payload) => ({
   type: LOGIN_ASYNC,
-  payload: { carrera, usuario },
+  payload: payload,
 });
 
 export const startChecking = () => ({ type: LOGIN_CHECKING });
@@ -37,6 +37,8 @@ export const logout = () => ({ type: LOGIN_LOGOUT });
 // Reducer
 const initialState = {
   data: null,
+  perfil: null,
+  routes: [],
   carrera: null,
   checking: true,
   isAuthenticated: false,
@@ -49,6 +51,8 @@ const reducer = (state = initialState, { type, payload }) => {
         checking: false,
         isAuthenticated: true,
         data: payload.usuario,
+        perfil: payload.perfil,
+        routes: payload.routes,
         carrera: payload.carrera,
       };
 

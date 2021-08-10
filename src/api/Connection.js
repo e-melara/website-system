@@ -26,14 +26,18 @@ class DBConnection {
   async login(username, password) {
     return new Promise(async (resolve, reject) => {
       try {
-        const { token, carrera, usuario } = await this.post(this.urlLogin, {
-          username,
-          password,
-        });
+        const { token, carrera, usuario, rol } = await this.post(
+          this.urlLogin,
+          {
+            username,
+            password,
+          }
+        );
         localStorage.setItem(KeyLocalStorage, token);
         resolve({
           carrera,
           usuario,
+          rol,
         });
       } catch (error) {
         reject({

@@ -22,7 +22,7 @@ function ItemSchules({ turno, hora, dias, codcarga, selection }) {
       <td className="text-center">{turno}</td>
       <th scope="row" className="text-center">
         <Button type="button" color="primary" size="sm" onClick={onClickTap}>
-          Seleccionar
+          +
         </Button>
       </th>
     </tr>
@@ -76,7 +76,7 @@ export const TableSchules = ({ subject }) => {
           <th colSpan="3">
             <h5 className="text-center">{nommate}</h5>
           </th>
-          <th>
+          <th width="150px" className="text-center">
             <h5>Ciclo: {ciclopens}</h5>
           </th>
         </tr>

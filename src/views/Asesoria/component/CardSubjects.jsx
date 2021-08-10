@@ -6,6 +6,7 @@ import { Col, Card, CardHeader, CardFooter, Button } from "reactstrap";
 import { TableSchules } from "./TableSchules";
 import TableSchulesEnrolled from "./TableSchulesEnrollled";
 
+// TODO: AGREGAR EL CICLO
 function CardSubjects({ subjects, schulesStudents }) {
   const itemSubject = filter(subjects, { visible: true }).map((e, key) => {
     return <TableSchules key={`${key}-stable-subject`} subject={e} />;
@@ -18,7 +19,7 @@ function CardSubjects({ subjects, schulesStudents }) {
           <Card className="earning-card">
             <CardHeader style={{ padding: "20px 40px" }}>
               <div className="header-top">
-                <h5 className="m-0">Materias</h5>
+                <h5 className="m-0">Materias del ciclo 02-2021</h5>
               </div>
             </CardHeader>
             {itemSubject}
@@ -31,7 +32,7 @@ function CardSubjects({ subjects, schulesStudents }) {
           <Card className="earning-card">
             <CardHeader style={{ padding: "20px 40px" }}>
               <div className="header-top">
-                <h5 className="m-0">Materias Inscriptas</h5>
+                <h5 className="m-0">Hoja de asesoria</h5>
               </div>
             </CardHeader>
             <TableSchulesEnrolled
@@ -44,7 +45,7 @@ function CardSubjects({ subjects, schulesStudents }) {
                 className="btn-lg"
                 style={{ float: "right" }}
               >
-                Registrar
+                Enviar
               </Button>
             </CardFooter>
           </Card>

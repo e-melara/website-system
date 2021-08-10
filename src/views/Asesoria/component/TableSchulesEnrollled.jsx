@@ -21,9 +21,10 @@ const TableSchulesEnrollledItem = ({ schules, subject, index }) => {
       <td>
         <Button
           onClick={handleDeleteSubjectEnrolled}
-          close
           className="btn btn-danger"
-        ></Button>
+        >
+          -
+        </Button>
       </td>
     </tr>
   );

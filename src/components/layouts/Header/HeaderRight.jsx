@@ -1,31 +1,20 @@
 import React from "react";
 import { Col } from "reactstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import { Maximize, User, Settings, LogIn } from "react-feather";
 
 import { logout } from "../../../redux/ducks/login";
 import { changeTheme } from "../../../redux/ducks/ui";
 import ImageProfile from "../../../assets/images/profile/profile.jpg";
 
-const HeaderRight = () => {
-  const dispatch = useDispatch();
-
-  const { ui, auth } = useSelector((state) => state);
-  const { data } = auth;
-
-  const handlerClickMode = () => {
-    dispatch(changeTheme());
-  };
-
-  const handlerLogout = () => {
-    dispatch(logout());
-  };
+const HeaderRight = ({ ui, auth, clickMode, logout }) => {
+  const { data, perfil } = auth;
 
   return (
     <Col className="nav-right pull-right right-header p-0">
       <ul className="nav-menus">
         <li>
-          <div className="mode" onClick={handlerClickMode}>
+          <div className="mode" onClick={clickMode}>
             <i
               className={
                 ui.theme === "ligth" ? "fa fa-moon-o" : "fa fa-lightbulb-o"
@@ -48,7 +37,7 @@ const HeaderRight = () => {
             <div className="media-body">
               <span>{data.nombres}</span>
               <p className="mb-0 font-roboto">
-                {data.apellidos} <i className="middle fa fa-angle-down"></i>
+                {perfil} <i className="middle fa fa-angle-down"></i>
               </p>
             </div>
           </div>
@@ -65,7 +54,7 @@ const HeaderRight = () => {
                 <span>Ajustes</span>
               </a>
             </li>
-            <li onClick={handlerLogout}>
+            <li onClick={logout}>
               <a href="#/">
                 <LogIn />
                 <span>Salir</span>
@@ -78,4 +67,18 @@ const HeaderRight = () => {
   );
 };
 
-export default HeaderRight;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logout: () => dispatch(logout()),
+    clickMode: () => dispatch(changeTheme()),
+  };
+};
+
+const mapStateToProps = (state) => {
+  return {
+    ui: state.ui,
+    auth: state.auth,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderRight);
