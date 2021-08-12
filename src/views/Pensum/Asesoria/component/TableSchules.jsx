@@ -3,8 +3,8 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Table } from "reactstrap";
 
-import { verificated } from "../../../utils/verificatedAdvisory";
-import { selectionSubjectSchules } from "../../../redux/ducks/asesoria";
+import { verificated } from "../../../../utils/verificatedAdvisory";
+import { selectionSubjectSchules } from "../../../../redux/ducks/asesoria";
 
 function ItemSchules({ turno, hora, dias, codcarga, selection }) {
   const onClickTap = () => {

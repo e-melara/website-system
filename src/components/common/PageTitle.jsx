@@ -4,7 +4,7 @@ import { Home } from "react-feather";
 import { Col, Row } from "reactstrap";
 import { Link } from "react-router-dom";
 
-const PageTitle = ({ title, urls}) => {
+const PageTitle = ({ title, urls }) => {
   return (
     <div className="page-title">
       <Row>
@@ -12,20 +12,22 @@ const PageTitle = ({ title, urls}) => {
           <h3>{title}</h3>
         </Col>
         <Col>
-          <ol className="breadcrumb">
-            <li className='breadcrumb-item'>
-              <Link to='/'>
-                <Home />
-              </Link>
-            </li>
-            {
-              urls.map((item, index) => {
+          {urls && (
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
+                <Link to="/">
+                  <Home />
+                </Link>
+              </li>
+              {urls.map((item, index) => {
                 return (
-                  <li className='breadcrumb-item' key={`breadcrum - ${index}` }>{item}</li>
+                  <li className="breadcrumb-item" key={`breadcrum - ${index}`}>
+                    {item}
+                  </li>
                 );
-              })
-            }
-          </ol>
+              })}
+            </ol>
+          )}
         </Col>
       </Row>
     </div>
@@ -33,8 +35,8 @@ const PageTitle = ({ title, urls}) => {
 };
 
 PageTitle.propTypes = {
-  urls: PropTypes.array.isRequired,
-  title: PropTypes.string.isRequired
+  urls: PropTypes.array,
+  title: PropTypes.string.isRequired,
 };
 
 export default PageTitle;

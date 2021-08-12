@@ -1,13 +1,15 @@
-import React from "react";
 import { filter } from "lodash";
 import { connect } from "react-redux";
+import React, { useState } from "react";
 import { Col, Card, CardHeader, CardFooter, Button } from "reactstrap";
 
+import ModalAsesoria from "./ModalAsesoria";
 import { TableSchules } from "./TableSchules";
 import TableSchulesEnrolled from "./TableSchulesEnrollled";
 
-// TODO: AGREGAR EL CICLO
 function CardSubjects({ subjects, schulesStudents }) {
+  const [isOpen, setisOpen] = useState(false);
+
   const itemSubject = filter(subjects, { visible: true }).map((e, key) => {
     return <TableSchules key={`${key}-stable-subject`} subject={e} />;
   });
@@ -42,6 +44,7 @@ function CardSubjects({ subjects, schulesStudents }) {
             <CardFooter style={{ padding: "20px 40px" }}>
               <Button
                 color="primary"
+                onClick={() => setisOpen(true)}
                 className="btn-lg"
                 style={{ float: "right" }}
               >
@@ -51,6 +54,7 @@ function CardSubjects({ subjects, schulesStudents }) {
           </Card>
         </Col>
       )}
+      <ModalAsesoria isOpen={isOpen} handler={setisOpen} />
     </>
   );
 }

@@ -16,7 +16,15 @@ export const Layout = ({ children }) => {
         <Header isClose={isClose} />
         <section className="page-body-wrapper">
           <SideBar isClose={isClose} />
-          <div className="page-body">{children}</div>
+          <div
+            className="page-body"
+            style={{
+              padding: "0px",
+              marginLeft: `${isClose ? "90px" : "280px"}`,
+            }}
+          >
+            {children}
+          </div>
           <footer className="footer">
             <div className="container-fluid">
               <div className="row">

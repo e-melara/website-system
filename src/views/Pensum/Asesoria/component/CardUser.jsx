@@ -1,7 +1,7 @@
 import React from "react";
 import { Col, Card, CardBody } from "reactstrap";
 
-import ImageProfile from "../../../assets/images/profile/3.png";
+import ImageProfile from "../../../../assets/images/profile/3.png";
 
 export const CardUser = ({ user, carrera }) => {
   return (
@@ -26,9 +26,7 @@ export const CardUser = ({ user, carrera }) => {
               Carnet: {user.id}
             </h5>
 
-            <h6>
-              {carrera.nomcarrera}
-            </h6>
+            <h6>{carrera.nomcarrera}</h6>
           </div>
         </CardBody>
       </Card>

@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { Table, Button } from "reactstrap";
 
-import { deleteSchulesSubject } from "../../../redux/ducks/asesoria";
+import { deleteSchulesSubject } from "../../../../redux/ducks/asesoria";
 
 const TableSchulesEnrollledItem = ({ schules, subject, index }) => {
   const dispatch = useDispatch();

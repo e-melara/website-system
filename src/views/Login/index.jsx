@@ -6,22 +6,7 @@ import "./login.scss";
 import LoginForm from "./LoginForm";
 import Loading from "../../components/common/Loading";
 
-import { actionLogin } from "../../redux/ducks/login";
-import { useForm, useBandera } from "../../components/hooks";
-
-const LoginPage = ({ loading, login }) => {
-  const [showHide, setShowHide] = useBandera(true);
-  const [formValues, setFormValues] = useForm({
-    carnet: "",
-    password: "",
-  });
-
-  const handlerSubmit = (e) => {
-    e.preventDefault();
-    const { carnet, password } = formValues;
-    login(carnet, password);
-  };
-
+const LoginPage = ({ loading }) => {
   return (
     <>
       {loading && <Loading />}
@@ -31,13 +16,7 @@ const LoginPage = ({ loading, login }) => {
           <Col xl={5} className="p-0">
             <div className="login-card login__image_backgroun_bg">
               <div>
-                <LoginForm
-                  showHide={showHide}
-                  onSubmit={handlerSubmit}
-                  inputValues={formValues}
-                  onChangeInput={setFormValues}
-                  showHideFunc={(e) => setShowHide()}
-                />
+                <LoginForm loading={loading} />
               </div>
             </div>
           </Col>
@@ -53,12 +32,4 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    login: (username, password) => {
-      dispatch(actionLogin(username, password));
-    },
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
+export default connect(mapStateToProps)(LoginPage);
