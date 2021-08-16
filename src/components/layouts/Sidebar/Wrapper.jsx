@@ -2,9 +2,8 @@ import React from "react";
 import { Grid } from "react-feather";
 import { useDispatch } from "react-redux";
 
+import ultlaLogo from "../../../assets/images/logo/utla.png";
 import { changeOpenCloseAction } from "../../../redux/ducks/ui";
-import LoginImageFile from "../../../assets/images/logo/logo.png";
-import LoginImageDarkFile from "../../../assets/images/logo/logo_dark.png";
 
 function Wrapper() {
   const dispatch = useDispatch();
@@ -17,15 +16,9 @@ function Wrapper() {
       <a href="/#">
         <img
           className="img-fluid for-light"
-          src={LoginImageFile}
+          src={ultlaLogo}
           alt="imgs de logo"
-          width="97"
-        />
-        <img
-          className="img-fluid for-dark"
-          src={LoginImageDarkFile}
-          alt="imgs de logo"
-          width="97"
+          style={{ height: "35px" }}
         />
       </a>
       <div className="back-btn">

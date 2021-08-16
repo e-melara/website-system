@@ -7,6 +7,7 @@ import { Button, Form, Label, Input, FormGroup } from "reactstrap";
 import { actionLogin } from "../../redux/ducks/login";
 
 import Login from "../../assets/images/logo/login.png";
+import utlaLogo from "../../assets/images/logo/utla.png";
 import { useBandera } from "../../components/hooks/useBandera";
 import { MessageError } from "../../components/common/MessageError";
 
@@ -26,12 +27,26 @@ const LoginForm = ({ loading, login }) => {
   return (
     <div className="login-card">
       <div>
-        <div>
-          <a className="logo text-start" href="#/">
-            <img className="img-fluid for-light" src={Login} alt="looginpage" />
-          </a>
-        </div>
+        <div></div>
         <div className="login-main">
+          <a
+            className="logo text-start"
+            href="#/"
+            style={{ display: "flex", justifyContent: "center" }}
+          >
+            <img
+              className="img-fluid for-light"
+              src={utlaLogo}
+              alt="looginpage"
+              style={{ height: "120px" }}
+            />
+            <img
+              className="img-fluid for-dark"
+              src={utlaLogo}
+              alt="looginpage"
+              style={{ height: "120px" }}
+            />
+          </a>
           <Formik
             initialValues={{ carnet: "", password: "" }}
             validationSchema={signInSchema}

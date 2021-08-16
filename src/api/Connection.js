@@ -20,7 +20,17 @@ class DBConnection {
       timeout: 1000,
       baseURL: this.base_url,
     });
-    this.addHeaderAuthorization();
+    this.axiosConfig.interceptors.request.use(function (config) {
+      const token = localStorage.getItem(KeyLocalStorage);
+      if (token) {
+        const headers = {
+          Authorization: `bearer ${token}`,
+          Accept: "application/json",
+        };
+        config.headers = headers;
+      }
+      return config;
+    });
   }
 
   async login(username, password) {
@@ -45,13 +55,6 @@ class DBConnection {
         });
       }
     });
-  }
-
-  addHeaderAuthorization() {
-    const token = localStorage.getItem(KeyLocalStorage) || "";
-    this.axiosConfig.defaults.headers.common[
-      "Authorization"
-    ] = `bearer ${token}`;
   }
 
   errorCallback(error, callback) {

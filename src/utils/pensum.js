@@ -24,7 +24,8 @@ export const forEachPensumArrayToProps = (
   pensum,
   approveds,
   takes,
-  enrolled
+  enrolled,
+  reprobadas
 ) => {
   let enrolledIs = false;
   let arrayEnrolleds = [];
@@ -32,7 +33,9 @@ export const forEachPensumArrayToProps = (
   const pensumValues = values(pensum);
   const approvedsValues = map(values(approveds), "materia");
   const takesValues = map(values(takes), "materia");
+  const reprobadasValues = map(values(reprobadas), "materia");
 
+  console.log(reprobadasValues);
   if (schules && schules.length > 0) {
     enrolledIs = true;
     arrayEnrolleds = map(schules, "codmate");
@@ -43,6 +46,7 @@ export const forEachPensumArrayToProps = (
       take: includes(takesValues, e.codmate),
       approved: includes(approvedsValues, e.codmate),
       enrolled: enrolledIs && includes(arrayEnrolleds, e.codmate),
+      reprobada: includes(reprobadasValues, e.codmate),
     })
   );
 

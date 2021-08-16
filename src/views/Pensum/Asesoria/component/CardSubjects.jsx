@@ -7,8 +7,10 @@ import ModalAsesoria from "./ModalAsesoria";
 import { TableSchules } from "./TableSchules";
 import TableSchulesEnrolled from "./TableSchulesEnrollled";
 
-function CardSubjects({ subjects, schulesStudents }) {
+function CardSubjects({ subjects, schulesStudents, title }) {
   const [isOpen, setisOpen] = useState(false);
+
+  const _title = title ? title : "Hoja de asesoria";
 
   const itemSubject = filter(subjects, { visible: true }).map((e, key) => {
     return <TableSchules key={`${key}-stable-subject`} subject={e} />;
@@ -34,7 +36,7 @@ function CardSubjects({ subjects, schulesStudents }) {
           <Card className="earning-card">
             <CardHeader style={{ padding: "20px 40px" }}>
               <div className="header-top">
-                <h5 className="m-0">Hoja de asesoria</h5>
+                <h5 className="m-0">{_title}</h5>
               </div>
             </CardHeader>
             <TableSchulesEnrolled

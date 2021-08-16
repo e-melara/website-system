@@ -1,7 +1,7 @@
 import React from "react";
 
 import Wrapper from "./Wrapper";
-import LogoIcon from "../../../assets/images/logo/logo-icon.png";
+import utlaLogo from "../../../assets/images/logo/utla.png";
 
 function Logo() {
   return (
@@ -10,8 +10,9 @@ function Logo() {
       <div className="logo-icon-wrapper">
         <a href="/#">
           <img
+            style={{ height: "30px" }}
             className="img-fluid"
-            src={LogoIcon}
+            src={utlaLogo}
             alt="imgs icon"
           />
         </a>

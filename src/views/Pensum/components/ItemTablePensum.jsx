@@ -13,6 +13,7 @@ export const ItemTablePensum = ({
   codprere,
   univalora,
   enrolled,
+  reprobada,
 }) => {
   return (
     <div
@@ -20,6 +21,7 @@ export const ItemTablePensum = ({
         approved: approved,
         take: take,
         enrolled: enrolled,
+        reprobada: reprobada,
       })} item-subject row align-items-center`}
     >
       <Col xs={3} className="brd-bottom brd-right">

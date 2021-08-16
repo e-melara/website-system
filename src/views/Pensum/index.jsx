@@ -91,6 +91,10 @@ function PensumPage({ dispatch, carrera, asesoria }) {
                               <td className="text-center">
                                 <div className="cuadro"></div>
                               </td>
+                              <td className="text-center">Reprobadas</td>
+                              <td className="text-center">
+                                <div className="cuadro reprobada"></div>
+                              </td>
                             </tr>
                           </tbody>
                         </Table>

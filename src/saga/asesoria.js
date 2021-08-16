@@ -27,7 +27,7 @@ function* asyncLoadingPensum() {
     };
 
     yield put(startLoading());
-    const { active, pensum, take, approved, enrolleds } =
+    const { active, pensum, take, approved, enrolleds, reprobadas } =
       yield DBConnection.instance.get("/asesoria/pensum");
 
     payload.active = active;
@@ -42,7 +42,8 @@ function* asyncLoadingPensum() {
       pensum,
       approved,
       take,
-      enrolleds
+      enrolleds,
+      reprobadas
     );
     payload.pensum = pensumArray;
     yield put(pensumAddAllSuccess({ ...payload }));
