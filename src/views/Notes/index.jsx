@@ -1,79 +1,41 @@
-import classnames from "classnames";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import React, { useState, useEffect } from "react";
-
-import {
-  Row,
-  Nav,
-  TabPane,
-  NavItem,
-  NavLink,
-  Container,
-  TabContent,
-} from "reactstrap";
+import { Container, Row } from "reactstrap";
 
 import { Layout } from "../../components/layouts";
 import { notesLoading } from "../../redux/ducks/notes";
+import PageTitle from "../../components/common/PageTitle";
 
-import TableSchulesCiclo from "./components/TableSchulesCiclo";
-import TableHistoryNotes from "./components/TableHistoryNotes";
-
-function NotesPages({ loading }) {
-  const [activeTab, seTactiveTab] = useState("1");
-  const toggle = (tab) => {
-    if (activeTab !== tab) seTactiveTab(tab);
-  };
-
+const NotePage = ({ notes: { loading }, requestLoading }) => {
   useEffect(() => {
-    loading();
-  }, []);
+    if (!loading) {
+      requestLoading();
+    }
+  }, [loading, requestLoading]);
 
   return (
     <Layout>
       <Container fluid={true}>
-        <Row className="second-chart-list third-news-update tabs">
-          <>
-            <Nav tabs>
-              <NavItem>
-                <NavLink
-                  className={classnames({ active: activeTab === "1" })}
-                  onClick={() => toggle("1")}
-                >
-                  Horario
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink
-                  className={classnames({ active: activeTab === "2" })}
-                  onClick={() => toggle("2")}
-                >
-                  Notas
-                </NavLink>
-              </NavItem>
-            </Nav>
-            <TabContent activeTab={activeTab}>
-              <TabPane tabId="1">
-                <TableSchulesCiclo />
-              </TabPane>
-              <TabPane tabId="2">
-                <TableHistoryNotes />
-              </TabPane>
-            </TabContent>
-          </>
+        <Row>
+          <PageTitle title="Horario del ciclo" />
         </Row>
+        <Row className="asesoria third-news-update"></Row>
       </Container>
     </Layout>
   );
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    loading: () => dispatch(notesLoading()),
-  };
 };
 
 const mapStateToProps = (state) => {
-  return {};
+  const notes = state.notes;
+  return {
+    notes,
+  };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(NotesPages);
+const mapDispathToProps = (dispatch) => {
+  return {
+    requestLoading: () => dispatch(notesLoading()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispathToProps)(NotePage);

@@ -1,48 +1,59 @@
 import React from "react";
-import { connect } from "react-redux";
 import { Table } from "reactstrap";
 
+import TableHeader from "./TableHeader";
 import { ItemTablePensum } from "./ItemTablePensum";
 
-function TablePensum({ pensum }) {
-  const ciclos = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+const getZeroHeader = (row) => {
+  return row.ciclopens;
+};
 
-  const rows = pensum.map((e, index) => {
-    return (
-      <tr key={`pensum-table-${index}`}>
-        {e.map((item) => {
-          if (item) {
-            return (
-              <td key={`${item.codmate}-${item.nommate}`}>
-                <ItemTablePensum {...item} />
-              </td>
-            );
-          }
-          return <td key={Math.random() * 1000 + ".item.empty"}></td>;
-        })}
-      </tr>
-    );
-  });
+function RowPensum({ items }) {
   return (
-    <Table responsive bordered size="sm">
-      <tbody>
-        <tr>
-          {ciclos.map((ciclo) => (
-            <td className="text-center" key={ciclo}>
-              <strong> {ciclo}</strong>
-            </td>
-          ))}
-        </tr>
-        {rows}
-      </tbody>
-    </Table>
+    <td>
+      {items &&
+        items.map((subject) => (
+          <ItemTablePensum
+            {...subject}
+            key={"item-table-pensum-" + Math.random()}
+          />
+        ))}
+    </td>
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    pensum: state.asesoria.pensum,
-  };
+function TablePensum({ pensum, carrera }) {
+  return (
+    <React.Fragment>
+      <TableHeader carrera={carrera} />
+      <Table responsive bordered size="sm">
+        <thead>
+          <tr>
+            {pensum &&
+              pensum.map((item) => {
+                const header = getZeroHeader(item[0]);
+                return (
+                  <th key={Math.random()} className="table-head-th">
+                    {header}
+                  </th>
+                );
+              })}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            {pensum &&
+              pensum.map((item) => (
+                <RowPensum
+                  items={item}
+                  key={Math.random() * 1000 + "-table-pensum"}
+                />
+              ))}
+          </tr>
+        </tbody>
+      </Table>
+    </React.Fragment>
+  );
 }
 
-export default connect(mapStateToProps)(TablePensum);
+export default TablePensum;

@@ -3,6 +3,7 @@ import { fork, takeEvery, put } from "redux-saga/effects";
 
 import DBConnection from "../api/Connection";
 import { finishLoading, startLoading } from "../redux/ducks/ui";
+
 import {
   actionsTypes,
   loaderSubjects,
@@ -37,7 +38,6 @@ function* asyncLoadingPensum() {
       payload.enrolled = propsToEnrolled(enrolleds);
     }
 
-    // verificado que materias tiene ya aprovadas vrs las que puede llevar
     const pensumArray = forEachPensumArrayToProps(
       pensum,
       approved,

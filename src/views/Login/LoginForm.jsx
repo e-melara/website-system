@@ -6,7 +6,6 @@ import { Button, Form, Label, Input, FormGroup } from "reactstrap";
 
 import { actionLogin } from "../../redux/ducks/login";
 
-import Login from "../../assets/images/logo/login.png";
 import utlaLogo from "../../assets/images/logo/utla.png";
 import { useBandera } from "../../components/hooks/useBandera";
 import { MessageError } from "../../components/common/MessageError";

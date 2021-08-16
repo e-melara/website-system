@@ -35,7 +35,6 @@ export const forEachPensumArrayToProps = (
   const takesValues = map(values(takes), "materia");
   const reprobadasValues = map(values(reprobadas), "materia");
 
-  console.log(reprobadasValues);
   if (schules && schules.length > 0) {
     enrolledIs = true;
     arrayEnrolleds = map(schules, "codmate");
@@ -50,30 +49,7 @@ export const forEachPensumArrayToProps = (
     })
   );
 
-  let subjectsGroupBy = groupBy(pensumEvaluado, "ciclopens");
-  return orderArrayBidimensional(subjectsGroupBy);
-};
-
-const orderArrayBidimensional = (array) => {
-  const numCiclo = 10 / 2;
-  let arrayResponse = [];
-  const orderSubject = orderBy(array, "nopensum");
-
-  for (let index = 0; index < numCiclo; index++) {
-    arrayResponse.push([
-      orderSubject[0][index],
-      orderSubject[1][index],
-      orderSubject[2][index],
-      orderSubject[3][index],
-      orderSubject[4][index],
-      orderSubject[5][index],
-      orderSubject[6][index],
-      orderSubject[7][index],
-      orderSubject[8][index],
-      orderSubject[9][index],
-    ]);
-  }
-  return arrayResponse;
+  return orderBy(groupBy(pensumEvaluado, 'ciclopens'), 'nopensim')
 };
 
 export const propsToEnrolled = (data) => {

@@ -1,10 +1,19 @@
 import { takeEvery, fork, put } from "redux-saga/effects";
 
-import { actionTypes } from "../redux/ducks/notes";
+import DBConnection from "../api/Connection";
+import { startLoading, finishLoading } from "../redux/ducks/ui";
+import { actionTypes, notesAllLoading } from "../redux/ducks/notes";
 
 function* asyncLoadingNotes() {
   try {
-  } catch (error) {}
+    yield put(startLoading())
+    const response = yield DBConnection.instance.get('/notes/me')
+    yield put(notesAllLoading({...response}))
+  } catch (error) {
+    console.log(error);
+  } finally {
+    yield put(finishLoading())
+  }
 }
 
 function* watchNotes() {

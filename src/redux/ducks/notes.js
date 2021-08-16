@@ -11,11 +11,21 @@ export const notesAllLoading = (payload) => ({
 
 export const actionTypes = { NOTES_LOADING_ALL, NOTES_LOADING_ALL_ASYCN };
 
-const initialState = {};
+const initialState = {
+  notes: [],
+  schules: [],
+  active: false,
+  loading: false
+};
 const reducers = (state = initialState, { type, payload }) => {
   switch (type) {
     case NOTES_LOADING_ALL_ASYCN:
-      return { ...state };
+      return Object.assign({}, state, {
+        loading: true,
+        active: payload.active,
+        notes: payload.history, 
+        schules: payload.schules
+      })
     default:
       return state;
   }
