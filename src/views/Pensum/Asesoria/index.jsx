@@ -1,20 +1,18 @@
 import React from "react";
+import { Row } from "reactstrap";
 import { connect } from "react-redux";
-import { Container, Row } from "reactstrap";
 
-import { CardUser } from "./component/CardUser";
+import CardUser from "../../../components/common/CardUser";
 import CardSubjects from "./component/CardSubjects";
 import CardUserEnrolled from "./component/CardUserEnrolled";
 
 const AsesoriaPage = ({ data, carrera, active, enrolled }) => {
   return (
-    <Container fluid={true}>
-      <Row className="asesoria third-news-update">
-        <CardUser user={data} carrera={carrera} />
-        {!active && <CardSubjects />}
-        {active && <CardUserEnrolled enrolled={enrolled} />}
-      </Row>
-    </Container>
+    <Row className="asesoria third-news-update">
+      <CardUser user={data} carrera={carrera} />
+      {!active && <CardSubjects />}
+      {active && <CardUserEnrolled enrolled={enrolled} />}
+    </Row>
   );
 };
 

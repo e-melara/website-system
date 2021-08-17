@@ -1,12 +1,13 @@
-import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { Container, Row } from "reactstrap";
+import React, { useEffect } from "react";
+import { Row, CardBody, Col, Card } from "reactstrap";
 
 import { Layout } from "../../components/layouts";
+import TablaHorario from "./components/TableHorario";
 import { notesLoading } from "../../redux/ducks/notes";
-import PageTitle from "../../components/common/PageTitle";
+import CardUser from "../../components/common/CardUser";
 
-const HorarioPage = ({ notes: { loading }, requestLoading }) => {
+const HorarioPage = ({ schules, user, carrera, loading, requestLoading }) => {
   useEffect(() => {
     if (!loading) {
       requestLoading();
@@ -15,20 +16,36 @@ const HorarioPage = ({ notes: { loading }, requestLoading }) => {
 
   return (
     <Layout>
-      <Container fluid={true}>
-        <Row>
-          <PageTitle title="Horario del ciclo" />
-        </Row>
-        <Row className="asesoria third-news-update"></Row>
-      </Container>
+      <Row className="asesoria third-news-update">
+        <CardUser user={user} carrera={carrera} />
+        {schules.length > 0 ? (
+          <TablaHorario items={schules} />
+        ) : (
+          <Col>
+            <Card>
+              <CardBody>
+                <div className="alert alert-info">
+                  <h2 className="text-center">
+                    Por el momento no tienes horario asignado
+                  </h2>
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
+        )}
+      </Row>
     </Layout>
   );
 };
 
 const mapStateToProps = (state) => {
-  const notes = state.notes;
+  const { schules, loading } = state.notes;
+  const { data, carrera } = state.auth;
   return {
-    notes,
+    schules,
+    user: data,
+    carrera,
+    loading,
   };
 };
 

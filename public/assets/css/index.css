@@ -1,16 +1,7 @@
 /* prettier-ignore */
+
+@import url("./bootstrap.css");
 @import url("./font-awesome.css");
-@import url("./vendors/icofont.css");
-@import url("./vendors/themify.css");
-@import url("./vendors/flag-icon.css");
-@import url("./vendors/feather-icon.css");
-@import url("./vendors/scrollbar.css");
-/* 
-@import url("./vendors/animate.css");
-@import url("./vendors/chartist.css");
-@import url("./vendors/date-picker.css"); */
-@import url("./vendors/bootstrap.css");
-@import url("./style.css");
-@import url("./color-2.css");
 @import url("./responsive.css");
-@import url("./feather.css");
+@import url("./color-3.css");
+@import url("./style.css");

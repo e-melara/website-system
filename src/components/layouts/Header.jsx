@@ -7,7 +7,7 @@ import HeaderRight from "./Header/HeaderRight";
 export const Header = ({ isClose }) => {
   return (
     <header className={`page-header ${isClose ? "close_icon" : ""}`}>
-      <Row className="header-wrapper m-0 row">
+      <Row className="header-wrapper m-0" style={{ height: "81px" }}>
         <HeaderLeft />
         <HeaderRight />
       </Row>

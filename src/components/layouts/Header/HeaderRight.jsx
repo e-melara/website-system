@@ -1,30 +1,51 @@
-import React from "react";
 import { Col } from "reactstrap";
+import classNames from "classnames";
 import { connect } from "react-redux";
-import { Maximize, User, Settings, LogIn } from "react-feather";
+import React, { useEffect } from "react";
+import { Maximize } from "react-feather";
+import { User, Settings, LogIn } from "react-feather";
 
 import { logout } from "../../../redux/ducks/login";
-import { changeTheme } from "../../../redux/ducks/ui";
+import { actionOnChangeTheme } from "../../../redux/ducks/ui";
 import ImageProfile from "../../../assets/images/profile/profile.jpg";
+import { fullScreen, changeUiThemeDarkOrLigth } from "../../../utils/ui";
 
-const HeaderRight = ({ ui, auth, clickMode, logout }) => {
+const HeaderRight = ({ auth, logout, ui, themeOnChange }) => {
+  const { theme } = ui;
   const { data, perfil } = auth;
+
+  useEffect(() => {
+    changeUiThemeDarkOrLigth(theme);
+  }, [theme]);
+
+  const handlerClickFullView = (e) => {
+    e.preventDefault();
+    fullScreen();
+  };
+
+  const handlerClickDarkOnLigth = () => {
+    themeOnChange(theme);
+  };
+
+  const c = classNames({
+    fa: true,
+    "fa-moon-o": theme === "ligth",
+    "fa-lightbulb-o": theme === "dark",
+  });
 
   return (
     <Col className="nav-right pull-right right-header p-0">
       <ul className="nav-menus">
-        <li>
-          <div className="mode" onClick={clickMode}>
-            <i
-              className={
-                ui.theme === "ligth" ? "fa fa-moon-o" : "fa fa-lightbulb-o"
-              }
-            ></i>
+        <li onClick={handlerClickDarkOnLigth}>
+          <div className="mode">
+            <i className={c}></i>
           </div>
         </li>
-        <li className="maximize">
-          <a className="text-dark" href="#!">
-            <Maximize />
+        <li>
+          <a href="#/" onClick={handlerClickFullView}>
+            <div className="text-dark">
+              <Maximize />
+            </div>
           </a>
         </li>
         <li className="profile-nav onhover-dropdown p-0 me-0">
@@ -70,7 +91,7 @@ const HeaderRight = ({ ui, auth, clickMode, logout }) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     logout: () => dispatch(logout()),
-    clickMode: () => dispatch(changeTheme()),
+    themeOnChange: (theme) => dispatch(actionOnChangeTheme(theme)),
   };
 };
 

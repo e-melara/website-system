@@ -5,7 +5,7 @@ import utlaLogo from "../../../assets/images/logo/utla.png";
 
 function Logo() {
   return (
-    <div>
+    <>
       <Wrapper />
       <div className="logo-icon-wrapper">
         <a href="/#">
@@ -17,7 +17,7 @@ function Logo() {
           />
         </a>
       </div>
-    </div>
+    </>
   );
 }
 

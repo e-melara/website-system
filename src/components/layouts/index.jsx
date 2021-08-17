@@ -1,40 +1,29 @@
 import React from "react";
+import classNames from "classnames";
 import { useSelector } from "react-redux";
 
-import "./layout.scss";
+import Footer from "./Footer";
 import { Header } from "./Header";
 import { SideBar } from "./SideBar";
 import Loading from "../common/Loading";
 
-// TODO: Arreglar la clase de footer para que cuadre bien
 export const Layout = ({ children }) => {
   const { isClose, loading } = useSelector((state) => state.ui);
+
+  const c = classNames({
+    "page-body": true,
+    minHeigth: true,
+  });
 
   return (
     <>
       <main className="page-wrapper compact-wrapper">
         <Header isClose={isClose} />
-        <section className="page-body-wrapper">
+        <div className="page-body-wrapper">
           <SideBar isClose={isClose} />
-          <div
-            className="page-body"
-            style={{
-              padding: "0px",
-              marginLeft: `${isClose ? "90px" : "280px"}`,
-            }}
-          >
-            {children}
-          </div>
-          <footer className="footer">
-            <div className="container-fluid">
-              <div className="row">
-                <div className="col-md-12 footer-copyright text-center">
-                  <p className="mb-0">UTLA 2021 © </p>
-                </div>
-              </div>
-            </div>
-          </footer>
-        </section>
+          <div className={c}>{children}</div>
+          <Footer />
+        </div>
       </main>
       {loading && <Loading />}
     </>

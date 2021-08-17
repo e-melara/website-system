@@ -30,7 +30,9 @@ const reducers = (state = initialState, { type, payload }) => {
     case UI_ICON_CLOSE_PAGE:
       return { ...state, isClose: payload };
     case UI_THEME_CHANGE:
-      return { ...state, theme: payload };
+      return { ...state, 
+        theme: payload === 'ligth' ? 'dark' : 'ligth'
+      };
     case UI_INIT:
       return {
         ...state,
@@ -61,6 +63,10 @@ export const changeTheme = () => {
   const theme = changeThemeUI();
   return { type: UI_THEME_CHANGE, payload: theme };
 };
+
+export const actionOnChangeTheme = (payload) => ({
+  type: UI_THEME_CHANGE, payload
+})
 
 export const changeOpenCloseAction = () => {
   const open = changeOpenClose();

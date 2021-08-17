@@ -2,9 +2,7 @@ import axios from "axios";
 import { KeyLocalStorage, BaseUrl } from "../consts";
 
 class DBConnection {
-  // para la instancia de singleton
   static instance;
-  // para la configuracion de axios
   axiosConfig;
   base_url;
   urlLogin;

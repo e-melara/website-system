@@ -1,0 +1,32 @@
+.card___calendario {
+  border-radius: 0px;
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    span {
+      color: black;
+      font-weight: bold;
+      font-size: 1.3rem;
+    }
+  }
+  .card-body {
+    a {
+      display: block;
+      font-size: 1rem;
+      text-align: left;
+      line-height: 1.2rem;
+      font-weight: bold;
+    }
+    span#fecha__calendario {
+      font-size: 0.90rem;
+      display: block;
+      text-align: right;
+      font-weight: bold;
+      padding: 15px 0;
+    }
+  }
+
+  .card-header, .card-body {
+    padding: 5px 20px;
+  }
+}

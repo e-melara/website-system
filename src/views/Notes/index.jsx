@@ -1,12 +1,19 @@
-import React, { useEffect } from "react";
+import { Row } from "reactstrap";
 import { connect } from "react-redux";
-import { Container, Row } from "reactstrap";
+import React, { useEffect } from "react";
 
 import { Layout } from "../../components/layouts";
 import { notesLoading } from "../../redux/ducks/notes";
-import PageTitle from "../../components/common/PageTitle";
+import CardUser from "../../components/common/CardUser";
+import TableNotesStudent from "./components/TableNotesStudent";
 
-const NotePage = ({ notes: { loading }, requestLoading }) => {
+const NotePage = ({
+  notes: { loading },
+  requestLoading,
+  auth,
+  carrera,
+  notes,
+}) => {
   useEffect(() => {
     if (!loading) {
       requestLoading();
@@ -15,20 +22,21 @@ const NotePage = ({ notes: { loading }, requestLoading }) => {
 
   return (
     <Layout>
-      <Container fluid={true}>
-        <Row>
-          <PageTitle title="Horario del ciclo" />
-        </Row>
-        <Row className="asesoria third-news-update"></Row>
-      </Container>
+      <Row className="asesoria third-news-update">
+        <CardUser carrera={carrera} user={auth} />
+        <TableNotesStudent notes={notes} />
+      </Row>
     </Layout>
   );
 };
 
 const mapStateToProps = (state) => {
-  const notes = state.notes;
+  const { data, carrera } = state.auth;
+  const { notes } = state.notes;
   return {
     notes,
+    auth: data,
+    carrera,
   };
 };
 
