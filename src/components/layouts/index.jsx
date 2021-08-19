@@ -7,12 +7,13 @@ import { Header } from "./Header";
 import { SideBar } from "./SideBar";
 import Loading from "../common/Loading";
 
-export const Layout = ({ children }) => {
+export const Layout = ({ children, classBodyOther }) => {
   const { isClose, loading } = useSelector((state) => state.ui);
 
-  const c = classNames({
+  let c = classNames({
     "page-body": true,
     minHeigth: true,
+    ...classBodyOther,
   });
 
   return (

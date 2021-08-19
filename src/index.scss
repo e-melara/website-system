@@ -77,3 +77,8 @@ div.sidebar-wrapper .logo-wrapper {
 .page-body.minHeigth {
   min-height: calc(100vh - 133px) !important;
 }
+
+// Close Icon
+div.sidebar-wrapper.close_icon ~ .page-margin-left {
+  margin-left: 86px !important;
+}

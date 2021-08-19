@@ -74,11 +74,12 @@ export const initialStateAsesoria = () => ({ type: ASESORIA_EMPTY });
 
 // reducers
 const initialState = {
+  pensum: [],
   subjects: [],
   enrolled: {},
-  pensum: [],
-  active: false,
   approved: [],
+  active: false,
+  loading: false,
   schulesStudents: [],
 };
 
@@ -88,6 +89,7 @@ function reducers(state = initialState, { type, payload }) {
       return {
         ...state,
         ...payload,
+        loading: true,
       };
     case ASESORIA_EMPTY:
       return initialState;
@@ -121,6 +123,7 @@ function reducers(state = initialState, { type, payload }) {
       return {
         ...state,
         active: true,
+        loading: true,
         enrolled: { ...payload.enrolled },
         pensum: { ...payload.pensum },
       };
