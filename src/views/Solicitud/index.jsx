@@ -1,16 +1,12 @@
 import classnames from "classnames";
 import React, { useState } from "react";
-import {
-  Row,
-  Col,
-  Nav,
-  TabPane,
-  NavItem,
-  NavLink,
-  TabContent,
-} from "reactstrap";
+import { Row, Nav, TabPane, NavItem, NavLink, TabContent } from "reactstrap";
 
 import { Layout } from "../../components/layouts";
+
+import SextaMateria from "./component/SextaMateria";
+import MateriaTutoriada from "./component/MateriaTutoriada";
+import ExamenSuficiencia from "./component/ExamenSuficiencia";
 
 function SolicitudPage() {
   const [activeTab, seTactiveTab] = useState("1");
@@ -50,10 +46,13 @@ function SolicitudPage() {
           </Nav>
           <TabContent activeTab={activeTab}>
             <TabPane tabId="1">
-              <h2>Pagina de inicio</h2>
+              <SextaMateria />
             </TabPane>
             <TabPane tabId="2">
-              <h2>Pagina de entrada</h2>
+              <MateriaTutoriada />
+            </TabPane>
+            <TabPane tabId="3">
+              <ExamenSuficiencia />
             </TabPane>
           </TabContent>
         </Row>
