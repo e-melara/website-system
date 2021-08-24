@@ -3,22 +3,16 @@ import { connect } from "react-redux";
 import React, { useEffect } from "react";
 
 import { Layout } from "../../components/layouts";
-import { notesLoading } from "../../redux/ducks/notes";
+import { checking } from "../../redux/ducks/notes";
 import CardUser from "../../components/common/CardUser";
 import TableNotesStudent from "./components/TableNotesStudent";
 
-const NotePage = ({
-  notes: { loading },
-  requestLoading,
-  auth,
-  carrera,
-  notes,
-}) => {
+const NotePage = ({ loading, auth, carrera, notes, validated }) => {
   useEffect(() => {
     if (!loading) {
-      requestLoading();
+      validated(loading);
     }
-  }, [loading, requestLoading]);
+  }, [loading, validated]);
 
   return (
     <Layout>
@@ -32,9 +26,10 @@ const NotePage = ({
 
 const mapStateToProps = (state) => {
   const { data, carrera } = state.auth;
-  const { notes } = state.notes;
+  const { notes, loading } = state.notes;
   return {
     notes,
+    loading,
     auth: data,
     carrera,
   };
@@ -42,7 +37,7 @@ const mapStateToProps = (state) => {
 
 const mapDispathToProps = (dispatch) => {
   return {
-    requestLoading: () => dispatch(notesLoading()),
+    validated: (loading) => dispatch(checking(loading)),
   };
 };
 

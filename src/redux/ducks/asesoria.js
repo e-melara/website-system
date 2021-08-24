@@ -19,21 +19,56 @@ const ASESORIA_RESPONSE_SEND = "[ASESORIA] RESPONSE SEND ASESORIA";
 // Types actions asesoria Enrolled
 const ASESORIA_SUBJECT_ENROLLED_DELETED = "[ASESORIA ENROLLED] DELETE SCHULES";
 
+// Verificando si hay datos en el store
+const CHECKING_DATA = "[ASESORIA CHECKING] VERIFICATED DATA";
+
+// Para las acciones de las solicitudes
+const SOLICITUD_ADD_POST = "[ASESORIA] ADD POST";
+const SOLICITUD_ADD_SUCCESS_EXTRA = "[ASESORIA] ADD POST SUCCESS EXTRA";
+const SOLICITUD_ADD_SUCCESS_OTHERS = "[ASESORIA] ADD POST SUCCESS OTHERS";
+
 export const actionsTypes = {
   ASESORIA,
   ASESORIA_EMPTY,
+  CHECKING_DATA,
   ASESORIA_ASYNC,
   PENSUM_LOADING_ALL,
   ASESORIA_REQUEST_SEND,
   ASESORIA_SUBJECT_SCHULES,
   PENSUM_LOADING_ALL_SUCCESS,
   ASESORIA_SUBJECT_ENROLLED_DELETED,
+  // SOLICITUD
+  SOLICITUD_ADD_POST,
+  SOLICITUD_ADD_SUCCESS_EXTRA,
+  SOLICITUD_ADD_SUCCESS_OTHERS,
 };
 
+//actions para las solicitudes
+export const addSolicitud = (payload) => ({
+  type: SOLICITUD_ADD_POST,
+  payload,
+});
+
+export const resolveSolicitudExtra = (payload) => ({
+  type: SOLICITUD_ADD_SUCCESS_EXTRA,
+  payload,
+});
+
+export const resolveSolicitudOther = (payload) => ({
+  type: SOLICITUD_ADD_SUCCESS_OTHERS,
+  payload,
+});
+
 // actions
-
+export const checking = (payload) => {
+  if (payload) {
+    return { type: CHECKING_DATA };
+  }
+  return {
+    type: PENSUM_LOADING_ALL,
+  };
+};
 export const pensumLoadingAll = () => ({ type: PENSUM_LOADING_ALL });
-
 export const startLoadingAsesoria = () => ({ type: ASESORIA });
 export const loaderSubjects = (materias) => ({
   type: ASESORIA_ASYNC,
@@ -80,11 +115,15 @@ const initialState = {
   approved: [],
   active: false,
   loading: false,
+  solicitudesSexta: [],
+  solicitudesOther: [],
   schulesStudents: [],
 };
 
 function reducers(state = initialState, { type, payload }) {
   switch (type) {
+    case CHECKING_DATA:
+      return { ...state, loading: true };
     case PENSUM_LOADING_ALL_SUCCESS:
       return {
         ...state,
@@ -126,6 +165,18 @@ function reducers(state = initialState, { type, payload }) {
         loading: true,
         enrolled: { ...payload.enrolled },
         pensum: { ...payload.pensum },
+      };
+
+    // Solicitudes
+    case SOLICITUD_ADD_SUCCESS_EXTRA:
+      return {
+        ...state,
+        solicitudesSexta: [...state.solicitudesSexta, payload]
+      };
+    case SOLICITUD_ADD_SUCCESS_OTHERS:
+      return {
+        ...state,
+        solicitudesOther: [...state.solicitudesOther, payload]
       };
     default:
       return state;

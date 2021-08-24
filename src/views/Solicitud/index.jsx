@@ -1,16 +1,43 @@
 import classnames from "classnames";
-import React, { useState } from "react";
-import { Row, Nav, TabPane, NavItem, NavLink, TabContent } from "reactstrap";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+
+import {
+  Row,
+  Nav,
+  Col,
+  TabPane,
+  NavItem,
+  NavLink,
+  TabContent,
+  Container,
+} from "reactstrap";
 
 import { Layout } from "../../components/layouts";
-
 import SextaMateria from "./component/SextaMateria";
+import { checking } from "../../redux/ducks/asesoria";
 import MateriaTutoriada from "./component/MateriaTutoriada";
 import ExamenSuficiencia from "./component/ExamenSuficiencia";
 
-function SolicitudPage() {
-  const [activeTab, seTactiveTab] = useState("1");
+// selectores
+import {
+  solicitudOthers,
+  subjectsApprovateTake,
+  validateSextaSubject,
+} from "../../redux/selectors/asesoria";
 
+function SolicitudPage({
+  loading,
+  results,
+  verificated,
+  validated,
+  solicitudes,
+}) {
+  useEffect(() => {
+    verificated(loading);
+  }, [loading, verificated]);
+
+  const [activeTab, seTactiveTab] = useState("1");
   const toggle = (tab) => {
     if (activeTab !== tab) seTactiveTab(tab);
   };
@@ -46,13 +73,28 @@ function SolicitudPage() {
           </Nav>
           <TabContent activeTab={activeTab}>
             <TabPane tabId="1">
-              <SextaMateria />
+              <Container fluid={true}>
+                <Row className="justify-content-center">
+                  <Col md={10} lg={8} xs={12}>
+                    {validated.active && <SextaMateria validated={validated} />}
+                    {!validated.active && !validated.inscripta && (
+                      <div className="alert alert-danger">
+                        <p>{validated.message}</p>
+                      </div>
+                    )}
+                  </Col>
+                </Row>
+              </Container>
             </TabPane>
             <TabPane tabId="2">
-              <MateriaTutoriada />
+              <Row className="justify-content-center">
+                <MateriaTutoriada />
+              </Row>
             </TabPane>
             <TabPane tabId="3">
-              <ExamenSuficiencia />
+              <Row className="justify-content-center">
+                <ExamenSuficiencia />
+              </Row>
             </TabPane>
           </TabContent>
         </Row>
@@ -61,4 +103,21 @@ function SolicitudPage() {
   );
 }
 
-export default SolicitudPage;
+const mapStateToProps = (state) => {
+  const { loading } = state.asesoria;
+
+  return {
+    loading,
+    solicitudes: solicitudOthers(state),
+    results: subjectsApprovateTake(state),
+    validated: validateSextaSubject(state),
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    verificated: (loading) => dispatch(checking(loading)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SolicitudPage);

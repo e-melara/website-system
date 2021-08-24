@@ -25,10 +25,12 @@ function* asyncLoadingPensum() {
       enrolled: {},
       pensum: [],
       active: false,
+      solicitudesSexta: [],
+      solicitudesOther: [],
     };
 
     yield put(startLoading());
-    const { active, pensum, take, approved, enrolleds, reprobadas } =
+    const { active, pensum, take, approved, enrolleds, reprobadas, solicitud } =
       yield DBConnection.instance.get("/asesoria/pensum");
 
     payload.active = active;
@@ -38,6 +40,9 @@ function* asyncLoadingPensum() {
       payload.enrolled = propsToEnrolled(enrolleds);
     }
 
+    payload.solicitudesSexta = solicitud.sexta;
+    payload.solicitudesOther = solicitud.other;
+    
     const pensumArray = forEachPensumArrayToProps(
       pensum,
       approved,
@@ -92,6 +97,35 @@ function* asyncAsesoriaRequest(actions) {
   }
 }
 
+// Solicitudes
+
+function* asyncSolicitudPost(actions) {
+  const payload = actions.payload;
+  try {
+    yield put(startLoading());
+    const type = payload.type;
+    const { solicitud } = yield DBConnection.instance.post(
+      "/solicitud/add",
+      payload
+    );
+
+    if (type === "SEXTA") {
+      yield put({
+        type: actionsTypes.SOLICITUD_ADD_SUCCESS_EXTRA,
+        payload: solicitud,
+      });
+    } else {
+      yield put({
+        type: actionsTypes.SOLICITUD_ADD_SUCCESS_OTHERS,
+        payload: solicitud,
+      });
+    }
+  } catch (error) {
+  } finally {
+    yield put(finishLoading());
+  }
+}
+
 // function watch
 function* watchAsesoria() {
   yield takeEvery(actionsTypes.ASESORIA, asyncAsesoriaLoading);
@@ -106,9 +140,15 @@ function* watchPensumLoadingAll() {
   yield takeEvery(actionsTypes.PENSUM_LOADING_ALL, asyncLoadingPensum);
 }
 
+// function para solicitudes
+function* watchSolicitudesAll() {
+  yield takeEvery(actionsTypes.SOLICITUD_ADD_POST, asyncSolicitudPost);
+}
+
 const rootAsesoria = [
   fork(watchAsesoria),
   fork(watchAsesoriaRequest),
   fork(watchPensumLoadingAll),
+  fork(watchSolicitudesAll),
 ];
 export default rootAsesoria;

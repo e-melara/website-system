@@ -16,18 +16,20 @@ import "./index.scss";
 import AsesoriaPage from "./Asesoria";
 import { Layout } from "../../components/layouts";
 import TablePensum from "./components/TablePensum";
-import { pensumLoadingAll } from "../../redux/ducks/asesoria";
+import { checking } from "../../redux/ducks/asesoria";
 
-function PensumPage({ dispatch, carrera, asesoria }) {
+function PensumPage({ carrera, pensum, loading, verificated }) {
   const [activeTab, seTactiveTab] = useState("1");
-
-  useEffect(() => {
-    dispatch(pensumLoadingAll());
-  }, [dispatch]);
-
   const toggle = (tab) => {
     if (activeTab !== tab) seTactiveTab(tab);
   };
+
+  useEffect(() => {
+    if (!loading) {
+      verificated(loading);
+    }
+  }, [verificated, loading]);
+
   return (
     <Layout>
       <Row className="second-chart-list third-news-update tabs p-0">
@@ -54,7 +56,7 @@ function PensumPage({ dispatch, carrera, asesoria }) {
             <TabPane tabId="1">
               <Row>
                 <Col>
-                  <TablePensum pensum={asesoria.pensum} carrera={carrera} />
+                  <TablePensum pensum={pensum} carrera={carrera} />
                 </Col>
               </Row>
             </TabPane>
@@ -68,11 +70,19 @@ function PensumPage({ dispatch, carrera, asesoria }) {
   );
 }
 
-const mapStateToProps = (state) => {
+const mapDispathToProps = (dispatch) => {
   return {
-    asesoria: state.asesoria,
-    carrera: state.auth.carrera,
+    verificated: () => dispatch(checking()),
   };
 };
 
-export default connect(mapStateToProps)(PensumPage);
+const mapStateToProps = (state) => {
+  const { pensum, loading } = state.asesoria;
+  return {
+    carrera: state.auth.carrera,
+    pensum,
+    loading,
+  };
+};
+
+export default connect(mapStateToProps, mapDispathToProps)(PensumPage);

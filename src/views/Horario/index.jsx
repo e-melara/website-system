@@ -3,16 +3,16 @@ import React, { useEffect } from "react";
 import { Row, CardBody, Col, Card } from "reactstrap";
 
 import { Layout } from "../../components/layouts";
+import { checking } from "../../redux/ducks/notes";
 import TablaHorario from "./components/TableHorario";
-import { notesLoading } from "../../redux/ducks/notes";
 import CardUser from "../../components/common/CardUser";
 
-const HorarioPage = ({ schules, user, carrera, loading, requestLoading }) => {
+const HorarioPage = ({ schules, user, carrera, loading, validated }) => {
   useEffect(() => {
     if (!loading) {
-      requestLoading();
+      validated(loading);
     }
-  }, [loading, requestLoading]);
+  }, [loading, validated]);
 
   return (
     <Layout>
@@ -51,7 +51,7 @@ const mapStateToProps = (state) => {
 
 const mapDispathToProps = (dispatch) => {
   return {
-    requestLoading: () => dispatch(notesLoading()),
+    validated: (loading) => dispatch(checking(loading)),
   };
 };
 
