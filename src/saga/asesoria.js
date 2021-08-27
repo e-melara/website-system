@@ -53,7 +53,6 @@ function* asyncLoadingPensum() {
     payload.pensum = pensumArray;
     yield put(pensumAddAllSuccess({ ...payload }));
   } catch (error) {
-    console.log(error);
   } finally {
     yield put(finishLoading());
   }

@@ -41,6 +41,12 @@ export const validateSextaSubject = createSelector(
           inscripta: false,
           message: "No hay una sexta materia a inscribir",
         };
+      }else {
+        return {
+          active: false,
+          inscripta: false,
+          message: "Para poder solicitar una sexta materias debes tener inscripta 5 materias",
+        };
       }
     }
 
