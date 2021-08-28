@@ -21,11 +21,33 @@ function* asycnSaveSolicitud(actions) {
   }
 }
 
+function* asycnLoader(actions) {
+  try {
+    const { payload } = actions;
+    const { total, current_page, data } = yield DBConnection.instance.get(
+      `/solicitud?page=${payload}`
+    );
+    yield put({
+      type: actionsType.SOLICITUD_LOADER_DATA,
+      payload : {
+        data,
+        total,
+        current_page,
+        loading: false,
+      }
+    })
+  } catch (error) {}
+}
+
 // function watch
 function* watchSaveSolicitud() {
   yield takeEvery(actionsType.SOLICITUD_SAVE, asycnSaveSolicitud);
 }
 
-const rootSolicitud = [fork(watchSaveSolicitud)];
+function* watchLoader() {
+  yield takeEvery(actionsType.SOLICITUD_LOADER, asycnLoader);
+}
+
+const rootSolicitud = [fork(watchSaveSolicitud), fork(watchLoader)];
 
 export default rootSolicitud;

@@ -8,7 +8,6 @@ import {
 import React, { useCallback, useState, useMemo, useEffect } from "react";
 
 import "./solicitud-nueva.scss";
-
 import {
   validateSextaSubject,
   subjectsApprovateTake,
@@ -23,6 +22,7 @@ import { Layout } from "../../components/layouts";
 import { checking } from "../../redux/ducks/asesoria";
 import { PageInfo } from "./components/SolicitudNueva/PageInfo";
 import FormSelect from "./components/SolicitudNueva/FormSelect";
+import { validateSextaSubjectUtils } from "../../utils/solicitud";
 import HorarioSextaMateria from "./components/SolicitudNueva/HorarioSextaMateria";
 
 const { Step } = Steps;
@@ -36,6 +36,7 @@ const SolicitudNuevaPage = ({
   carrera,
   subjects,
   validated,
+  enrolleds,
   saveRemote,
   resetState,
   verificated,
@@ -47,7 +48,7 @@ const SolicitudNuevaPage = ({
 
   useEffect(() => {
     resetState();
-  }, [resetState])
+  }, [resetState]);
 
   useEffect(() => {
     if (!loading) {
@@ -73,9 +74,9 @@ const SolicitudNuevaPage = ({
   }, [current, form, subjects, add]);
 
   const prev = useCallback(() => {
-    const type = "SEXTA";
+    const type = dataSolicitud.type;
     setCurrent(current - (type === "SEXTA" ? 1 : 2));
-  }, [current]);
+  }, [current, dataSolicitud]);
 
   const next = useCallback(async () => {
     try {
@@ -89,10 +90,19 @@ const SolicitudNuevaPage = ({
 
   const handlerSelectionSextaSubject = useCallback(
     (data) => {
-      sixth(data);
-      setCurrent(current + 1);
+      let validatedSolicitud = validateSextaSubjectUtils(data, enrolleds);
+      if (!validatedSolicitud.validate) {
+        sixth(data);
+        setCurrent(current + 1);
+        return;
+      }
+
+      const { subjectObject } = validatedSolicitud;
+      message.error(
+        `Lo sentimos pero el horario seleccionado es el mismo con la materia ${subjectObject.nommate}, materia ya inscripta`, 10
+      );
     },
-    [current, sixth]
+    [sixth, enrolleds, setCurrent, current]
   );
 
   const steps = useMemo(
@@ -123,12 +133,12 @@ const SolicitudNuevaPage = ({
       },
     ],
     [
-      validated,
       form,
-      carrera,
       data,
-      dataSolicitud,
+      carrera,
       subjects,
+      validated,
+      dataSolicitud,
       handlerSelectionSextaSubject,
     ]
   );
@@ -209,11 +219,13 @@ const mapDispathToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
   const { add } = state.solicitud;
+  const { enrolled } = state.asesoria;
   const { data, carrera } = state.auth;
   return {
     data,
     carrera,
     dataSolicitud: add,
+    enrolleds: enrolled,
     loading: state.asesoria.loading,
     validated: validateSextaSubject(state),
     subjects: subjectsApprovateTake(state),

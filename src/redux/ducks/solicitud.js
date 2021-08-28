@@ -1,3 +1,6 @@
+const SOLICITUD_LOADER = "[SOLICITUD] LOADER PAGE";
+const SOLICITUD_LOADER_DATA = "[SOLICITUD] LOADER PAGE SUCCESS";
+
 const SOLICITUD_ADD_POST = "[SOLICITUD] ADD POST";
 const SOLICITUD_ADD_SUCCESS = "[SOLICITUD] ADD POST SUCCESS";
 
@@ -14,13 +17,20 @@ const SOLICITUD_SIXTH_SUBJECT_ERROR =
 export const actionsType = {
   SOLICITUD_SAVE,
   SOLICITUD_RESET,
+  SOLICITUD_LOADER,
   SOLICITUD_ADD_POST,
   SOLICITUD_ADD_OBJECT,
   SOLICITUD_ADD_SUCCESS,
+  SOLICITUD_LOADER_DATA,
   SOLICITUD_SIXTH_SUBJECT,
   SOLICITUD_SIXTH_SUBJECT_ERROR,
   SOLICITUD_SIXTH_SUBJECT_SUCCESS,
 };
+
+export const paginator = (payload) => ({
+  type: SOLICITUD_LOADER,
+  payload
+});
 
 export const addObjectState = (payload) => ({
   type: SOLICITUD_ADD_OBJECT,
@@ -47,6 +57,15 @@ const initialState = {
     observacion: "",
     sixthSubject: null,
   },
+  list: {
+    data: [],
+    pagination: {
+      current: 1,
+      pageSize: 5,
+      total: 0,
+    },
+    loading: true,
+  },
 };
 
 const reducers = (state = initialState, { type, payload }) => {
@@ -61,6 +80,21 @@ const reducers = (state = initialState, { type, payload }) => {
         add: Object.assign({}, state.add, payload, {
           data: true,
         }),
+      };
+
+    case SOLICITUD_LOADER_DATA:
+      return {
+        ...state,
+        list: {
+          ...state.list,
+          data: payload.data,
+          pagination: {
+            pageSize: 5,
+            current: payload.current_page,
+            total: payload.total,
+          },
+          loading: false,
+        },
       };
 
     case SOLICITUD_SIXTH_SUBJECT_SUCCESS:

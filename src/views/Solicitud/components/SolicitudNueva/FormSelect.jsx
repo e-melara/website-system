@@ -7,9 +7,10 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const FormSelect = ({ form, subjects, validated, data }) => {
+  const typeInitial = data.type || 'SEXTA';
   const { active, inscripta } = validated;
   const { observacion, type, subject } = data;
-  const [showFormSubject, setShowFormSubject] = useState("SEXTA");
+  const [showFormSubject, setShowFormSubject] = useState(typeInitial);
 
   const onChangeValuesInput = (e) => {
     if (e.type) {
