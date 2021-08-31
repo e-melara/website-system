@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 import { fork, takeEvery, put } from "redux-saga/effects";
 
 import DBConnection from "../api/Connection";
-import { finishLoading, startLoading } from "../redux/ducks/ui";
+import { changeLoading } from "../redux/ducks/ui";
 
 import {
   actionsTypes,
@@ -29,7 +29,7 @@ function* asyncLoadingPensum() {
       solicitudesOther: [],
     };
 
-    yield put(startLoading());
+    yield put(changeLoading(true));
     const { active, pensum, take, approved, enrolleds, reprobadas, solicitud } =
       yield DBConnection.instance.get("/asesoria/pensum");
 
@@ -54,12 +54,12 @@ function* asyncLoadingPensum() {
     yield put(pensumAddAllSuccess({ ...payload }));
   } catch (error) {
   } finally {
-    yield put(finishLoading());
+    yield put(changeLoading(false));
   }
 }
 
 function* asyncAsesoriaLoading() {
-  yield put(startLoading());
+  yield put(changeLoading(true));
   try {
     const { materias, active, data } = yield DBConnection.instance.get(
       "/asesoria/me"
@@ -74,13 +74,13 @@ function* asyncAsesoriaLoading() {
   } catch (error) {
     console.log(error);
   } finally {
-    yield put(finishLoading());
+    yield put(changeLoading(false));
   }
 }
 
 // FIXED: Reparar la parte del estado cuando se guarda
 function* asyncAsesoriaRequest(actions) {
-  yield put(startLoading());
+  yield put(changeLoading(true));
   try {
     const { codCargas, phone } = actions.payload;
     yield DBConnection.instance.post("/asesoria/registro", {
@@ -92,7 +92,7 @@ function* asyncAsesoriaRequest(actions) {
   } catch (error) {
     toast.error(error.message);
   } finally {
-    yield put(finishLoading());
+    yield put(changeLoading(false));
   }
 }
 
@@ -101,7 +101,7 @@ function* asyncAsesoriaRequest(actions) {
 function* asyncSolicitudPost(actions) {
   const payload = actions.payload;
   try {
-    yield put(startLoading());
+    yield put(changeLoading(true));
     const type = payload.type;
     const { solicitud } = yield DBConnection.instance.post(
       "/solicitud/add",
@@ -121,7 +121,7 @@ function* asyncSolicitudPost(actions) {
     }
   } catch (error) {
   } finally {
-    yield put(finishLoading());
+    yield put(changeLoading(false));
   }
 }
 

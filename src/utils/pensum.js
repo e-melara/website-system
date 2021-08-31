@@ -12,6 +12,18 @@ const stringStatus = (status) => {
   }
 };
 
+export const statusEnrolled = (status) => {
+  let resolve = { message: "Activa", type: "info" };
+  if (status === "A") {
+    return resolve;
+  } else if (status === "D") {
+    return {
+      message: "Denegada",
+      type: "error",
+    };
+  }
+};
+
 export const mapSubjectsActive = (materias) => {
   return values(materias).map((e) =>
     Object.assign({}, e, {
@@ -49,7 +61,7 @@ export const forEachPensumArrayToProps = (
     })
   );
 
-  return orderBy(groupBy(pensumEvaluado, 'ciclopens'), 'nopensim')
+  return orderBy(groupBy(pensumEvaluado, "ciclopens"), "nopensim");
 };
 
 export const propsToEnrolled = (data) => {

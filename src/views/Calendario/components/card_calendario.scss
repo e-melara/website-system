@@ -1,32 +1,36 @@
-.card___calendario {
-  border-radius: 0px;
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    span {
-      color: black;
-      font-weight: bold;
-      font-size: 1.3rem;
+.ant-card-head {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  .ant-card-head-wrapper {
+    .ant-card-head-title,
+    .ant-card-extra {
+      padding: 0px;
+      font-size: 1.5rem;
+      font-weight: 800;
     }
   }
-  .card-body {
-    a {
-      display: block;
-      font-size: 1rem;
-      text-align: left;
-      line-height: 1.2rem;
-      font-weight: bold;
-    }
-    span#fecha__calendario {
-      font-size: 0.90rem;
-      display: block;
-      text-align: right;
-      font-weight: bold;
-      padding: 15px 0;
-    }
-  }
+}
 
-  .card-header, .card-body {
-    padding: 5px 20px;
+.ant-page-header-heading-sub-title {
+  margin-left: 10px;
+}
+
+.ant-card-body {
+  .link {
+    display: block;
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    height: 100px;
+    overflow: hidden;
+    line-height: 1.2;
+    font-family: "Lato";
+    text-overflow: ellipsis;
+  }
+  .date_span {
+    display: block;
+    font-size: 1rem;
+    padding: 5px 0px;
+    font-weight: 800;
+    text-align: right;
   }
 }

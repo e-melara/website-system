@@ -4,11 +4,9 @@ import React, { useEffect } from "react";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { Col, Row, Button, Table, Card, Alert } from "antd";
 
-// Moment
 import "moment/locale/es";
 import Moment from "react-moment";
 
-import { Layout } from "../../components/layouts";
 import { paginator } from "../../redux/ducks/solicitud";
 
 const statusText = (message) => {
@@ -33,6 +31,7 @@ function Solicitud({ paginatorHandler, paginator }) {
     {
       title: "Codigo",
       dataIndex: "codmate",
+      align: 'center'
     },
     {
       title: "Materia",
@@ -41,6 +40,7 @@ function Solicitud({ paginatorHandler, paginator }) {
     {
       width: "80px",
       title: "Tipo",
+      align: 'center',
       dataIndex: "type",
       render: (type) => (
         <Alert
@@ -58,6 +58,7 @@ function Solicitud({ paginatorHandler, paginator }) {
     {
       width: "80px",
       title: "Estado",
+      align: 'center',
       dataIndex: "estado",
       render: (status) => (
         <Alert
@@ -69,6 +70,7 @@ function Solicitud({ paginatorHandler, paginator }) {
     {
       title: "Fecha",
       width: "160px",
+      align: 'center',
       dataIndex: "created_at",
       render: (dateCreated) => (
         <Moment date={dateCreated} format="DD MMM YYYY" withTitle locale="es" />
@@ -76,18 +78,18 @@ function Solicitud({ paginatorHandler, paginator }) {
     },
     {
       title: "Hace",
+      align: 'center',
       width: "160px",
       dataIndex: "created_at",
-      render: (dateCreated) => (
-        <Moment date={dateCreated} toNow locale="es" />
-      ),
+      render: (dateCreated) => <Moment date={dateCreated} toNow locale="es" />,
     },
   ];
 
   return (
-    <Layout>
-      <Row justify="end" className="p-4">
-        <Col span={3}>
+    <div className="p-4">
+      <Row justify="space-between" className="p-4">
+        <Col></Col>
+        <Col>
           <Link to="/solicitud/s/new">
             <Button
               size="large"
@@ -102,9 +104,10 @@ function Solicitud({ paginatorHandler, paginator }) {
       </Row>
       <Row>
         <Col span={24}>
-          <Card title="Solicitudes">
+          <Card title="Solicitudes" size='small' hoverable>
             <Table
               bordered
+              size="small"
               columns={columns}
               onChange={handlerChangePage}
               dataSource={paginator.data}
@@ -115,7 +118,7 @@ function Solicitud({ paginatorHandler, paginator }) {
           </Card>
         </Col>
       </Row>
-    </Layout>
+    </div>
   );
 }
 

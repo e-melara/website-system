@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Switch, Redirect } from "react-router-dom";
 import { AuthRouter } from "./AuthRouter";
 import { PublicRoute } from "./PublicRoute";
 import { PrivateRoute } from "./PrivateRoute";
-import { AuthPrivateRoute } from "./AuthPrivateRoute";
+import AuthPrivateRoute  from "./AuthPrivateRoute";
 
 import { startChecking } from "../redux/ducks/login";
 import Loading from "../components/common/Loading";
@@ -30,7 +30,7 @@ const AppRouter = ({ auth: { isAuthenticated, checking }, dispatch }) => {
           />
           <PrivateRoute
             path="/"
-            component={AuthPrivateRoute}
+            component={() => <AuthPrivateRoute />}
             isAuthenticated={isAuthenticated}
           />
           <Redirect to="/auth/login" />

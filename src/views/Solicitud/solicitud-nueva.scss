@@ -1,6 +1,7 @@
 .steps-action {
-  display: flex;
+  padding: 0px 30px 30px;
   justify-content: space-between;
+  display: flex;
   span[role="img"].anticon-arrow-right ~ span {
     float: left;
     margin-right: 10px;
@@ -31,9 +32,9 @@
     h2 {
       color: #373e5d !important;
     }
-    p{
-      font-size: 1.0rem;
-      font-family: 'Lato';
+    p {
+      font-size: 1rem;
+      font-family: "Lato";
     }
   }
 }
@@ -47,7 +48,7 @@
       color: #373e5d !important;
     }
     .ant-form-item-explain-error {
-      font-family: 'Lato';
+      font-family: "Lato";
       text-align: left;
       padding: 10px 5px;
     }
@@ -61,7 +62,7 @@
   padding: 40px;
   background-color: #f9f9f9;
   .ant-descriptions-row .ant-descriptions-item-container {
-    .ant-descriptions-item-label, 
+    .ant-descriptions-item-label,
     .ant-descriptions-item-content {
       font-size: 1.2rem;
       time {

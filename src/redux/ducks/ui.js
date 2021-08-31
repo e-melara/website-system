@@ -1,42 +1,51 @@
-import { initThemeUi, changeThemeUI, changeOpenClose } from "../../utils/ui";
+const UI = "[UI] INITIAL STATE";
+const UI_LOADING = "[UI] LOADING CHANGE STATUS";
+const UI_CHANGE_THEME = "[UI] CHANGE UI THEME STATUS";
+const UI_CHANGE_SIDEBAR = "[UI] CHANGE UI SIDEBAR STATUS";
 
-// types
-const UI_EMPTY = "[UI] UI EMPTY";
+export const actionsType = {
+  UI,
+  UI_LOADING,
+  UI_CHANGE_THEME,
+  UI_CHANGE_SIDEBAR,
+};
 
-export const UI_LOADING_SHOW = "[UI] SHOW LOADING";
-export const UI_LOADING_HIDE = "[UI] HIDDEN LOADING";
+export const changeUiTheme = () => ({ type: UI_CHANGE_THEME });
+export const changeUiSidebar = () => ({ type: UI_CHANGE_SIDEBAR });
+export const initialStatus = (payload) => ({ type: UI, payload });
+export const changeLoading = (payload) => ({ type: UI_LOADING, payload });
 
-export const UI_INIT = "[UI] INIT CHANGE";
-export const UI_THEME_CHANGE = "[UI] CHANGE THEME";
-export const UI_ICON_CLOSE_PAGE = "[UI] CHANGE PAGE CLOSE";
-
-export const uiEmptyChange = () => ({ type: UI_EMPTY });
-
-// reducers
 const initialState = {
+  open: false,
+  theme: "dark",
   loading: false,
-  theme: "ligth",
-  isClose: false,
 };
 
 const reducers = (state = initialState, { type, payload }) => {
   switch (type) {
-    case UI_EMPTY:
-      return initialState;
-    case UI_LOADING_SHOW:
-      return { ...state, loading: true };
-    case UI_LOADING_HIDE:
-      return { ...state, loading: false };
-    case UI_ICON_CLOSE_PAGE:
-      return { ...state, isClose: payload };
-    case UI_THEME_CHANGE:
-      return { ...state, 
-        theme: payload === 'ligth' ? 'dark' : 'ligth'
+    case UI:
+      return {
+        ...payload,
+        loading: false,
       };
-    case UI_INIT:
+    case UI_CHANGE_SIDEBAR:
+      localStorage.setItem("open", !state.open);
       return {
         ...state,
-        ...payload,
+        open: !state.open,
+      };
+    case UI_CHANGE_THEME:
+      const theme = state.theme === "ligth" ? "dark" : "ligth";
+      localStorage.setItem("theme", theme);
+      return {
+        ...state,
+        theme: theme,
+      };
+
+    case UI_LOADING:
+      return {
+        ...state,
+        loading: payload,
       };
     default:
       return state;
@@ -44,31 +53,3 @@ const reducers = (state = initialState, { type, payload }) => {
 };
 
 export default reducers;
-
-// actions
-export const startLoading = () => ({
-  type: UI_LOADING_SHOW,
-});
-
-export const finishLoading = () => ({
-  type: UI_LOADING_HIDE,
-});
-
-export const initUI = () => {
-  const ui = initThemeUi();
-  return { type: UI_INIT, payload: { ...ui } };
-};
-
-export const changeTheme = () => {
-  const theme = changeThemeUI();
-  return { type: UI_THEME_CHANGE, payload: theme };
-};
-
-export const actionOnChangeTheme = (payload) => ({
-  type: UI_THEME_CHANGE, payload
-})
-
-export const changeOpenCloseAction = () => {
-  const open = changeOpenClose();
-  return { type: UI_ICON_CLOSE_PAGE, payload: open };
-};

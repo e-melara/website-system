@@ -1,22 +1,51 @@
 import React from "react";
-import { Row } from "reactstrap";
+import { DatePicker, Row, Col, List } from "antd";
 
-import { Layout } from "../../components/layouts";
 import CardCalendario from "./components/CardCalendario";
-import PageTitle from "../../components/common/PageTitle";
+
+const { Item } = List;
 
 const Calendario = () => {
-  const tarjetas = Array.from(Array(10).fill(1)).map((_, i) => (
-    <CardCalendario key={i} />
-  ));
-
+  const arrayData = Array(10).fill(1);
   return (
-    <Layout>
-      <Row>
-        <PageTitle title="Calendario Academico" />
+    <div className="p-4">
+      <Row justify="space-between">
+        <Col>
+          <h3 className="ant-page-header-heading-title">
+            Calendario Academico
+            <span className="ant-page-header-heading-sub-title">
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+            </span>
+          </h3>
+        </Col>
+        <Col>
+          <DatePicker
+            size="large"
+            picker="month"
+            format={"MMMM-YYYY"}
+            style={{ width: 210 }}
+            placeholder="Seleccione el mes"
+          />
+        </Col>
       </Row>
-      <Row>{tarjetas}</Row>
-    </Layout>
+      <List
+        grid={{
+          gutter: [16, 16],
+          sm: 1,
+          md: 2,
+          lg: 3,
+          xl: 4,
+          xxl: 4
+        }}
+        style={{ paddingTop: 40 }}
+        dataSource={arrayData}
+        renderItem={() => (
+          <Item>
+            <CardCalendario />
+          </Item>
+        )}
+      />
+    </div>
   );
 };
 

@@ -3,30 +3,14 @@ import { put, takeEvery, fork } from "redux-saga/effects";
 // types actions for watchs
 import DBConnection from "../api/Connection";
 import { showErrorToast } from "../utils/errors";
-import { startLoading, finishLoading, initUI } from "../redux/ducks/ui";
-import {
-  actionType,
-  actionLoginSuccess,
-  checkingFinish,
-} from "../redux/ducks/login";
-
-import { KeyLocalStorage } from "../consts";
-import { uiEmptyChange } from "../redux/ducks/ui";
-import { initialStateAsesoria } from "../redux/ducks/asesoria";
-
-// functions async
-function* asycnLogout() {
-  localStorage.removeItem("ui");
-  localStorage.removeItem(KeyLocalStorage);
-
-  yield put(uiEmptyChange());
-  yield put(initialStateAsesoria());
-  yield put({ type: actionType.LOGIN_LOGOUT_ASYNC });
-}
+import { checkingFinish } from "../redux/ducks/login";
+import { KeyLocalStorage, RESET_STORE } from "../consts";
+import { changeLoading, actionsType } from "../redux/ducks/ui";
+import { actionType, actionLoginSuccess } from "../redux/ducks/login";
 
 function* asyncLogin(action) {
   const { username, password } = action.payload;
-  yield put(startLoading());
+  yield put(changeLoading(true));
   try {
     const resolve = yield DBConnection.instance.login(username, password);
     yield put(
@@ -45,12 +29,13 @@ function* asyncLogin(action) {
       showErrorToast(data);
     }
   } finally {
-    yield put(finishLoading());
+    yield put(changeLoading(false));
   }
 }
 
 function* asyncChecking() {
   try {
+    yield put(changeLoading(true));
     const resolve = yield DBConnection.instance.post("auth/me");
     yield put(
       actionLoginSuccess(
@@ -62,11 +47,23 @@ function* asyncChecking() {
         })
       )
     );
-    yield put(initUI());
   } catch (e) {
   } finally {
     yield put(checkingFinish());
+    yield put({
+      type: actionsType.UI,
+      payload: {
+        open: localStorage.getItem("open") || true,
+        theme: localStorage.getItem("theme") || "dark",
+        loading: false,
+      },
+    });
   }
+}
+
+function* asyncLogout() {
+  localStorage.removeItem(KeyLocalStorage);
+  yield put({ type: RESET_STORE });
 }
 
 // functions watch
@@ -78,14 +75,10 @@ function* watchChecking() {
   yield takeEvery(actionType.LOGIN_CHECKING, asyncChecking);
 }
 
-function* watchLogoutChecking() {
-  yield takeEvery(actionType.LOGIN_LOGOUT, asycnLogout);
+function* watchLogout() {
+  yield takeEvery(actionType.LOGIN_LOGOUT, asyncLogout);
 }
 
-const rootAuthSaga = [
-  fork(watchLogin),
-  fork(watchChecking),
-  fork(watchLogoutChecking),
-];
+const rootAuthSaga = [fork(watchLogin), fork(watchChecking), fork(watchLogout)];
 
 export default rootAuthSaga;

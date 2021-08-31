@@ -1,11 +1,11 @@
-import { Row } from "reactstrap";
+// import { Row } from "reactstrap";
+import { Row, Col, Table, Card, Badge } from "antd";
+
 import { connect } from "react-redux";
 import React, { useEffect } from "react";
 
-import { Layout } from "../../components/layouts";
 import { checking } from "../../redux/ducks/notes";
 import CardUser from "../../components/common/CardUser";
-import TableNotesStudent from "./components/TableNotesStudent";
 
 const NotePage = ({ loading, auth, carrera, notes, validated }) => {
   useEffect(() => {
@@ -13,14 +13,58 @@ const NotePage = ({ loading, auth, carrera, notes, validated }) => {
       validated(loading);
     }
   }, [loading, validated]);
+  const columns = [
+    {
+      key: "codmate",
+      dataIndex: "codmate",
+      title: "Codigo",
+      align: 'center'
+    },
+    {
+      key: "nommate",
+      dataIndex: "nommate",
+      title: "Materia",
+      
+    },
+    {
+      key: "ciclolectivo",
+      dataIndex: "ciclolectivo",
+      title: "Ciclo en curso",
+      align: 'center'
+    },
+    {
+      key: "estado",
+      dataIndex: "estado",
+      title: "Estado",
+      align: 'center',
+      render: (estado) => (
+        <Badge
+          status={estado === "APROBADO" ? "success" : "error"}
+          text={estado}
+        />
+      ),
+    },
+  ];
 
   return (
-    <Layout>
-      <Row className="asesoria third-news-update">
-        <CardUser carrera={carrera} user={auth} />
-        <TableNotesStudent notes={notes} />
+    <div className="p-4">
+      <Row gutter={[20, 0]}>
+        <Col xs={8}>
+          <CardUser carrera={carrera} user={auth} />
+        </Col>
+        <Col xs={16}>
+          <Card title="Historial de notas">
+            <Table
+              rowKey={Math.floor(Math.random() * Date.now())}
+              columns={columns}
+              dataSource={notes}
+              size="small"
+              bordered
+            />
+          </Card>
+        </Col>
       </Row>
-    </Layout>
+    </div>
   );
 };
 

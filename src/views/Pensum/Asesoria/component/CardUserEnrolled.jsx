@@ -1,65 +1,60 @@
 import React from "react";
+import { Table, Card, Alert, Badge } from "antd";
 
-import { Col, Card, CardHeader, CardFooter, Table } from "reactstrap";
+// TODO: Cambiar el colo del estado para los siguientes dos estados
+export default function CardUserEnrolled({ enrolled }) {
+  const { schules, estado } = enrolled;
 
-import Badge from "../../../../components/common/Badge";
-
-function CardUserEnrolled({ enrolled }) {
-  const rows = enrolled.schules.map(function (row, index) {
-    const status = row.estado === "D" ? "Pendiente" : "Aceptada";
-    return (
-      <tr key={`enrolled ${Math.random() * 100}`}>
-        <td>{index + 1}</td>
-        <td>{row.nommate}</td>
-        <td className="text-center">{row.dias}</td>
-        <td className="text-center">{row.hora}</td>
-        <td className="text-center">{row.turno}</td>
-        <td className="text-center">
-          <Badge title={status} />
-        </td>
-      </tr>
-    );
-  });
+  const columns = [
+    {
+      title: "Codigo",
+      dataIndex: "codmate",
+      key: "codmate",
+    },
+    {
+      title: "Materia",
+      dataIndex: "nommate",
+      key: "nommate",
+    },
+    {
+      title: "Dias",
+      dataIndex: "dias",
+      key: "dias",
+    },
+    {
+      title: "Horarios",
+      dataIndex: "hora",
+      key: "hora",
+    },
+    {
+      title: "Grupo",
+      dataIndex: "turno",
+      key: "turno",
+    },
+  ];
 
   return (
-    <>
-      <Col>
-        <Card className="earning-card">
-          <CardHeader style={{ padding: "20px 40px" }}>
-            <div className="header-top">
-              <h5 className="m-0">Hoja de asesoria</h5>
-              <div>
-                <span>Estado Actual: </span>
-                <Badge title={enrolled.estado} />
-              </div>
-            </div>
-          </CardHeader>
-          <Table responsive className="table-bordernone">
-            <thead>
-              <tr>
-                <th width="10px">#</th>
-                <th className="text-center">Materia</th>
-                <th className="text-center">Dia</th>
-                <th className="text-center">Horas</th>
-                <th className="text-center">Grupo</th>
-                <th className="text-center">Estado</th>
-              </tr>
-            </thead>
-            <tbody>{rows}</tbody>
-          </Table>
-          <CardFooter style={{ padding: "20px 40px" }}>
-            <h4
-              className="alert alert-primary text-center"
-              style={{ borderRadius: "50px" }}
-            >
-              {enrolled.observacion ||
-                "Su asesoria esta en proceso de validación"}
-            </h4>
-          </CardFooter>
-        </Card>
-      </Col>
-    </>
+    <Badge.Ribbon
+      text={`${estado}`}
+      type={estado === "Activa" ? "purple" : "green"}
+    >
+      <Card title="Hoja de asesoria" hoverable>
+        <Table
+          key={enrolled.codcarga}
+          dataSource={schules}
+          columns={columns}
+          bordered
+          pagination={false}
+        />
+        <Alert
+          type="success"
+          title="Obsevacion"
+          style={{ padding: 20 }}
+          message={`Observacion: ${
+            enrolled.observacion || "Su asesoria esta en proceso de validación"
+          }`}
+        />
+      </Card>
+    </Badge.Ribbon>
   );
 }
-
-export default CardUserEnrolled;

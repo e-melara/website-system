@@ -1,30 +1,24 @@
 import React from "react";
-import { Card, CardBody } from "reactstrap";
+import { Card } from "antd";
 
 import ImageProfile from "../../assets/images/profile/3.png";
 
-const CardUser = ({ user, carrera }) => {
+export default function CardUser({ user, carrera }) {
   return (
-    <Card className="o-hidden profile-greeting">
-      <CardBody className="avatar-showcase">
-        <div className="greeting-user text-center avatars">
-          <div className="profile-vector avatar">
-            <img
-              className="img-fluid img-100 rounded-circle"
-              src={ImageProfile}
-              alt="imgs para el perfil"
-            />
-          </div>
-          <h5 className="f-w-600">
-            {user.nombres} {user.apellidos} <br />
-            Carnet: {user.id}
-          </h5>
-
-          <h6>{carrera.nomcarrera}</h6>
-        </div>
-      </CardBody>
+    <Card hoverable>
+      <figure className="d-flex justify-content-center">
+        <img
+          src={ImageProfile}
+          style={{ height: 150 }}
+          className="img-fluid rounded-circle"
+          alt="imgs para el perfil"
+        />
+      </figure>
+      <h5 className="text-center">
+        {user.nombres} {user.apellidos} <br />
+        Carnet: {user.id}
+      </h5>
+      <h6 className="text-center">{carrera.nomcarrera}</h6>
     </Card>
   );
-};
-
-export default CardUser;
+}

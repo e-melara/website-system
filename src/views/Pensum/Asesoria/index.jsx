@@ -1,17 +1,29 @@
 import React from "react";
-import { Row } from "reactstrap";
+import { Row, Col } from "antd";
 import { connect } from "react-redux";
 
+import "./asesoria.scss";
 import CardUser from "../../../components/common/CardUser";
 import CardSubjects from "./component/CardSubjects";
 import CardUserEnrolled from "./component/CardUserEnrolled";
 
+// TODO:Por el momento no he modificado el modal
 const AsesoriaPage = ({ data, carrera, active, enrolled }) => {
   return (
-    <Row className="asesoria third-news-update">
-      <CardUser user={data} carrera={carrera} />
-      {!active && <CardSubjects />}
-      {active && <CardUserEnrolled enrolled={enrolled} />}
+    <Row gutter={[24, 8]} className="asesoria third-news-update">
+      <Col flex={2}>
+        <CardUser user={data} carrera={carrera} />
+      </Col>
+      {!active && (
+        <Col flex={5}>
+          <CardSubjects />
+        </Col>
+      )}
+      {active && (
+        <Col flex={5}>
+          <CardUserEnrolled enrolled={enrolled} />
+        </Col>
+      )}
     </Row>
   );
 };

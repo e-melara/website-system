@@ -1,59 +1,43 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { Table, Button } from "reactstrap";
+import { Table, Button } from "antd";
+import { MinusCircleOutlined } from "@ant-design/icons";
 
-import { deleteSchulesSubject } from "../../../../redux/ducks/asesoria";
+const { Column } = Table;
 
-const TableSchulesEnrollledItem = ({ schules, subject, index }) => {
-  const dispatch = useDispatch();
-
-  const handleDeleteSubjectEnrolled = () => {
-    dispatch(deleteSchulesSubject(subject));
-  };
-
-  return (
-    <tr>
-      <td>{index + 1}</td>
-      <td>{subject.nommate}</td>
-      <td className="text-center">{schules.dias}</td>
-      <td className="text-center">{schules.hora}</td>
-      <td className="text-center">{schules.turno}</td>
-      <td>
-        <Button
-          onClick={handleDeleteSubjectEnrolled}
-          className="btn btn-danger"
-        >
-          -
-        </Button>
-      </td>
-    </tr>
-  );
-};
-
-export default function TableSchulesEnrolled({ items }) {
-  const rows = items.map(function (element, index) {
-    return (
-      <TableSchulesEnrollledItem
-        key={element.subject.materia}
-        {...element}
-        index={index}
-      />
-    );
+export default function TableSchulesEnrolled({ items, handler }) {
+  const data = items.map(({ subject, schules }) => {
+    return {
+      dia: schules.dias,
+      turno: schules.turno,
+      horas: schules.hora,
+      nommate: subject.nommate,
+      materia: subject.materia,
+    };
   });
 
   return (
-    <Table responsive className="table-border">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th className="text-center">Materia</th>
-          <th className="text-center">Dia</th>
-          <th className="text-center">Horas</th>
-          <th className="text-center">Grupo</th>
-          <th width="10px"></th>
-        </tr>
-      </thead>
-      <tbody>{rows}</tbody>
+    <Table bordered dataSource={data} size="small" pagination={false}>
+      <Column title="Codigo" dataIndex="materia" key="Dia" />
+      <Column title="Materia" dataIndex="nommate" key="nommate" />
+      <Column title="Dia" dataIndex="dia" key="dia" />
+      <Column title="Horas" dataIndex="horas" key="horas" />
+      <Column title="Turno" dataIndex="turno" key="turno" />
+      <Column
+        width="80px"
+        key='nommate'
+        render={(_, record) => (
+          <Button
+            danger
+            type="primary"
+            onClick={() => handler(record)}
+            size="middle"
+            icon={<MinusCircleOutlined />}
+          >
+            Eliminar
+          </Button>
+        )}
+      />
     </Table>
   );
-}
+};
+

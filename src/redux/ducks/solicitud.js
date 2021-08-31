@@ -29,7 +29,7 @@ export const actionsType = {
 
 export const paginator = (payload) => ({
   type: SOLICITUD_LOADER,
-  payload
+  payload,
 });
 
 export const addObjectState = (payload) => ({

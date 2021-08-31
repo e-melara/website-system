@@ -1,3 +1,5 @@
+import { RESET_STORE } from "../../consts";
+
 // actions
 const LOGIN = "[AUTH] LOGIN";
 const LOGIN_LOGOUT = "[AUTH] LOGOUT";
@@ -30,7 +32,7 @@ export const actionLoginSuccess = (payload) => ({
 });
 
 export const startChecking = () => ({ type: LOGIN_CHECKING });
-export const checkingFinish = () => ({ type: LOGIN_CHECKING_ASYNC });
+export const checkingFinish = (payload) => ({ type: LOGIN_CHECKING_ASYNC, payload });
 
 export const logout = () => ({ type: LOGIN_LOGOUT });
 
@@ -58,7 +60,7 @@ const reducer = (state = initialState, { type, payload }) => {
 
     case LOGIN_CHECKING_ASYNC:
       return { ...state, checking: false };
-    case LOGIN_LOGOUT_ASYNC:
+    case RESET_STORE:
       return Object.assign({}, initialState, {
         checking: false,
       });

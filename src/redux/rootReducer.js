@@ -6,7 +6,9 @@ import reducerLogin from "./ducks/login";
 import reducerAsesoria from "./ducks/asesoria";
 import reducerSolicitud from "./ducks/solicitud";
 
-const reducers = combineReducers({
+import { RESET_STORE } from "../consts";
+
+const appReducer = combineReducers({
   ui: reducerUi,
   auth: reducerLogin,
   notes: reducerNotes,
@@ -14,9 +16,16 @@ const reducers = combineReducers({
   solicitud: reducerSolicitud,
 });
 
+const rootReducer = (state, action) => {
+  if (action.type === RESET_STORE) {
+    state = undefined;
+  }
+  return appReducer(state, action);
+};
+
 export const composeEnhancers =
   (typeof window !== "undefined" &&
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
   compose;
 
-export default reducers;
+export default rootReducer;

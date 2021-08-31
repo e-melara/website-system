@@ -1,0 +1,39 @@
+.site-layout {
+  .site-layout-background {
+    background-color: #fff;
+    transition: all 0.5s ease;
+  }
+  .site-layout-content {
+    @extend .site-layout-background;
+    margin: 20px;
+  }
+  .site-layout-background-btn .toggle-span {
+    color: black;
+  }
+}
+
+.max-heigth-100vh .logo {
+  height: 64px;
+  padding: 10px 10px 0px;
+  margin-bottom: 10px;
+  img {
+    height: 55px;
+  }
+}
+
+.max-heigth-100vh {
+  min-height: 100vh;
+}
+
+.toggle-span,
+.toggle-span:hover {
+  font-size: 1.2rem;
+  color: white;
+}
+
+.btn-theme {
+  span[role="img"] {
+    font-size: 1.6rem;
+    margin-right: 5px;
+  }
+}

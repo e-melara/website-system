@@ -1,11 +1,12 @@
 import { connect } from "react-redux";
 import React, { useEffect } from "react";
-import { Row, CardBody, Col, Card } from "reactstrap";
+import { Row, Col, Card, Table, Alert } from "antd";
 
-import { Layout } from "../../components/layouts";
 import { checking } from "../../redux/ducks/notes";
-import TablaHorario from "./components/TableHorario";
+import { statusEnrolled } from "../../utils/pensum";
 import CardUser from "../../components/common/CardUser";
+
+const { Column } = Table;
 
 const HorarioPage = ({ schules, user, carrera, loading, validated }) => {
   useEffect(() => {
@@ -15,26 +16,42 @@ const HorarioPage = ({ schules, user, carrera, loading, validated }) => {
   }, [loading, validated]);
 
   return (
-    <Layout>
-      <Row className="asesoria third-news-update">
-        <CardUser user={user} carrera={carrera} />
-        {schules.length > 0 ? (
-          <TablaHorario items={schules} />
-        ) : (
-          <Col>
-            <Card>
-              <CardBody>
-                <div className="alert alert-info">
-                  <h2 className="text-center">
-                    Por el momento no tienes horario asignado
-                  </h2>
-                </div>
-              </CardBody>
+    <div className="p-4">
+      <Row gutter={[20, 0]}>
+        <Col xs={8}>
+          <CardUser user={user} carrera={carrera} />
+        </Col>
+        <Col xs={16}>
+          {schules.length === 0 ? (
+            <div></div>
+          ) : (
+            <Card title="Horario ciclo 02-2021">
+              <Table
+                size="small"
+                dataSource={schules}
+                key={schules[0].codmate}
+                pagination={false}
+                bordered
+              >
+                <Column title="Codigo" dataIndex="codmate" key="codmate" />
+                <Column title="Materia" dataIndex="nommate" key="nommate" />
+                <Column title="Dias" dataIndex="dias" key="dias" />
+                <Column title="Horas" dataIndex="hora" key="hora" />
+                <Column
+                  title="Estado"
+                  dataIndex="estado"
+                  key="estado"
+                  render={(estado) => {
+                    const r = statusEnrolled(estado);
+                    return <Alert type={r.type} message={r.message} />;
+                  }}
+                />
+              </Table>
             </Card>
-          </Col>
-        )}
+          )}
+        </Col>
       </Row>
-    </Layout>
+    </div>
   );
 };
 
