@@ -7,7 +7,7 @@ import { Col, Row, Button, Table, Card, Alert } from "antd";
 import "moment/locale/es";
 import Moment from "react-moment";
 
-import { paginator } from "../../redux/ducks/solicitud";
+import { paginator, initialStateSolicitud } from "../../redux/ducks/solicitud";
 
 const statusText = (message) => {
   return message === "I"
@@ -17,10 +17,10 @@ const statusText = (message) => {
     : "Denegada";
 };
 
-function Solicitud({ paginatorHandler, paginator }) {
+function Solicitud({ paginatorHandler, paginator, initial }) {
   useEffect(() => {
-    paginatorHandler(1);
-  }, [paginatorHandler]);
+    initial()
+  }, [initial]);
 
   const handlerChangePage = (pagination) => {
     const { current } = pagination;
@@ -31,7 +31,7 @@ function Solicitud({ paginatorHandler, paginator }) {
     {
       title: "Codigo",
       dataIndex: "codmate",
-      align: 'center'
+      align: "center",
     },
     {
       title: "Materia",
@@ -40,25 +40,25 @@ function Solicitud({ paginatorHandler, paginator }) {
     {
       width: "80px",
       title: "Tipo",
-      align: 'center',
+      align: "center",
       dataIndex: "type",
-      render: (type) => (
-        <Alert
-          type={
-            type === "SUFICIENCIA"
-              ? "success"
-              : type === "EXAMEN"
-              ? "info"
-              : "warning"
-          }
-          message={type}
-        />
-      ),
+      render: (type) => {
+        let alertType = type === "SEXTA" ? "success" : "info";
+        if (type === "TUTORIADA") {
+          alertType = "warning";
+        }
+        return (
+          <Alert
+            type={alertType}
+            message={type}
+          />
+        );
+      },
     },
     {
       width: "80px",
       title: "Estado",
-      align: 'center',
+      align: "center",
       dataIndex: "estado",
       render: (status) => (
         <Alert
@@ -70,18 +70,20 @@ function Solicitud({ paginatorHandler, paginator }) {
     {
       title: "Fecha",
       width: "160px",
-      align: 'center',
+      align: "center",
       dataIndex: "created_at",
       render: (dateCreated) => (
         <Moment date={dateCreated} format="DD MMM YYYY" withTitle locale="es" />
       ),
     },
     {
-      title: "Hace",
-      align: 'center',
+      title: "",
+      align: "center",
       width: "160px",
       dataIndex: "created_at",
-      render: (dateCreated) => <Moment date={dateCreated} toNow locale="es" />,
+      render: (dateCreated) => (
+        <Moment date={dateCreated} fromNow locale="es" />
+      ),
     },
   ];
 
@@ -104,7 +106,7 @@ function Solicitud({ paginatorHandler, paginator }) {
       </Row>
       <Row>
         <Col span={24}>
-          <Card title="Solicitudes" size='small' hoverable>
+          <Card title="Solicitudes" size="small" hoverable>
             <Table
               bordered
               size="small"
@@ -124,6 +126,7 @@ function Solicitud({ paginatorHandler, paginator }) {
 
 const mapDispatchToProps = (dispath) => {
   return {
+    initial: () => dispath(initialStateSolicitud()),
     paginatorHandler: (data) => dispath(paginator(data)),
   };
 };

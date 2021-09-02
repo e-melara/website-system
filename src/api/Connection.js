@@ -22,7 +22,7 @@ class DBConnection {
       const token = localStorage.getItem(KeyLocalStorage);
       if (token) {
         const headers = {
-          Authorization: `bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           Accept: "application/json",
         };
         config.headers = headers;

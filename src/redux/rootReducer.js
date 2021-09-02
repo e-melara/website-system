@@ -3,6 +3,7 @@ import { combineReducers, compose } from "redux";
 import reducerUi from "./ducks/ui";
 import reducerNotes from "./ducks/notes";
 import reducerLogin from "./ducks/login";
+import reducerEventos from "./ducks/eventos";
 import reducerAsesoria from "./ducks/asesoria";
 import reducerSolicitud from "./ducks/solicitud";
 
@@ -12,6 +13,7 @@ const appReducer = combineReducers({
   ui: reducerUi,
   auth: reducerLogin,
   notes: reducerNotes,
+  eventos: reducerEventos,
   asesoria: reducerAsesoria,
   solicitud: reducerSolicitud,
 });

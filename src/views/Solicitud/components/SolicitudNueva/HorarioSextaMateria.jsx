@@ -2,8 +2,8 @@ import React from "react";
 import { PageHeader, Button, List } from "antd";
 import { RightOutlined } from "@ant-design/icons";
 
-const HorarioSextaMateria = ({ validated, handler }) => {
-  const { subjects } = validated;
+const HorarioSextaMateria = ({ handler, sixthValidated }) => {
+  const { subjects } = sixthValidated;
 
   return (
     <div className="form-select-subject">

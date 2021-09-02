@@ -8,53 +8,55 @@ const subjects = (state) => state.asesoria.subjects;
 const solicitudes = (state) => state.asesoria.solicitudesSexta;
 const approved = (state) => mapFun(state.asesoria.approved, "nopensum");
 
+//estado de las estadistica de las materias por solicitud
+export const estadisticaSolicitud = (state) => state.solicitud.estadistica;
 export const solicitudOthers = (state) => state.asesoria.solicitudesOther;
 
-export const validateSextaSubject = createSelector(
-  [enrolled, subjects, solicitudes],
-  (enrolledSubject, subjectsPosibles, sextaMateria) => {
-    if (!isEmpty(enrolledSubject)) {
-      const length = enrolledSubject.schules.length;
-      if (sextaMateria.length > 0) {
-        return {
-          active: true,
-          inscripta: true,
-          subjects: sextaMateria,
-        };
-      }
+// Para la verificacion de la sexta materias
+export const sixthSubjectValidated = createSelector(
+  [enrolled, subjects, estadisticaSolicitud],
+  (enrolledSubject, posiblesSubject, objectSixth ) => {
+    const filterSixthStatic = objectSixth.find(e => e['type'] === 'SEXTA')
 
-      if (length >= 5) {
-        const codEnrolleds = mapFun(enrolledSubject.schules, "codmate");
-        const posiblesMaterias = subjectsPosibles.filter(function (element) {
-          return !codEnrolleds.includes(element.materia);
-        });
+    if(filterSixthStatic) {
+      return {
+        active: false,
+        message:
+          "Solo puedes solicitar una sexta materia una vez",
+      };
+    }
 
-        if (posiblesMaterias.length > 0) {
-          return {
-            active: true,
-            inscripta: false,
-            subjects: posiblesMaterias,
-          };
-        }
-        return {
-          active: false,
-          inscripta: false,
-          message: "No hay una sexta materia a inscribir",
-        };
-      }else {
-        return {
-          active: false,
-          inscripta: false,
-          message: "Para poder solicitar una sexta materias debes tener inscripta 5 materias",
-        };
-      }
+    if (isEmpty(enrolledSubject)) {
+      return {
+        active: false,
+        message:
+          "Para solicitar la sexta materias debes tener una asesoria activa",
+      };
+    }
+
+    if (enrolledSubject.schules.length < 5) {
+      return {
+        active: false,
+        message:
+          "Para poder solicitar una sexta materias debes tener inscripta 5 materias",
+      };
+    }
+
+    const subjectsSixth = map(enrolledSubject.schules, "codmate");
+    const filterSixth = posiblesSubject.filter(
+      (e) => !subjectsSixth.includes(e.materia)
+    );
+
+    if (filterSixth.length === 0) {
+      return {
+        active: false,
+        message: "No hay una sexta materia a inscribir",
+      };
     }
 
     return {
-      active: false,
-      inscripta: false,
-      message:
-        "Para solicitar la sexta materias debes tener una asesoria activa",
+      active: true,
+      subjects: filterSixth,
     };
   }
 );
@@ -97,19 +99,6 @@ export const subjectsApprovateTake = createSelector(
         });
       }
       return false;
-    });
-  }
-);
-
-export const filterSubjectTutoriadaSuficiencia = createSelector(
-  [solicitudOthers, solicitudes, subjectsApprovateTake],
-  function (other, sextasMaterias, possibleSubject) {
-    const valueOther = map(other, 'codmate')
-    const sextaSubject = map(sextasMaterias, 'codmate')
-    const valuesArray = valueOther.concat(sextaSubject);
-
-    return possibleSubject.filter(function(item) {
-      return !valuesArray.includes(item.code)
     });
   }
 );

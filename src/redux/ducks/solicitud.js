@@ -14,15 +14,20 @@ const SOLICITUD_SIXTH_SUBJECT_SUCCESS =
 const SOLICITUD_SIXTH_SUBJECT_ERROR =
   "[SOLICITUD SIXTH] ADD SIXTH SUBJECT ERROR";
 
+const SOLICITUD_INITIAL = "[SOLICITUD] INITIAL STATE";
+const SOLICITUD_INITIAL_SUCCESS = "[SOLICITUD] INITIAL STATE SUCCESS";
+
 export const actionsType = {
   SOLICITUD_SAVE,
   SOLICITUD_RESET,
   SOLICITUD_LOADER,
+  SOLICITUD_INITIAL,
   SOLICITUD_ADD_POST,
   SOLICITUD_ADD_OBJECT,
   SOLICITUD_ADD_SUCCESS,
   SOLICITUD_LOADER_DATA,
   SOLICITUD_SIXTH_SUBJECT,
+  SOLICITUD_INITIAL_SUCCESS,
   SOLICITUD_SIXTH_SUBJECT_ERROR,
   SOLICITUD_SIXTH_SUBJECT_SUCCESS,
 };
@@ -38,6 +43,7 @@ export const addObjectState = (payload) => ({
 });
 
 export const reset = () => ({ type: SOLICITUD_RESET });
+export const initialStateSolicitud = () => ({ type: SOLICITUD_INITIAL })
 export const saveSolicitud = (payload) => ({ type: SOLICITUD_SAVE, payload });
 export const addSolictud = (payload) => ({ type: SOLICITUD_ADD_POST, payload });
 export const addSixthSubject = (payload) => ({
@@ -66,10 +72,18 @@ const initialState = {
     },
     loading: true,
   },
+  estadistica: [],
+  materias: [],
 };
 
 const reducers = (state = initialState, { type, payload }) => {
   switch (type) {
+    case SOLICITUD_INITIAL_SUCCESS:
+      return {
+        ...state,
+        materias: payload.materias,
+        estadistica: payload.stadistic,
+      };
     case SOLICITUD_RESET:
       return initialState;
     case SOLICITUD_ADD_SUCCESS:

@@ -6,9 +6,8 @@ import { Col, Row } from "reactstrap";
 const { Option } = Select;
 const { TextArea } = Input;
 
-const FormSelect = ({ form, subjects, validated, data }) => {
-  const typeInitial = data.type || 'SEXTA';
-  const { active, inscripta } = validated;
+const FormSelect = ({ form, subjects, data, sixthValidated }) => {
+  const typeInitial = data.type || "SEXTA";
   const { observacion, type, subject } = data;
   const [showFormSubject, setShowFormSubject] = useState(typeInitial);
 
@@ -28,9 +27,9 @@ const FormSelect = ({ form, subjects, validated, data }) => {
           since the 1500s, when an unknown printer took a galley of type and
           scrambled it to make a type specimen book.
         </p>
-        {!active && (
+        {!sixthValidated.active && (
           <div className="alert alert-primary">
-            <p className="text-center">{validated.message}</p>
+            <p className="text-center">{sixthValidated.message}</p>
           </div>
         )}
       </div>
@@ -67,7 +66,9 @@ const FormSelect = ({ form, subjects, validated, data }) => {
                 placeholder="Seleccione el tipo de solicitud"
               >
                 <Option>[Seleccione una opcion]</Option>
-                {active && !inscripta && <Option value={"SEXTA"}>Sexta Materia</Option>}
+                {sixthValidated.active && (
+                  <Option value={"SEXTA"}>Sexta Materia</Option>
+                )}
                 <Option value={"TUTORIADA"}>Materia Tutoriada</Option>
                 <Option value={"SUFICIENCIA"}>Examen de Suficiencia</Option>
               </Select>
