@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React from "react";
 import { Menu } from "antd";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -7,11 +7,11 @@ import {
   RadarChartOutlined,
 } from "@ant-design/icons";
 
-import LogoUtla from "../.././../assets/images/logo/utla.png";
+import LogoUtla from "../../assets/images/logo/utla.png";
 
 const { SubMenu } = Menu;
 
-export const SiderBar = memo(({ routes, theme }) => {
+export const SiderBar = ({ routes, theme }) => {
   const location = useLocation();
   return (
     <>
@@ -37,4 +37,4 @@ export const SiderBar = memo(({ routes, theme }) => {
       </Menu>
     </>
   );
-});
+};

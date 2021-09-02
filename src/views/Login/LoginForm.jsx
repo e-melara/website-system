@@ -1,13 +1,12 @@
-import React from "react";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import classNames from "classnames";
 import { connect } from "react-redux";
-import { Button, Form, Label, Input, FormGroup } from "reactstrap";
+import React, { useState } from "react";
 
 import { actionLogin } from "../../redux/ducks/login";
 
 import utlaLogo from "../../assets/images/logo/utla.png";
-import { useBandera } from "../../components/hooks/useBandera";
 import { MessageError } from "../../components/common/MessageError";
 
 const signInSchema = Yup.object().shape({
@@ -22,7 +21,7 @@ const signInSchema = Yup.object().shape({
 });
 
 const LoginForm = ({ loading, login }) => {
-  const [showInput, setShowInput] = useBandera(true);
+  const [showInput, setShowInput] = useState(true);
   return (
     <div className="login-card">
       <div>
@@ -64,7 +63,7 @@ const LoginForm = ({ loading, login }) => {
               handleSubmit,
               isSubmitting,
             }) => (
-              <Form
+              <form
                 noValidate
                 autoComplete="off"
                 onSubmit={handleSubmit}
@@ -72,13 +71,17 @@ const LoginForm = ({ loading, login }) => {
               >
                 <h4>Ingresa a tu cuenta</h4>
                 <p>Ingresa tu carnet y contraseña para loguarte</p>
-                <FormGroup
-                  className={`was-invalited ${
-                    touched.carnet && errors.carnet ? "error" : ""
-                  }`}
+                <div
+                  className={classNames({
+                    "form-group": true,
+                    "was-invalited": true,
+                    error: touched.carnet && errors.carnet,
+                  })}
                 >
-                  <Label className="col-form-label">Carnet</Label>
-                  <Input
+                  <label htmlFor="carnet" className="col-form-label">
+                    Carnet
+                  </label>
+                  <input
                     required
                     type="text"
                     name="carnet"
@@ -86,20 +89,26 @@ const LoginForm = ({ loading, login }) => {
                     onBlur={handleBlur}
                     value={values.carnet}
                     onChange={handleChange}
+                    className="form-control"
                   />
                   <MessageError
                     errors={errors.carnet}
                     touched={touched.carnet}
                   />
-                </FormGroup>
-                <FormGroup
-                  className={`was-invalited ${
-                    touched.password && errors.password ? "error" : "valid"
-                  }`}
+                </div>
+
+                <div
+                  className={classNames({
+                    "form-group": true,
+                    "was-invalited": true,
+                    error: touched.password && errors.password,
+                  })}
                 >
-                  <Label className="col-form-label">Contraseña</Label>
+                  <label htmlFor="password" className="col-form-label">
+                    Carnet
+                  </label>
                   <div className="form-input position-relative">
-                    <Input
+                    <input
                       required
                       name="password"
                       onBlur={handleBlur}
@@ -107,6 +116,7 @@ const LoginForm = ({ loading, login }) => {
                       value={values.password}
                       onChange={handleChange}
                       type={showInput ? "password" : "text"}
+                      className="form-control"
                     />
                     <div
                       className="show-hide"
@@ -119,20 +129,17 @@ const LoginForm = ({ loading, login }) => {
                     errors={errors.password}
                     touched={touched.password}
                   />
-                </FormGroup>
-                <FormGroup className="mb-0">
-                  <br />
-                  <Button
-                    size="lg"
-                    color="primary"
+                </div>
+                <div className="form-group">
+                  <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-100"
+                    className="w-100 btn btn-primary btn-lg"
                   >
                     Entrar
-                  </Button>
-                </FormGroup>
-              </Form>
+                  </button>
+                </div>
+              </form>
             )}
           </Formik>
         </div>

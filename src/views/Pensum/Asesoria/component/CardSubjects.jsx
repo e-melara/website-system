@@ -1,9 +1,8 @@
-import { filter } from "lodash";
 import { connect } from "react-redux";
 import React, { useState } from "react";
 
 import { SendOutlined } from "@ant-design/icons";
-import { Row, Col, Card, Button, message } from "antd";
+import { Card, Button, message } from "antd";
 
 import TableSchules from "./TableSchules";
 import ModalAsesoria from "./ModalAsesoria";
@@ -34,26 +33,24 @@ function CardSubjects({ subjects, schulesStudents, title, add, drop }) {
     drop(record);
   };
 
-  const itemSubject = filter(subjects, { visible: true }).map((e, key) => {
-    return (
-      <TableSchules
-        handler={handlerAddSubjectStatus}
-        key={`${key}-stable-subject`}
-        subject={e}
-      />
-    );
-  });
-
   return (
     <>
-      <Row gutter={[24, 8]}>
-        {itemSubject.length > 0 && (
-          <Col flex={3}>
-            <Card title="Materias del ciclo 02-2021">{itemSubject}</Card>
-          </Col>
-        )}
+      <div className="row">
+        <div className="col">
+          <Card title="Materias del ciclo 02-2021">
+            {subjects
+              .filter((e) => e.visible)
+              .map((e) => (
+                <TableSchules
+                  handler={handlerAddSubjectStatus}
+                  key={e.materia}
+                  subject={e}
+                />
+              ))}
+          </Card>
+        </div>
         {schulesStudents.length > 0 && (
-          <Col flex={3}>
+          <div className="col">
             <Card
               title={title ? title : "Hoja de asesoria"}
               extra={
@@ -73,9 +70,9 @@ function CardSubjects({ subjects, schulesStudents, title, add, drop }) {
                 handler={handlerDeleteSubject}
               />
             </Card>
-          </Col>
+          </div>
         )}
-      </Row>
+      </div>
       <ModalAsesoria isOpen={isOpen} handler={setisOpen} />
     </>
   );

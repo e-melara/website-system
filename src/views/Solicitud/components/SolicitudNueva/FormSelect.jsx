@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Form, Select, Input } from "antd";
 
-import { Col, Row } from "reactstrap";
-
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -46,8 +44,8 @@ const FormSelect = ({ form, subjects, data, sixthValidated }) => {
         wrapperCol={{ span: 24 }}
         onValuesChange={onChangeValuesInput}
       >
-        <Row>
-          <Col>
+        <div className='row'>
+          <div className='col'>
             <Form.Item
               name="type"
               label="Tipo de solicitud"
@@ -73,9 +71,9 @@ const FormSelect = ({ form, subjects, data, sixthValidated }) => {
                 <Option value={"SUFICIENCIA"}>Examen de Suficiencia</Option>
               </Select>
             </Form.Item>
-          </Col>
+          </div>
           {showFormSubject !== "SEXTA" && (
-            <Col>
+            <div className='col'>
               <Form.Item
                 name="subject"
                 label="Materia a solicitar"
@@ -102,9 +100,9 @@ const FormSelect = ({ form, subjects, data, sixthValidated }) => {
                   ))}
                 </Select>
               </Form.Item>
-            </Col>
+            </div>
           )}
-        </Row>
+        </div>
         <Form.Item
           name="observacion"
           label="Motivos por que realiza la solicitud"

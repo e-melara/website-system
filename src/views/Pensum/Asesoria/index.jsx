@@ -1,5 +1,4 @@
 import React from "react";
-import { Row, Col } from "antd";
 import { connect } from "react-redux";
 
 import "./asesoria.scss";
@@ -7,24 +6,25 @@ import CardUser from "../../../components/common/CardUser";
 import CardSubjects from "./component/CardSubjects";
 import CardUserEnrolled from "./component/CardUserEnrolled";
 
-// TODO:Por el momento no he modificado el modal
 const AsesoriaPage = ({ data, carrera, active, enrolled }) => {
   return (
-    <Row gutter={[24, 8]} className="asesoria third-news-update">
-      <Col flex={2}>
+    <div className="row">
+      <div className="col-3">
         <CardUser user={data} carrera={carrera} />
-      </Col>
-      {!active && (
-        <Col flex={5}>
-          <CardSubjects />
-        </Col>
-      )}
+      </div>
+
       {active && (
-        <Col flex={5}>
+        <div className="col">
           <CardUserEnrolled enrolled={enrolled} />
-        </Col>
+        </div>
       )}
-    </Row>
+
+      {!active &&
+        <div className="col">
+          <CardSubjects />
+        </div>
+      }
+    </div>
   );
 };
 

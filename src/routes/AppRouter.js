@@ -10,10 +10,12 @@ import AuthPrivateRoute  from "./AuthPrivateRoute";
 import { startChecking } from "../redux/ducks/login";
 import Loading from "../components/common/Loading";
 
-const AppRouter = ({ auth: { isAuthenticated, checking }, dispatch }) => {
+const AppRouter = ({ isAuthenticated, checking , checkingStart }) => {
   useEffect(() => {
-    dispatch(startChecking());
-  }, [dispatch]);
+    if(checking) {
+      checkingStart();
+    }
+  }, [checkingStart, checking]);
 
   if (checking) {
     return <Loading />;
@@ -40,10 +42,21 @@ const AppRouter = ({ auth: { isAuthenticated, checking }, dispatch }) => {
   );
 };
 
-function mapStateToProps(state) {
+
+const mapDispatchToProps = (dispatch) => {
   return {
-    auth: state.auth,
+    checkingStart: () => dispatch(startChecking())
+  }
+}
+
+
+const mapStateToProps = (state) => {
+  const { isAuthenticated, checking} = state.auth
+  return {
+    isAuthenticated, checking
   };
 }
 
-export default connect(mapStateToProps)(AppRouter);
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppRouter);

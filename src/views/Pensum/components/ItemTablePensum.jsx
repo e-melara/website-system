@@ -1,7 +1,5 @@
 import React from "react";
-import { Col } from "reactstrap";
 
-import "./ItemTablePensum.scss";
 import classnames from "classnames";
 
 export const ItemTablePensum = ({
@@ -18,23 +16,22 @@ export const ItemTablePensum = ({
   return (
     <div
       className={`${classnames({
-        approved: approved,
         take: take,
-        enrolled: enrolled,
+        aprobadas: approved,
+        inscriptas: enrolled,
         reprobada: reprobada,
-      })} item-subject row align-items-center`}
+        default: !(approved || enrolled || reprobada),
+      })} item-subject row align-items-center cuadro`}
     >
-      <Col xs={3} className="brd-bottom brd-right">
+      <div className="brd-bottom brd-right col-3">
         <strong>{nopensum}</strong>
-      </Col>
-      <Col xs={9} className="brd-bottom">
-        {codmate}
-      </Col>
-      <Col xs={12}>
+      </div>
+      <div className="brd-bottom col-9">{codmate}</div>
+      <div className="col-12" xs={12}>
         <strong className="item-nommate">{nommate}</strong>
-      </Col>
-      <Col className="brd-top brd-right">{codprere}</Col>
-      <Col className="brd-top">{univalora}</Col>
+      </div>
+      <div className="brd-top brd-right col">{codprere}</div>
+      <div className="brd-top col">{univalora}</div>
     </div>
   );
 };

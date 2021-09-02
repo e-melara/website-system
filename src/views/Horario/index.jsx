@@ -23,7 +23,9 @@ const HorarioPage = ({ schules, user, carrera, loading, validated }) => {
         </Col>
         <Col xs={16}>
           {schules.length === 0 ? (
-            <div></div>
+            <div>
+              <Alert  type='info' message='Por el momento no tienes una horarios asignado' />
+            </div>
           ) : (
             <Card title="Horario ciclo 02-2021">
               <Table

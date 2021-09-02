@@ -1,31 +1,107 @@
-import React, { useState } from "react";
-import { Layout as LayoutAnt } from "antd";
+import classNames from "classnames";
+import { connect } from "react-redux";
+import React, { useCallback } from "react";
+import { Layout as LayoutAntd } from "antd";
 
 import "./layout.scss";
-import { SiderBar } from "./Sidebar/";
-import { HeaderContent } from "./Header/HeaderContent";
-import { useSelector } from "react-redux";
 
-const { Sider, Header, Content } = LayoutAnt;
+import { SiderBar } from "./Sidebar";
+import Loading from "../common/Loading";
+import { HeaderContent } from "./Header";
 
-export const Layout = ({ children }) => {
-  const [collapsed, setCollapsed] = useState(false);
+import { logout } from "../../redux/ducks/login";
+import { changeUiSidebar, changeUiTheme } from "../../redux/ducks/ui";
 
-  const handlerToggle = () => setCollapsed(!collapsed);
+const { Sider, Header, Footer, Content } = LayoutAntd;
 
-  const { routes } = useSelector((state) => state.auth);
+const Layout = ({
+  children,
+  open,
+  theme,
+  loading,
+  setOpen,
+  data,
+  perfil,
+  routes,
+  carrera,
+  getLogout,
+  setTheme,
+}) => {
+  const handlerChange = useCallback(() => setOpen(), [setOpen]);
+  const user = Object.assign({
+    data,
+    perfil,
+    carrera,
+  });
+  const handlerLogout = (e) => {
+    e.preventDefault();
+    getLogout();
+  };
 
   return (
-    <LayoutAnt className="max-heigth-100vh">
-      <Sider theme="dark" trigger={null} collapsible collapsed={collapsed}>
-        <SiderBar routes={routes} />
-      </Sider>
-      <LayoutAnt className="site-layout">
-        <Header className="site-layout-background">
-          <HeaderContent collapsed={collapsed} handler={handlerToggle} />
-        </Header>
-        <Content className="site-layout-content">{children}</Content>
-      </LayoutAnt>
-    </LayoutAnt>
+    <>
+      <LayoutAntd className="max-heigth-100vh">
+        <Sider
+          style={{
+            backgroundColor: theme === "ligth" && "white",
+          }}
+          trigger={null}
+          collapsible
+          collapsed={open}
+        >
+          <SiderBar routes={routes} theme={theme} />
+        </Sider>
+        <LayoutAntd className="site-layout">
+          <Header
+            className={classNames({
+              "site-layout-background": theme === "ligth",
+              "site-layout-background-btn": theme === "ligth",
+            })}
+          >
+            <HeaderContent
+              user={user}
+              theme={theme}
+              collapsed={open}
+              handlerTheme={setTheme}
+              handler={handlerChange}
+              handlerLogout={handlerLogout}
+            />
+          </Header>
+          <Content>
+            <div className="site-layout-background" style={{ margin: 40 }}>
+              {children}
+            </div>
+          </Content>
+          <Footer className="text-center">
+            ©2021 UTLA todos los derechos reservados
+          </Footer>
+        </LayoutAntd>
+      </LayoutAntd>
+      {loading && <Loading />}
+    </>
   );
 };
+
+const mapDispathToProps = (dispatch) => {
+  return {
+    getLogout: () => dispatch(logout()),
+    setTheme: () => dispatch(changeUiTheme()),
+    setOpen: () => dispatch(changeUiSidebar()),
+  };
+};
+
+const mapStateToProps = (state) => {
+  const { open, loading, theme } = state.ui;
+  const { data, perfil, routes, carrera } = state.auth;
+  return {
+    open,
+    loading,
+    theme,
+    data,
+    perfil,
+    routes,
+    carrera,
+  };
+};
+
+export default connect(mapStateToProps, mapDispathToProps)(Layout);

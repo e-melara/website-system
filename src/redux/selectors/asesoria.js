@@ -5,7 +5,6 @@ const mapFun = (array = [], campus) => map(array, campus);
 
 const enrolled = (state) => state.asesoria.enrolled;
 const subjects = (state) => state.asesoria.subjects;
-const solicitudes = (state) => state.asesoria.solicitudesSexta;
 const approved = (state) => mapFun(state.asesoria.approved, "nopensum");
 
 //estado de las estadistica de las materias por solicitud

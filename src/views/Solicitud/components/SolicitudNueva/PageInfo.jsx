@@ -2,7 +2,6 @@ import React from "react";
 import "moment/locale/es";
 import moment from "moment";
 import Moment from "react-moment";
-import { Col, Row } from "reactstrap";
 import { useSelector } from "react-redux";
 import { PageHeader, Descriptions } from "antd";
 
@@ -15,12 +14,12 @@ export const PageInfo = ({ user, carrera }) => {
   );
 
   return (
-    <div>
-      <Row xs={12}>
-        <Col>
+    <>
+      <div className='row'>
+        <div className='col-3'>
           <CardUser carrera={carrera} user={user} />
-        </Col>
-        <Col>
+        </div>
+        <div className='col-9'>
           <PageHeader
             ghost={false}
             title="Confirmacion"
@@ -67,8 +66,8 @@ export const PageInfo = ({ user, carrera }) => {
               </Descriptions.Item>
             </Descriptions>
           </PageHeader>
-        </Col>
-      </Row>
-    </div>
+        </div>
+      </div>
+    </>
   );
 };

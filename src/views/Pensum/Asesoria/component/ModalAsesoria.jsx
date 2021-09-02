@@ -1,22 +1,15 @@
 import React from "react";
+import classNames from "classnames";
 import { connect } from "react-redux";
-import {
-  Modal,
-  ModalBody,
-  ModalHeader,
-  Table,
-  FormGroup,
-  Label,
-  Input,
-} from "reactstrap";
 
 import * as Yup from "yup";
-import { Formik } from "formik";
+import { useFormik } from "formik";
+import { Modal, Table, Alert } from "antd";
 
 import { asesoriaRequestSend } from "../../../../redux/ducks/asesoria";
 import { MessageError } from "../../../../components/common/MessageError";
 
-const phoneRegExp = /^[2,7]{1}[0-9]{3}-[0-9]{4}$/;
+const phoneRegExp = /^[2,7,6]{1}[0-9]{3}-[0-9]{4}$/;
 
 const shapeToValidated = Yup.object().shape({
   phoneNumber: Yup.string()
@@ -24,115 +17,99 @@ const shapeToValidated = Yup.object().shape({
     .required("El numero de celular es requerido"),
 });
 
+const { Column } = Table;
+
 function ModalAsesoria({
-  handler,
+  send,
   isOpen,
+  handler,
   schules: { schulesStudents },
-  dispatch,
 }) {
-  const rows = schulesStudents.map((item) => {
-    return (
-      <tr key={`${item.materia}-modal-${Math.random()}`}>
-        <td>{item.subject.nommate}</td>
-        <td>{item.schules.dias}</td>
-        <td>{item.schules.hora}</td>
-        <td>{item.schules.turno}</td>
-      </tr>
-    );
+  const data = schulesStudents.map((e) => ({
+    materia: e.subject.materia,
+    nommate: e.subject.nommate,
+    dias: e.schules.dias,
+    hora: e.schules.hora,
+    turno: e.schules.turno,
+  }));
+
+  const form = useFormik({
+    initialValues: {
+      phoneNumber: "0000-0000",
+    },
+    validationSchema: shapeToValidated,
+    onSubmit: ({ phoneNumber }) => {
+      handler(false);
+      send({
+        phone: phoneNumber,
+        schules: schulesStudents,
+      });
+    },
   });
 
   return (
     <>
-      <Formik
-        onSubmit={(values) => {
-          handler(false);
-          dispatch(
-            asesoriaRequestSend({
-              phone: values.phoneNumber,
-              schules: schulesStudents,
-            })
-          );
-        }}
-        validationSchema={shapeToValidated}
-        initialValues={{
-          phoneNumber: "",
-        }}
+      <Modal
+        width="60%"
+        visible={isOpen}
+        onOk={form.handleSubmit}
+        okText="Enviar"
+        title="Listado de materias"
+        onCancel={() => handler(false)}
       >
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-        }) => (
-          <Modal isOpen={isOpen}>
-            <ModalHeader>Listados de materias</ModalHeader>
-            <Table>
-              <thead>
-                <tr>
-                  <th>Materia</th>
-                  <th>Dias</th>
-                  <th>Horas</th>
-                  <th>Turno</th>
-                </tr>
-              </thead>
-              <tbody>{rows}</tbody>
-            </Table>
-            <ModalBody>
-              <form noValidate onSubmit={handleSubmit} autoComplete="off">
-                <FormGroup
-                  className={`was-invalited ${
-                    touched.phoneNumber && errors.phoneNumber ? "error" : ""
-                  }`}
-                >
-                  <Label className="col-form-label">Celular</Label>
-                  <Input
-                    required
-                    type="text"
-                    name="phoneNumber"
-                    onBlur={handleBlur}
-                    placeholder="0000-0000"
-                    value={values.phoneNumber}
-                    onChange={handleChange}
-                  />
-                  <MessageError
-                    errors={errors.phoneNumber}
-                    touched={touched.phoneNumber}
-                  />
-                </FormGroup>
-                <div
-                  className="alert alert-primary"
-                  role="alert"
-                  style={{ marginTop: "20px" }}
-                >
-                  Debes ingresar tu numero de celular para poder seguir
-                </div>
-                <FormGroup>
-                  <button
-                    type="button"
-                    onClick={() => handler(false)}
-                    style={{ float: "left" }}
-                    className="btn btn-danger"
-                  >
-                    Cancelar
-                  </button>
-                  <input
-                    type="submit"
-                    value="Enviar"
-                    disabled={errors.phoneNumber}
-                    style={{ float: "right" }}
-                    className="btn btn-primary"
-                  />
-                </FormGroup>
-              </form>
-            </ModalBody>
-          </Modal>
-        )}
-      </Formik>
+        <Table rowKey='nommate' dataSource={data} pagination={false} bordered>
+          <Column align="center" title="Codigo" dataIndex="materia" />
+          <Column title="Materia" dataIndex="nommate" />
+          <Column align="center" title="Dias" dataIndex="dias" />
+          <Column align="center" title="Horas" dataIndex="hora" />
+          <Column align="center" title="Turno" dataIndex="turno" />
+        </Table>
+        <div className="row" style={{ marginTop: 15 }}>
+          <div className="col-8 offset-md-2">
+            <form noValidate autoComplete="off">
+              <div
+                className={classNames({
+                  "form-group was-invalited": true,
+                  error: form.touched.phoneNumber && form.errors.phoneNumber,
+                })}
+              >
+                <label htmlFor="phoneNumber" className="col-form-label">
+                  Celular:
+                </label>
+                <input
+                  type="tel"
+                  required
+                  name="phoneNumber"
+                  placeholder="0000-0000"
+                  onBlur={form.handleBlur}
+                  className="form-control"
+                  onChange={form.handleChange}
+                  value={form.values.phoneNumber}
+                />
+                <MessageError
+                  errors={form.errors.phoneNumber}
+                  touched={form.touched.phoneNumber}
+                />
+              </div>
+            </form>
+          </div>
+          <div className="col-8 offset-md-2" style={{ marginTop: 15 }}>
+            <Alert
+              type="info"
+              message="Debes ingresar tu numero de celular para poder continuar"
+            />
+          </div>
+        </div>
+      </Modal>
     </>
   );
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    send: (data) => dispatch(asesoriaRequestSend(data)),
+  };
+};
 
 const mapStateToProps = (state) => {
   return {
@@ -140,4 +117,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(ModalAsesoria);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalAsesoria);

@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import { message } from "antd";
 import { fork, takeEvery, put } from "redux-saga/effects";
 
 import DBConnection from "../api/Connection";
@@ -42,7 +42,7 @@ function* asyncLoadingPensum() {
 
     payload.solicitudesSexta = solicitud.sexta;
     payload.solicitudesOther = solicitud.other;
-    
+
     const pensumArray = forEachPensumArrayToProps(
       pensum,
       approved,
@@ -87,10 +87,10 @@ function* asyncAsesoriaRequest(actions) {
       codCargas,
       phone,
     });
-    toast.info("Tu inscripcion ha sido registrada con exito");
+    message.info("Tu inscripcion ha sido registrada con exito")
     yield put(pensumLoadingAll());
   } catch (error) {
-    toast.error(error.message);
+    message.error(error.message)
   } finally {
     yield put(changeLoading(false));
   }

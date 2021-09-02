@@ -1,45 +1,41 @@
 import React from "react";
 
-import { Jumbotron, Table } from "reactstrap";
-
 export default function TableHeader({ carrera }) {
   return (
-    <Jumbotron>
-      <h1 className="display-3">Pensum</h1>
-      <p className="lead">
-        Carrera: <strong>{carrera.nomcarrera}</strong>
-      </p>
-      <hr className="my-2" />
-      <p className="lead">
-        Nota: Este módulo tiene la finalidad de visualizar el desarrollo de la
-        carrera a lo largo de los diferentes ciclos de estudio.
-      </p>
-      <Table responsive className="table table-border lead">
-        <tbody>
-          <tr>
-            <td className="text-center">Aprobadas</td>
-            <td className="text-center">
-              <div className="cuadro aprobadas"></div>
-            </td>
-            <td className="text-center">Inscriptas</td>
-            <td className="text-center">
-              <div className="cuadro inscriptas"></div>
-            </td>
-            <td className="text-center">Prerequisitos completos</td>
-            <td className="text-center">
-              <div className="cuadro posibles"></div>
-            </td>
-            <td className="text-center">Pendientes</td>
-            <td className="text-center">
-              <div className="cuadro"></div>
-            </td>
-            <td className="text-center">Reprobadas</td>
-            <td className="text-center">
-              <div className="cuadro reprobada"></div>
-            </td>
-          </tr>
-        </tbody>
-      </Table>
-    </Jumbotron>
+    <>
+      <div className="jumbotron">
+        <h1 className="display-3">Pensum</h1>
+        <p className="lead">
+          Carrera: <strong>{carrera.nomcarrera}</strong>
+        </p>
+        <hr className="my-2" />
+        <p className="lead">
+          Nota: Este módulo tiene la finalidad de visualizar el desarrollo de la
+          carrera a lo largo de los diferentes ciclos de estudio.
+        </p>
+      </div>
+      <div className="row">
+        <div className="col d-flex justify-content-evenly align-items-center">
+          <div className='cuadro aprobadas'></div>
+          <h5>Aprobadas</h5>
+        </div>
+        <div className="col d-flex justify-content-evenly align-items-center">
+          <div className='cuadro inscriptas'></div>
+          <h5>Inscritas</h5>
+        </div>
+        <div className="col d-flex justify-content-evenly align-items-center">
+          <div className='cuadro posibles'></div>
+          <h5>Prerequisitos completos</h5>
+        </div>
+        <div className="col d-flex justify-content-evenly align-items-center">
+          <div className='cuadro'></div>
+          <h5>Pendientes</h5>
+        </div>
+        <div className="col d-flex justify-content-evenly align-items-center">
+          <div className='cuadro reprobada'></div>
+          <h5>Reprobadas</h5>
+        </div>
+      </div>
+    </>
   );
 }

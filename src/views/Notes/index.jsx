@@ -1,4 +1,3 @@
-// import { Row } from "reactstrap";
 import { Row, Col, Table, Card, Badge } from "antd";
 
 import { connect } from "react-redux";
@@ -24,7 +23,7 @@ const NotePage = ({ loading, auth, carrera, notes, validated }) => {
       key: "nommate",
       dataIndex: "nommate",
       title: "Materia",
-      
+
     },
     {
       key: "ciclolectivo",
@@ -55,7 +54,7 @@ const NotePage = ({ loading, auth, carrera, notes, validated }) => {
         <Col xs={16}>
           <Card title="Historial de notas">
             <Table
-              rowKey={Math.floor(Math.random() * Date.now())}
+              rowKey='codmate'
               columns={columns}
               dataSource={notes}
               size="small"

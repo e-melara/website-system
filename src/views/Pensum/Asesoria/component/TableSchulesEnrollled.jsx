@@ -16,7 +16,7 @@ export default function TableSchulesEnrolled({ items, handler }) {
   });
 
   return (
-    <Table bordered dataSource={data} size="small" pagination={false}>
+    <Table rowKey='materia' bordered dataSource={data} size="small" pagination={false}>
       <Column title="Codigo" dataIndex="materia" key="Dia" />
       <Column title="Materia" dataIndex="nommate" key="nommate" />
       <Column title="Dia" dataIndex="dia" key="dia" />
