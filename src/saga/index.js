@@ -6,12 +6,16 @@ import rootEventos from "./eventos";
 import rootAsesoria from "./asesoria";
 import rootSolicitud from "./solicitud";
 
+// admin for saga
+import rootAdminAsesoria from "./admin/asesoria";
+
 export default function* rootSaga() {
   yield all([
-    ...rootAuthSaga,
-    ...rootAsesoria,
     ...rootNotes,
-    ...rootSolicitud,
+    ...rootAuthSaga,
     ...rootEventos,
+    ...rootAsesoria,
+    ...rootSolicitud,
+    ...rootAdminAsesoria
   ]);
 }

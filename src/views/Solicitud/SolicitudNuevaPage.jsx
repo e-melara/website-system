@@ -10,8 +10,8 @@ import React, { useCallback, useState, useMemo, useEffect } from "react";
 
 import "./solicitud-nueva.scss";
 import {
-  subjectsApprovateTake,
   sixthSubjectValidated,
+  validatedSubjectToOf,
 } from "../../redux/selectors/asesoria";
 import {
   reset,
@@ -228,7 +228,7 @@ const mapStateToProps = (state) => {
     dataSolicitud: add,
     enrolleds: enrolled,
     loading: state.asesoria.loading,
-    subjects: subjectsApprovateTake(state),
+    subjects: validatedSubjectToOf(state),
     sixthValidated: sixthSubjectValidated(state),
   };
 };

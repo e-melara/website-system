@@ -87,10 +87,10 @@ function* asyncAsesoriaRequest(actions) {
       codCargas,
       phone,
     });
-    message.info("Tu inscripcion ha sido registrada con exito")
+    message.info("Tu inscripcion ha sido registrada con exito");
     yield put(pensumLoadingAll());
   } catch (error) {
-    message.error(error.message)
+    message.error(error.message);
   } finally {
     yield put(changeLoading(false));
   }
@@ -143,6 +143,7 @@ function* watchPensumLoadingAll() {
 function* watchSolicitudesAll() {
   yield takeEvery(actionsTypes.SOLICITUD_ADD_POST, asyncSolicitudPost);
 }
+
 
 const rootAsesoria = [
   fork(watchAsesoria),

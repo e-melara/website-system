@@ -38,9 +38,7 @@ export const actionsTypes = {
   PENSUM_LOADING_ALL_SUCCESS,
   ASESORIA_SUBJECT_ENROLLED_DELETED,
   // SOLICITUD
-  SOLICITUD_ADD_POST,
-  SOLICITUD_ADD_SUCCESS_EXTRA,
-  SOLICITUD_ADD_SUCCESS_OTHERS,
+  SOLICITUD_ADD_POST
 };
 
 //actions para las solicitudes
@@ -115,9 +113,6 @@ const initialState = {
   approved: [],
   active: false,
   loading: false,
-  solicitudesSexta: [],
-  solicitudesOther: [],
-  schulesStudents: [],
 };
 
 function reducers(state = initialState, { type, payload }) {
@@ -167,17 +162,6 @@ function reducers(state = initialState, { type, payload }) {
         pensum: { ...payload.pensum },
       };
 
-    // Solicitudes
-    case SOLICITUD_ADD_SUCCESS_EXTRA:
-      return {
-        ...state,
-        solicitudesSexta: [...state.solicitudesSexta, payload]
-      };
-    case SOLICITUD_ADD_SUCCESS_OTHERS:
-      return {
-        ...state,
-        solicitudesOther: [...state.solicitudesOther, payload]
-      };
     default:
       return state;
   }

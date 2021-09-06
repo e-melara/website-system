@@ -15,17 +15,18 @@ import { changeUiSidebar, changeUiTheme } from "../../redux/ducks/ui";
 const { Sider, Header, Footer, Content } = LayoutAntd;
 
 const Layout = ({
-  children,
+  rol,
   open,
-  theme,
-  loading,
-  setOpen,
   data,
+  theme,
   perfil,
   routes,
+  setOpen,
+  loading,
   carrera,
-  getLogout,
+  children,
   setTheme,
+  getLogout,
 }) => {
   const handlerChange = useCallback(() => setOpen(), [setOpen]);
   const user = Object.assign({
@@ -68,7 +69,11 @@ const Layout = ({
             />
           </Header>
           <Content>
-            <div className="site-layout-background" style={{ margin: 40 }}>
+            <div className={
+              classNames({
+                "site-layout-background site-content-layout-m4" : rol !== 'IS_ADMIN',
+              })
+            }>
               {children}
             </div>
           </Content>
@@ -92,14 +97,15 @@ const mapDispathToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
   const { open, loading, theme } = state.ui;
-  const { data, perfil, routes, carrera } = state.auth;
+  const { data, perfil, routes, carrera, rol } = state.auth;
   return {
+    rol,
     open,
-    loading,
     theme,
     data,
-    perfil,
     routes,
+    perfil,
+    loading,
     carrera,
   };
 };

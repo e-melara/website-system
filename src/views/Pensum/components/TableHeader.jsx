@@ -24,8 +24,8 @@ export default function TableHeader({ carrera }) {
           <h5>Inscritas</h5>
         </div>
         <div className="col d-flex justify-content-evenly align-items-center">
-          <div className='cuadro posibles'></div>
-          <h5>Prerequisitos completos</h5>
+          <div className='cuadro take'></div>
+          <h5 style={{ marginLeft: 5, marginBottom: 0 }}>Prerequisitos completos</h5>
         </div>
         <div className="col d-flex justify-content-evenly align-items-center">
           <div className='cuadro'></div>

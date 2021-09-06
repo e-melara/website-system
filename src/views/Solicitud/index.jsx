@@ -110,12 +110,12 @@ function Solicitud({ paginatorHandler, paginator, initial }) {
             <Table
               bordered
               size="small"
+              rowKey='codmate'
               columns={columns}
               onChange={handlerChangePage}
               dataSource={paginator.data}
               loading={paginator.loading}
               pagination={paginator.pagination}
-              rowKey={(record) => `${record.codmate}-${record.id}`}
             />
           </Card>
         </Col>

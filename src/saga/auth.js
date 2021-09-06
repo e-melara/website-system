@@ -24,7 +24,7 @@ function* asyncLogin(action) {
         carrera: rol !== "IS_ADMIN" && carrera,
       })
     );
-  } catch (error) {
+  } catch ({ error }) {
     const { data, status } = error;
     if (status === 403) {
       message.error(data.message);
@@ -45,6 +45,7 @@ function* asyncChecking() {
         usuario,
         routes,
         carrera: rol !== "IS_ADMIN" && carrera,
+        rol: rol === "IS_ADMIN" ? rol : "IS_STUDENT",
       })
     );
     yield put({

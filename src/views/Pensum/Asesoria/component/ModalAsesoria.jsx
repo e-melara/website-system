@@ -1,9 +1,9 @@
 import React from "react";
-import classNames from "classnames";
-import { connect } from "react-redux";
-
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import classNames from "classnames";
+import { connect } from "react-redux";
+import InputMask from "react-input-mask";
 import { Modal, Table, Alert } from "antd";
 
 import { asesoriaRequestSend } from "../../../../redux/ducks/asesoria";
@@ -35,7 +35,7 @@ function ModalAsesoria({
 
   const form = useFormik({
     initialValues: {
-      phoneNumber: "0000-0000",
+      phoneNumber: "",
     },
     validationSchema: shapeToValidated,
     onSubmit: ({ phoneNumber }) => {
@@ -57,7 +57,7 @@ function ModalAsesoria({
         title="Listado de materias"
         onCancel={() => handler(false)}
       >
-        <Table rowKey='nommate' dataSource={data} pagination={false} bordered>
+        <Table rowKey="nommate" dataSource={data} pagination={false} bordered>
           <Column align="center" title="Codigo" dataIndex="materia" />
           <Column title="Materia" dataIndex="nommate" />
           <Column align="center" title="Dias" dataIndex="dias" />
@@ -76,9 +76,10 @@ function ModalAsesoria({
                 <label htmlFor="phoneNumber" className="col-form-label">
                   Celular:
                 </label>
-                <input
-                  type="tel"
+                <InputMask
                   required
+                  mask='9999-9999'
+                  id='phoneNumber'
                   name="phoneNumber"
                   placeholder="0000-0000"
                   onBlur={form.handleBlur}

@@ -14,7 +14,7 @@ export const TableSchules = ({ subject, handler }) => {
       pagination={false}
       dataSource={schules}
       rowClassName="tr-class"
-      rowKey={'codcarga'}
+      rowKey='codcarga'
     >
       <ColumnGroup title={nommate}>
         <Column title="Dia" dataIndex="dias" key="Dia" />

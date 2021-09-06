@@ -40,7 +40,7 @@ export default function CardUserEnrolled({ enrolled }) {
     >
       <Card title="Hoja de asesoria" hoverable>
         <Table
-          key={enrolled.codcarga}
+        rowKey='codmate'
           dataSource={schules}
           columns={columns}
           bordered

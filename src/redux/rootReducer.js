@@ -7,6 +7,9 @@ import reducerEventos from "./ducks/eventos";
 import reducerAsesoria from "./ducks/asesoria";
 import reducerSolicitud from "./ducks/solicitud";
 
+// reducers for admin
+import reducersAdminAsesoria from "./ducks/admin/asesoria";
+
 import { RESET_STORE } from "../consts";
 
 const appReducer = combineReducers({
@@ -16,6 +19,8 @@ const appReducer = combineReducers({
   eventos: reducerEventos,
   asesoria: reducerAsesoria,
   solicitud: reducerSolicitud,
+  // admin
+  adminAsesoria: reducersAdminAsesoria
 });
 
 const rootReducer = (state, action) => {
@@ -25,9 +30,11 @@ const rootReducer = (state, action) => {
   return appReducer(state, action);
 };
 
-export const composeEnhancers =
-  (typeof window !== "undefined" &&
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
-  compose;
+// export const composeEnhancers =
+//   (typeof window !== "undefined" &&
+//     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+//   compose;
+
+export const composeEnhancers = compose;
 
 export default rootReducer;

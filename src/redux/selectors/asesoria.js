@@ -9,19 +9,18 @@ const approved = (state) => mapFun(state.asesoria.approved, "nopensum");
 
 //estado de las estadistica de las materias por solicitud
 export const estadisticaSolicitud = (state) => state.solicitud.estadistica;
-export const solicitudOthers = (state) => state.asesoria.solicitudesOther;
+export const subjectEnrolledInSolicitud = (state) => state.solicitud.materias;
 
 // Para la verificacion de la sexta materias
 export const sixthSubjectValidated = createSelector(
   [enrolled, subjects, estadisticaSolicitud],
-  (enrolledSubject, posiblesSubject, objectSixth ) => {
-    const filterSixthStatic = objectSixth.find(e => e['type'] === 'SEXTA')
+  (enrolledSubject, posiblesSubject, objectSixth) => {
+    const filterSixthStatic = objectSixth.find((e) => e["type"] === "SEXTA");
 
-    if(filterSixthStatic) {
+    if (filterSixthStatic) {
       return {
         active: false,
-        message:
-          "Solo puedes solicitar una sexta materia una vez",
+        message: "Solo puedes solicitar una sexta materia una vez",
       };
     }
 
@@ -78,7 +77,7 @@ const pensumCodigo = (state) => {
   return array;
 };
 
-export const subjectsApprovateTake = createSelector(
+const subjectsApprovateTake = createSelector(
   [pensumCodigo, approved],
   function (pensum, subjectApproved) {
     return pensum.filter(function (element) {
@@ -99,5 +98,12 @@ export const subjectsApprovateTake = createSelector(
       }
       return false;
     });
+  }
+);
+
+export const validatedSubjectToOf = createSelector(
+  [subjectsApprovateTake, subjectEnrolledInSolicitud],
+  (subjectsValidate, subjectEnrolled) => {
+    return subjectsValidate.filter((i) => !subjectEnrolled.includes(i.code));
   }
 );

@@ -12,30 +12,38 @@ const NotePage = ({ loading, auth, carrera, notes, validated }) => {
       validated(loading);
     }
   }, [loading, validated]);
+  console.log(notes);
   const columns = [
     {
       key: "codmate",
       dataIndex: "codmate",
       title: "Codigo",
-      align: 'center'
+      align: "center",
     },
     {
       key: "nommate",
       dataIndex: "nommate",
       title: "Materia",
-
     },
     {
       key: "ciclolectivo",
       dataIndex: "ciclolectivo",
       title: "Ciclo en curso",
-      align: 'center'
+      align: "center",
+    },
+
+    {
+      key: "promedio",
+      dataIndex: "promedio",
+      title: "Promedio",
+      align: 'center',
+      render: (promedio) => parseFloat(promedio).toFixed(2)
     },
     {
       key: "estado",
       dataIndex: "estado",
       title: "Estado",
-      align: 'center',
+      align: "center",
       render: (estado) => (
         <Badge
           status={estado === "APROBADO" ? "success" : "error"}
@@ -54,7 +62,7 @@ const NotePage = ({ loading, auth, carrera, notes, validated }) => {
         <Col xs={16}>
           <Card title="Historial de notas">
             <Table
-              rowKey='codmate'
+              rowKey="codmate"
               columns={columns}
               dataSource={notes}
               size="small"

@@ -39,8 +39,9 @@ export const logout = () => ({ type: LOGIN_LOGOUT });
 // Reducer
 const initialState = {
   data: null,
-  perfil: null,
+  rol: null,
   routes: [],
+  perfil: null,
   carrera: null,
   checking: true,
   isAuthenticated: false,
@@ -51,6 +52,7 @@ const reducer = (state = initialState, { type, payload }) => {
     case LOGIN_ASYNC:
       return {
         checking: false,
+        rol: payload.rol,
         isAuthenticated: true,
         data: payload.usuario,
         perfil: payload.perfil,

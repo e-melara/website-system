@@ -2,14 +2,19 @@ import React from "react";
 import { map } from "lodash";
 import { Switch, Route } from "react-router-dom";
 
+import Error404 from "../views/Error404";
+
+// Routes for students
 import HomePage from "../views/Home";
 import NotesPages from "../views/Notes";
 import PensumPage from "../views/Pensum";
 import HorarioPage from "../views/Horario";
-import Calendario from "../views/Calendario";
 import Solicitud from "../views/Solicitud";
-
+import Calendario from "../views/Calendario";
 import SolicitudNuevaPage from "../views/Solicitud/SolicitudNuevaPage";
+
+// Routes administrado
+import AsesoriaTable from "../views/Admin/Asesoria/AsesoriaTable";
 
 const routes = [
   {
@@ -42,6 +47,11 @@ const routes = [
     key: "/horario",
     component: <HorarioPage />,
   },
+  {
+    key: "/admin/r/asesoria",
+    to: "/admin/r/asesoria",
+    component: <AsesoriaTable />,
+  }
 ];
 
 const RouteComponent = ({ routesState }) => {
@@ -63,7 +73,8 @@ const RouteComponent = ({ routesState }) => {
     <>
       <Switch>
         {routeComponent}
-        <Route path="/" component={HomePage} />
+        <Route path="/" exact component={HomePage} />
+        <Route path='*' component={Error404} />
       </Switch>
     </>
   );
