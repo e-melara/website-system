@@ -1,7 +1,29 @@
 import React from "react";
 import { Table, Card, Alert, Badge } from "antd";
 
-// TODO: Cambiar el colo del estado para los siguientes dos estados
+import { StatusTagAsesoria } from "../../../../components/common/TagEstado";
+
+const objectValues = {
+  Activa: "blue",
+  Validar: "green",
+  Pendiente: "magenta",
+  Inscriptas: "purple",
+};
+
+const messageAsesoria = {
+  Activa: "Se ha enviado la asesoria al proceso de validacion",
+  Validar: "La asesoria esta validad, por favor anexar los datos requeridos",
+  Pendiente: "Por el momento la asesoria tiene observaciones, estar pendiente por favor",
+  Inscriptas: "La asesoria has sido validad y sus materias estas inscriptas",
+};
+
+const messageAsesoriaColor = {
+  Activa: "info",
+  Validar: "warning",
+  Pendiente: "error",
+  Inscriptas: "success",
+};
+
 export default function CardUserEnrolled({ enrolled }) {
   const { schules, estado } = enrolled;
 
@@ -31,28 +53,30 @@ export default function CardUserEnrolled({ enrolled }) {
       dataIndex: "turno",
       key: "turno",
     },
+    {
+      title: "Estado",
+      dataIndex: "estado",
+      key: "estado",
+      align: "center",
+      render: (status) => <StatusTagAsesoria status={status} />,
+    },
   ];
 
   return (
-    <Badge.Ribbon
-      text={`${estado}`}
-      type={estado === "Activa" ? "purple" : "green"}
-    >
-      <Card title="Hoja de asesoria" hoverable>
+    <Badge.Ribbon text={`${estado}`} color={objectValues[estado]}>
+      <Card title="Hoja de asesoria">
         <Table
-        rowKey='codmate'
-          dataSource={schules}
-          columns={columns}
           bordered
+          rowKey="codmate"
+          columns={columns}
+          dataSource={schules}
           pagination={false}
         />
         <Alert
-          type="success"
           title="Obsevacion"
-          style={{ padding: 20 }}
-          message={`Observacion: ${
-            enrolled.observacion || "Su asesoria esta en proceso de validación"
-          }`}
+          style={{ padding: 20, fontSize: '1.2rem', textAlign: "center" }}
+          type={messageAsesoriaColor[estado]}
+          message={enrolled.observacion || messageAsesoria[estado]}
         />
       </Card>
     </Badge.Ribbon>

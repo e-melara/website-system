@@ -113,6 +113,7 @@ const initialState = {
   approved: [],
   active: false,
   loading: false,
+  schulesStudents: [],
 };
 
 function reducers(state = initialState, { type, payload }) {

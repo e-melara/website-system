@@ -1,15 +1,13 @@
 import { values, map, includes, groupBy, orderBy } from "lodash";
 const stringStatus = (status) => {
-  switch (status) {
-    case "V":
-      return "Validar";
-    case "F":
-      return "Facturar";
-    case "I":
-      return "Inscriptas";
-    default:
-      return "Activa";
-  }
+  const statusValues = {
+    A: "Activa",
+    V: "Validar",
+    F: "Facturar",
+    P: "Pendiente",
+    I: "Inscriptas",
+  };
+  return statusValues[status];
 };
 
 export const statusEnrolled = (status) => {

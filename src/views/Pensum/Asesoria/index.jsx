@@ -2,8 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 
 import "./asesoria.scss";
-import CardUser from "../../../components/common/CardUser";
 import CardSubjects from "./component/CardSubjects";
+import CardUser from "../../../components/common/CardUser";
 import CardUserEnrolled from "./component/CardUserEnrolled";
 
 const AsesoriaPage = ({ data, carrera, active, enrolled }) => {

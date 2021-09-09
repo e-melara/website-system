@@ -71,7 +71,7 @@ const Layout = ({
           <Content>
             <div className={
               classNames({
-                "site-layout-background site-content-layout-m4" : rol !== 'IS_ADMIN',
+                "site-layout-background site-content-layout-m4" : true,
               })
             }>
               {children}

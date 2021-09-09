@@ -25,12 +25,10 @@ function* asyncLoadingPensum() {
       enrolled: {},
       pensum: [],
       active: false,
-      solicitudesSexta: [],
-      solicitudesOther: [],
     };
 
     yield put(changeLoading(true));
-    const { active, pensum, take, approved, enrolleds, reprobadas, solicitud } =
+    const { active, pensum, take, approved, enrolleds, reprobadas } =
       yield DBConnection.instance.get("/asesoria/pensum");
 
     payload.active = active;
@@ -39,9 +37,6 @@ function* asyncLoadingPensum() {
     if (active) {
       payload.enrolled = propsToEnrolled(enrolleds);
     }
-
-    payload.solicitudesSexta = solicitud.sexta;
-    payload.solicitudesOther = solicitud.other;
 
     const pensumArray = forEachPensumArrayToProps(
       pensum,
@@ -53,6 +48,7 @@ function* asyncLoadingPensum() {
     payload.pensum = pensumArray;
     yield put(pensumAddAllSuccess({ ...payload }));
   } catch (error) {
+    console.log(error);
   } finally {
     yield put(changeLoading(false));
   }
@@ -143,7 +139,6 @@ function* watchPensumLoadingAll() {
 function* watchSolicitudesAll() {
   yield takeEvery(actionsTypes.SOLICITUD_ADD_POST, asyncSolicitudPost);
 }
-
 
 const rootAsesoria = [
   fork(watchAsesoria),
