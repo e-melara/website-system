@@ -1,7 +1,5 @@
 import { message } from "antd";
-import { put, takeEvery, fork } from "redux-saga/effects";
-
-// types actions for watchs
+import { put, takeEvery, fork } from "redux-saga/effects"; // types actions for watchs
 import DBConnection from "../api/Connection";
 import { checkingFinish } from "../redux/ducks/login";
 import { KeyLocalStorage, RESET_STORE } from "../consts";

@@ -1,5 +1,7 @@
 import React from "react";
-import { Table, Card, Alert, Badge } from "antd";
+import { Link } from "react-router-dom";
+import { PaperClipOutlined } from "@ant-design/icons";
+import { Table, Card, Alert, Badge, Space, Button } from "antd";
 
 import { StatusTagAsesoria } from "../../../../components/common/TagEstado";
 
@@ -12,8 +14,9 @@ const objectValues = {
 
 const messageAsesoria = {
   Activa: "Se ha enviado la asesoria al proceso de validacion",
-  Validar: "La asesoria esta validad, por favor anexar los datos requeridos",
-  Pendiente: "Por el momento la asesoria tiene observaciones, estar pendiente por favor",
+  Validar: "Su asesoria ha sido validad, puede realizar el pago en ventanilla o por medio de tranferencia electronica dando click al boton de pago",
+  Pendiente:
+    "Por el momento la asesoria tiene observaciones, estar pendiente por favor",
   Inscriptas: "La asesoria has sido validad y sus materias estas inscriptas",
 };
 
@@ -22,6 +25,26 @@ const messageAsesoriaColor = {
   Validar: "warning",
   Pendiente: "error",
   Inscriptas: "success",
+};
+
+const AlertValidar = ({ estado }) => {
+  return (
+    <Alert
+      showIcon
+      style={{ padding: 20, fontSize: "1.2rem", textAlign: "center" }}
+      type="success"
+      action={
+        <Space wrap size="large">
+          <Link to='/asesoria/form'>
+            <Button type="dashed" icon={<PaperClipOutlined />} size="middle">
+              Pago
+            </Button>
+          </Link>
+        </Space>
+      }
+      message={messageAsesoria[estado]}
+    />
+  );
 };
 
 export default function CardUserEnrolled({ enrolled }) {
@@ -72,12 +95,17 @@ export default function CardUserEnrolled({ enrolled }) {
           dataSource={schules}
           pagination={false}
         />
-        <Alert
-          title="Obsevacion"
-          style={{ padding: 20, fontSize: '1.2rem', textAlign: "center" }}
-          type={messageAsesoriaColor[estado]}
-          message={enrolled.observacion || messageAsesoria[estado]}
-        />
+        {estado !== "Validar" ? (
+          <Alert
+            showIcon
+            title="Obsevacion"
+            style={{ padding: 20, fontSize: "1.2rem", textAlign: "center" }}
+            type={messageAsesoriaColor[estado]}
+            message={enrolled.observacion || messageAsesoria[estado]}
+          />
+        ) : (
+          <AlertValidar estado={estado} />
+        )}
       </Card>
     </Badge.Ribbon>
   );

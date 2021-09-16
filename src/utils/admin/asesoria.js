@@ -3,11 +3,10 @@ export const arrayAsesoriaArreglo = (schules = []) => {
     return [];
   }
   return schules.map(({ id, estado, subjects }) => {
-    console.log(subjects);
     let array = {
       id,
       key: id,
-      estado: estado,
+      estadoAsesoria: estado,
       dias: subjects.dias,
       hora: subjects.hora,
       chosen: estado === "A",

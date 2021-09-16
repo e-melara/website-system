@@ -1,4 +1,4 @@
-import logger from 'redux-logger'
+import logger from "redux-logger";
 import createSagaMiddleware from "redux-saga";
 import { createStore, applyMiddleware } from "redux";
 

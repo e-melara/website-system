@@ -11,6 +11,7 @@ import PensumPage from "../views/Pensum";
 import HorarioPage from "../views/Horario";
 import Solicitud from "../views/Solicitud";
 import Calendario from "../views/Calendario";
+import FormAsesoria from "../views/Pensum/Asesoria/FormAsesoria";
 import SolicitudNuevaPage from "../views/Solicitud/SolicitudNuevaPage";
 
 // Routes administrado
@@ -26,6 +27,11 @@ const routes = [
     to: "/asesoria",
     key: "/asesoria",
     component: <PensumPage />,
+  },
+  {
+    key: "/asesoria",
+    to: "/asesoria/form",
+    component: <FormAsesoria />,
   },
   {
     to: "/solicitud",
@@ -51,7 +57,7 @@ const routes = [
     key: "/admin/r/asesoria",
     to: "/admin/r/asesoria",
     component: <AsesoriaTable />,
-  }
+  },
 ];
 
 const RouteComponent = ({ routesState }) => {
@@ -74,7 +80,7 @@ const RouteComponent = ({ routesState }) => {
       <Switch>
         {routeComponent}
         <Route path="/" exact component={HomePage} />
-        <Route path='*' component={Error404} />
+        <Route path="*" component={Error404} />
       </Switch>
     </>
   );

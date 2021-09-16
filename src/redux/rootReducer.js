@@ -20,7 +20,7 @@ const appReducer = combineReducers({
   asesoria: reducerAsesoria,
   solicitud: reducerSolicitud,
   // admin
-  adminAsesoria: reducersAdminAsesoria
+  adminAsesoria: reducersAdminAsesoria,
 });
 
 const rootReducer = (state, action) => {
@@ -30,11 +30,5 @@ const rootReducer = (state, action) => {
   return appReducer(state, action);
 };
 
-// export const composeEnhancers =
-//   (typeof window !== "undefined" &&
-//     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
-//   compose;
-
 export const composeEnhancers = compose;
-
 export default rootReducer;

@@ -69,11 +69,11 @@ const Layout = ({
             />
           </Header>
           <Content>
-            <div className={
-              classNames({
-                "site-layout-background site-content-layout-m4" : true,
-              })
-            }>
+            <div
+              className={classNames({
+                "site-layout-background site-content-layout-m4": true,
+              })}
+            >
               {children}
             </div>
           </Content>

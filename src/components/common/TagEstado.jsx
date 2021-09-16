@@ -26,7 +26,7 @@ const statusMap = {
   ),
 };
 
-export const StatusTag = ({ status }) => statusMap[status];
+export const StatusTag = ({ status }) => statusMap[status] || <p></p>;
 
 const asesoriaStatusMap = {
   D: (
@@ -46,4 +46,5 @@ const asesoriaStatusMap = {
   ),
 };
 
-export const StatusTagAsesoria = ({ status }) => asesoriaStatusMap[status];
+export const StatusTagAsesoria = ({ status }) =>
+  asesoriaStatusMap[status] || <p></p>;

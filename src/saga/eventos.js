@@ -10,8 +10,7 @@ function* asyncLoadingEventos(actions) {
     let url = payload ? `eventos?date=${payload}` : "eventos";
     const resolve = yield DBConnection.instance.get(url);
     yield put(eventosSuccess(resolve));
-  } catch (error) {
-  } 
+  } catch (error) {}
 }
 
 // functions watch

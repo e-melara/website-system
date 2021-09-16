@@ -9,16 +9,12 @@ export default function Loading() {
       <svg>
         <defs></defs>
         <filter id="goo">
-          <fegaussianblur
-            in="SourceGraphic"
-            result="blur"
-          ></fegaussianblur>
+          <fegaussianblur in="SourceGraphic" result="blur"></fegaussianblur>
           <fecolormatrix
             in="blur"
             values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9"
             result="goo"
-          >
-          </fecolormatrix>
+          ></fecolormatrix>
         </filter>
       </svg>
     </div>

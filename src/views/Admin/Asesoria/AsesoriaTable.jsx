@@ -10,6 +10,12 @@ import { StatusTag } from "../../../components/common/TagEstado";
 
 import { actionsType } from "../../../redux/ducks/admin/asesoria";
 
+const statusFilter = {
+  1: 'A',
+  2: 'P',
+  4: 'V',
+}
+
 const { Column } = Table;
 const AsesoriaTable = ({
   data,
@@ -63,9 +69,10 @@ const AsesoriaTable = ({
         search: "",
       });
     } else {
+      const statusTxt = statusFilter[key]
       setFilterObject((status) => ({
         ...status,
-        estado: key === "2" ? "P" : "A",
+        estado: statusTxt,
       }));
     }
   };
@@ -110,7 +117,7 @@ const AsesoriaTable = ({
             fixed="left"
           />
           <Column
-            title="Nombre comppleto"
+            title="Nombre completo"
             dataIndex="nombres"
             key="nombres"
             align="left"

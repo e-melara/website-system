@@ -2,11 +2,16 @@ import React from "react";
 import { Dropdown, Menu, Input, Col, Row } from "antd";
 import { DownOutlined, SearchOutlined } from "@ant-design/icons";
 
-const AsesoriaHeader = ({ handlerFilterDropdown, handlerSearch, valueSearch }) => {
+const AsesoriaHeader = ({
+  handlerFilterDropdown,
+  handlerSearch,
+  valueSearch,
+}) => {
   const menu = (
     <Menu onClick={handlerFilterDropdown}>
       <Menu.Item key="1">Estados Iniciandos</Menu.Item>
       <Menu.Item key="2">Estados Pendientes</Menu.Item>
+      <Menu.Item key="4">Estados Completadas</Menu.Item>
       <Menu.Divider />
       <Menu.Item key="3">Limpiar filtro</Menu.Item>
     </Menu>
@@ -22,11 +27,14 @@ const AsesoriaHeader = ({ handlerFilterDropdown, handlerSearch, valueSearch }) =
         </Col>
         <Col flex={4} className="d-flex justify-content-end align-items-center">
           <Dropdown overlay={menu}>
-            <span style={{
-              fontSize: '1rem',
-              color: 'var(--antd-wave-shadow-color)',
-              cursor: 'pointer'
-            }} className="ant-dropdown-link">
+            <span
+              style={{
+                fontSize: "1rem",
+                color: "var(--antd-wave-shadow-color)",
+                cursor: "pointer",
+              }}
+              className="ant-dropdown-link"
+            >
               Filtrar por <DownOutlined />
             </span>
           </Dropdown>

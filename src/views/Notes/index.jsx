@@ -12,7 +12,6 @@ const NotePage = ({ loading, auth, carrera, notes, validated }) => {
       validated(loading);
     }
   }, [loading, validated]);
-  console.log(notes);
   const columns = [
     {
       key: "codmate",
