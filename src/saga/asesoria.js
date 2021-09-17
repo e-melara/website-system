@@ -127,16 +127,34 @@ function* asycnSolicitudAranceles() {
   try {
     yield put(changeLoading(true))
     const {
-      data: { aranceles, student }
+      data: { aranceles, student, bancos }
     } = yield DBConnection.instance.post('/asesoria/aranceles')
     const arregloData = arancelesCuota(aranceles, student.codigo, student.cuota)
 
     yield put({
       type: actionsTypes.SOLICITUD_ARANCELES_SUCCESS,
-      payload: { arregloData }
+      payload: { arregloData, bancos }
     })
   } catch (error) {
     console.log(error)
+  } finally {
+    yield put(changeLoading(false))
+  }
+}
+
+function* aysncAsesoriaArancelesPost(actions) {
+  const { payload } = actions
+  try {
+    yield put(changeLoading(true))
+    yield DBConnection.instance.upload('/asesoria/aranceles/pago', payload)
+    yield put({
+      type: actionsTypes.SOLICITUD_ARANCELES_POST_SAVE_SUCCESS
+    })
+    message.info('La peticion ha sido realizada con exito')
+  } catch (error) {
+    message.error(
+      'Por el momento tenemos un error en el sistema intenta mas tarde'
+    )
   } finally {
     yield put(changeLoading(false))
   }
@@ -166,11 +184,19 @@ function* watchSolicitudAranceles() {
   yield takeEvery(actionsTypes.SOLICITUD_ARANCELES, asycnSolicitudAranceles)
 }
 
+function* watchSolicitudArancelesPost() {
+  yield takeEvery(
+    actionsTypes.SOLICITUD_ARANCELES_POST_SAVE,
+    aysncAsesoriaArancelesPost
+  )
+}
+
 const rootAsesoria = [
   fork(watchAsesoria),
   fork(watchSolicitudesAll),
   fork(watchAsesoriaRequest),
   fork(watchPensumLoadingAll),
-  fork(watchSolicitudAranceles)
+  fork(watchSolicitudAranceles),
+  fork(watchSolicitudArancelesPost)
 ]
 export default rootAsesoria

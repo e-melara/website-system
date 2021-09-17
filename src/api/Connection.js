@@ -1,34 +1,34 @@
-import axios from "axios";
-import { KeyLocalStorage, BaseUrl } from "../consts";
+import axios from 'axios'
+import { KeyLocalStorage, BaseUrl } from '../consts'
 
 class DBConnection {
-  static instance;
-  axiosConfig;
-  base_url;
-  urlLogin;
+  static instance
+  axiosConfig
+  base_url
+  urlLogin
 
-  constructor(baseUrl = "", urlLogin = "auth/login") {
+  constructor(baseUrl = '', urlLogin = 'auth/login') {
     if (!!DBConnection.instance) {
-      return DBConnection.instance;
+      return DBConnection.instance
     }
-    this.instance = this;
-    this.base_url = baseUrl;
-    this.urlLogin = urlLogin;
+    this.instance = this
+    this.base_url = baseUrl
+    this.urlLogin = urlLogin
     this.axiosConfig = axios.create({
       timeout: 1000,
-      baseURL: this.base_url,
-    });
+      baseURL: this.base_url
+    })
     this.axiosConfig.interceptors.request.use(function (config) {
-      const token = localStorage.getItem(KeyLocalStorage);
+      const token = localStorage.getItem(KeyLocalStorage)
       if (token) {
         const headers = {
           Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        };
-        config.headers = headers;
+          // Accept: 'application/json'
+        }
+        config.headers = headers
       }
-      return config;
-    });
+      return config
+    })
   }
 
   async login(username, password) {
@@ -38,75 +38,90 @@ class DBConnection {
           this.urlLogin,
           {
             username,
-            password,
+            password
           }
-        );
-        localStorage.setItem(KeyLocalStorage, token);
+        )
+        localStorage.setItem(KeyLocalStorage, token)
         resolve({
           carrera,
           usuario,
-          rol,
-        });
+          rol
+        })
       } catch (error) {
         reject({
-          error,
-        });
+          error
+        })
       }
-    });
+    })
   }
 
   errorCallback(error, callback) {
     if (error.response) {
-      const { data, status } = error.response;
+      const { data, status } = error.response
       callback({
         data,
-        status: status,
-      });
+        status: status
+      })
     } else if (error.request) {
-      const { status, responseText } = error.request;
+      const { status, responseText } = error.request
       callback(
         callback({
           data: responseText,
-          status: status,
+          status: status
         })
-      );
+      )
     } else {
       callback({
         status: 400,
-        data: error.message,
-      });
+        data: error.message
+      })
     }
   }
 
-  get(url = "") {
+  get(url = '') {
     return new Promise((resolve, reject) => {
       this.axiosConfig
         .get(url)
         .then((response) => resolve(response.data))
         .catch((error) => {
           this.errorCallback(error, (err) => {
-            reject(err);
-          });
-        });
-    });
+            reject(err)
+          })
+        })
+    })
   }
 
-  post(url = "", data) {
+  post(url = '', data) {
     return new Promise((resolve, reject) => {
       this.axiosConfig
         .post(url, data)
         .then((response) => resolve(response.data))
         .catch((error) => {
           this.errorCallback(error, (err) => {
-            reject(err);
-          });
-        });
-    });
+            reject(err)
+          })
+        })
+    })
+  }
+
+  upload(url = '', data) {
+    return new Promise((resolve, reject) => {
+      this.axiosConfig
+        .post(url, data, {
+          'Content-Type': 'multipart/form-data'
+        })
+        .then((response) => resolve(response.data))
+        .catch((error) => {
+          this.errorCallback(error, (err) => {
+            reject(err)
+          })
+        })
+    })
   }
 
   morePromise(promises) {
-    return Promise.all([...promises]);
+    return Promise.all([...promises])
   }
 }
 
-export default Object.freeze(new DBConnection(BaseUrl));
+export default Object.freeze(new DBConnection(BaseUrl))

@@ -35,6 +35,10 @@ const SOLICITUD_ARANCELES_SUCCESS =
 const SOLICITUD_ARANCELE_ADD_ITEM = '[ASESORIA] ADD ITEM ARANCEL'
 const SOLICITUD_ARANCELE_REMOVE_ITEM = '[ASESORIA] REMOVE ITEM ARANCEL'
 
+const SOLICITUD_ARANCELES_POST_SAVE = '[ASESORIA] SOLICITUD ARANCELES POST'
+const SOLICITUD_ARANCELES_POST_SAVE_SUCCESS =
+  '[ASESORIA] SOLICITUD ARANCELES POST SUCCESS'
+
 export const actionsTypes = {
   ASESORIA,
   ASESORIA_EMPTY,
@@ -49,7 +53,9 @@ export const actionsTypes = {
   SOLICITUD_ADD_POST,
   // ARANCELES
   SOLICITUD_ARANCELES,
-  SOLICITUD_ARANCELES_SUCCESS
+  SOLICITUD_ARANCELES_SUCCESS,
+  SOLICITUD_ARANCELES_POST_SAVE,
+  SOLICITUD_ARANCELES_POST_SAVE_SUCCESS
 }
 
 //actions para las solicitudes
@@ -124,18 +130,24 @@ export const addArancelItem = (payload) => ({
   payload
 })
 export const loadingAranceles = () => ({ type: SOLICITUD_ARANCELES })
+export const pagoSave = (formData) => ({
+  type: SOLICITUD_ARANCELES_POST_SAVE,
+  payload: formData
+})
 
 // initial state asesoria
 export const initialStateAsesoria = () => ({ type: ASESORIA_EMPTY })
 
 // reducers
 const initialState = {
+  bancos: [],
   pensum: [],
   subjects: [],
   enrolled: {},
   approved: [],
   active: false,
   aranceles: [],
+  redirect: false,
   loading: false,
   schulesStudents: []
 }
@@ -143,6 +155,20 @@ const initialState = {
 function reducers(state = initialState, { type, payload }) {
   switch (type) {
     // aranceles
+    case SOLICITUD_ARANCELES_POST_SAVE:
+      return {
+        ...state,
+        redirect: false
+      }
+    case SOLICITUD_ARANCELES_POST_SAVE_SUCCESS:
+      return {
+        ...state,
+        redirect: true,
+        enrolled: {
+          ...state.enrolled,
+          estado: 'Facturar'
+        }
+      }
     case SOLICITUD_ARANCELES:
       return {
         ...state,
@@ -151,6 +177,8 @@ function reducers(state = initialState, { type, payload }) {
     case SOLICITUD_ARANCELES_SUCCESS:
       return {
         ...state,
+        redict: false,
+        bancos: payload.bancos,
         aranceles: payload.arregloData
       }
     case SOLICITUD_ARANCELE_REMOVE_ITEM:

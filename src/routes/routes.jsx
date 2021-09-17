@@ -58,6 +58,11 @@ const routes = [
     to: "/admin/r/asesoria",
     component: <AsesoriaTable />,
   },
+  {
+    key: '/admin/c/asesoria',
+    to: '/admin/c/asesoria',
+    component: <AsesoriaTable />
+  }
 ];
 
 const RouteComponent = ({ routesState }) => {

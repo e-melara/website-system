@@ -1,26 +1,30 @@
-import React, { useState } from 'react'
 import moment from 'moment'
+import { useHistory } from 'react-router'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import {
-  CloudUploadOutlined,
+  SendOutlined,
   PlusOutlined,
-  DeleteOutlined
+  DeleteOutlined,
+  CloudUploadOutlined
 } from '@ant-design/icons'
 import {
   Row,
   Col,
   Card,
   Form,
+  Table,
+  Modal,
   Upload,
   Button,
   message,
   Divider,
-  Table,
   Typography
 } from 'antd'
 
 import {
+  pagoSave,
   addArancelItem,
   loadingAranceles,
   removeArancelItem
@@ -34,24 +38,6 @@ import {
   InputTypeDatepicker
 } from '../../../components/common'
 
-const bancos = [
-  {
-    value: 1,
-    title: 'Banco de america Central',
-    is_referido: 1
-  },
-  {
-    value: 2,
-    title: 'Banco Cuscatlan',
-    is_referido: 0
-  },
-  {
-    value: 3,
-    title: 'Banco Promerica',
-    is_referido: 0
-  }
-]
-
 const disabledDateFn = (current) => {
   return (
     (current && current < moment().subtract('15', 'days').endOf('day')) ||
@@ -64,7 +50,8 @@ const { Title } = Typography
 const FormAsesoria = () => {
   //! dispatch
   const dispatch = useDispatch()
-  const { aranceles } = useSelector((state) => state.asesoria)
+  const history = useHistory()
+  const { aranceles, bancos, redirect } = useSelector((state) => state.asesoria)
 
   //! useState fileList
   const [fileList, setFileList] = React.useState([])
@@ -72,6 +59,8 @@ const FormAsesoria = () => {
   const [referido, setReferido] = React.useState(false)
   //! useState form aranceles (Table)
   const [arancelesTB, setArancelesTB] = useState([])
+  //! useState total aranceles
+  const [totalAranceles, setTotalAranceles] = useState(0)
 
   //! Options for select option
   let optionsArancel = aranceles
@@ -87,6 +76,14 @@ const FormAsesoria = () => {
   React.useEffect(() => {
     dispatch(loadingAranceles())
   }, [dispatch])
+
+  //! useEffect para la redireccion del formulario
+  useEffect(() => {
+    if (redirect) {
+      console.log(redirect);
+      history.push('/asesoria')
+    }
+  }, [redirect, history])
 
   //! form
   const [form] = Form.useForm()
@@ -136,6 +133,48 @@ const FormAsesoria = () => {
     dispatch(addArancelItem(item))
   }
 
+  //! handler save information
+  const handlerSaveInformation = (values) => {
+    const { monto } = values
+    const count = fileList.length
+    const countAranceles = arancelesTB.length
+
+    if (count === 0) {
+      Modal.error({
+        title: 'Error',
+        content: 'Se debe anexar por lo menos un archivo que compruebe su pago'
+      })
+      return
+    }
+    if (countAranceles === 0) {
+      Modal.error({
+        title: 'Error',
+        content: 'Se seleccionar los aranceles que cumplan con el pago'
+      })
+      return
+    }
+    if (monto !== totalAranceles) {
+      Modal.error({
+        title: 'Error',
+        content: 'El campos monto debe ser igual al total de los aranceles'
+      })
+      return
+    }
+
+    // armando los datos del formulario
+    const formData = new FormData()
+    fileList.forEach((file) => {
+      formData.append('files[]', file)
+    })
+
+    // convirtiendo los datos del pago a json string
+    formData.append('pago', JSON.stringify(values))
+    // convirtiendo los datos de los aranceles a json string
+    formData.append('aranceles', JSON.stringify(arancelesTB))
+
+    dispatch(pagoSave(formData))
+  }
+
   const columns = [
     {
       dataIndex: 'descripcion',
@@ -169,7 +208,12 @@ const FormAsesoria = () => {
       <Card title="Anexar informacion">
         <Row gutter={24}>
           <Col span={10}>
-            <Form form={form} name="form-banco" size="large">
+            <Form
+              form={form}
+              size="large"
+              name="form-banco"
+              onFinish={handlerSaveInformation}
+            >
               <Row gutter={24}>
                 <Divider />
                 <SelectInputType
@@ -278,6 +322,16 @@ const FormAsesoria = () => {
                   </Upload>
                 </Col>
               </Row>
+              <Divider />
+              <Row justify="end">
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  icon={<SendOutlined />}
+                >
+                  Enviar
+                </Button>
+              </Row>
             </Form>
           </Col>
           <Col span={14}>
@@ -325,6 +379,7 @@ const FormAsesoria = () => {
                 pageData.forEach(({ precio }) => {
                   totalPrice += precio
                 })
+                setTotalAranceles(totalPrice)
                 return (
                   <Table.Summary>
                     <Table.Summary.Row>

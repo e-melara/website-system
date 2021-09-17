@@ -1,6 +1,7 @@
 import Moment from "react-moment";
 import { connect } from "react-redux";
 import { Table, Space, Button } from "antd";
+import { useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { SearchOutlined, EyeOutlined } from "@ant-design/icons";
 
@@ -27,6 +28,7 @@ const AsesoriaTable = ({
   emptySelectedCurrent,
   addSelectedKeysHandler,
 }) => {
+  const location = useLocation();
   //! ---  Use state  --------
   const [isOpen, setIsOpen] = useState(false);
   const [selectCurrent, setSelectCurrent] = useState({});

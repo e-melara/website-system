@@ -14,3 +14,10 @@ export const arancelesCuota = (data = [], codigo = '', precioCuota = 0.0) => {
     return returnObject
   })
 }
+
+export const AsesoriaTypeUser = (pathname) => {
+  if (pathname === 'admin/c/asesoria') {
+    return 'Colector'
+  }
+  return 'Registro'
+}
