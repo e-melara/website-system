@@ -1,23 +1,25 @@
-import Moment from "react-moment";
-import { connect } from "react-redux";
-import { Table, Space, Button } from "antd";
-import { useLocation } from "react-router-dom";
-import React, { useEffect, useState } from "react";
-import { SearchOutlined, EyeOutlined } from "@ant-design/icons";
+import Moment from 'react-moment'
+import { connect } from 'react-redux'
+import { Table, Space, Button } from 'antd'
+import { useLocation } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { SearchOutlined, EyeOutlined } from '@ant-design/icons'
 
-import AsesoriaModal from "./AsesoriaModal";
-import AsesoriaHeader from "./AsesoriaHeader";
-import { StatusTag } from "../../../components/common/TagEstado";
+import AsesoriaModal from './AsesoriaModal'
+import AsesoriaHeader from './AsesoriaHeader'
+import { AsesoriaTypeUser } from '../../../utils/functions'
+import { StatusTag } from '../../../components/common/TagEstado'
 
-import { actionsType } from "../../../redux/ducks/admin/asesoria";
+import { actionsType } from '../../../redux/ducks/admin/asesoria'
 
 const statusFilter = {
   1: 'A',
   2: 'P',
   4: 'V',
+  5: 'F'
 }
 
-const { Column } = Table;
+const { Column } = Table
 const AsesoriaTable = ({
   data,
   loading,
@@ -26,76 +28,78 @@ const AsesoriaTable = ({
   paginator,
   selectOneById,
   emptySelectedCurrent,
-  addSelectedKeysHandler,
+  addSelectedKeysHandler
 }) => {
-  const location = useLocation();
+  //! Para saber que tipo de usuario es
+  const location = useLocation()
+  const typeUser = AsesoriaTypeUser(location.pathname)
+
   //! ---  Use state  --------
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectCurrent, setSelectCurrent] = useState({});
+  const [typeUserState] = useState(typeUser)
+  const [isOpen, setIsOpen] = useState(false)
+  const [selectCurrent, setSelectCurrent] = useState({})
   const [filterObject, setFilterObject] = useState({
-    estado: "A",
-    search: "",
-  });
-
-  //! effects
-  useEffect(() => {
-    paginator();
-  }, [paginator]);
+    search: '',
+    type: typeUserState,
+    estado: '',
+  })
 
   useEffect(() => {
-    paginator({ page: 1, ...filterObject });
-  }, [filterObject, paginator]);
+    paginator({ page: 1, ...filterObject })
+  }, [filterObject, paginator])
 
   useEffect(() => {
     if (!isOpen) {
-      emptySelectedCurrent();
+      emptySelectedCurrent()
     }
-  }, [isOpen, emptySelectedCurrent]);
+  }, [isOpen, emptySelectedCurrent])
 
   //! Handler function
   //!---- Handler open modal -----!
   const handlerOpen = (data) => {
-    setSelectCurrent(data);
-    selectOneById({ id: data.id });
-    setIsOpen(true);
-  };
+    setSelectCurrent(data)
+    selectOneById({ id: data.id })
+    setIsOpen(true)
+  }
 
   //! Pagination
-  const handlerChange = (record) => {};
+  const handlerChange = (record) => {}
 
   //! Handler filter
   const handlerFilterDropdown = ({ key }) => {
-    if (key === "3") {
+    if (key === '3') {
       setFilterObject({
-        estado: "A",
-        search: "",
-      });
+        search: '',
+        estado: '',
+        type: typeUserState,
+      })
     } else {
       const statusTxt = statusFilter[key]
       setFilterObject((status) => ({
         ...status,
-        estado: statusTxt,
-      }));
+        estado: statusTxt
+      }))
     }
-  };
+  }
 
   //! Handler search
   const handlerSearch = (searchTxt) => {
     setFilterObject((status) => ({
       ...status,
-      search: searchTxt.trim(),
-    }));
-  };
+      search: searchTxt.trim()
+    }))
+  }
 
   //! Handler send asesoria change status
   const handlerSend = (type, data, id) => {
-    setIsOpen(false);
-    addType(type, data, id);
-  };
+    setIsOpen(false)
+    addType(type, data, id)
+  }
 
   return (
     <>
       <AsesoriaHeader
+        typeUser={typeUserState}
         handlerSearch={handlerSearch}
         handlerFilterDropdown={handlerFilterDropdown}
       />
@@ -107,7 +111,7 @@ const AsesoriaTable = ({
           dataSource={data}
           loading={loading}
           onChange={handlerChange}
-          pagination={{ position: ["none", "bottomCenter"] }}
+          pagination={{ position: ['none', 'bottomCenter'] }}
         >
           <Column
             align="center"
@@ -128,7 +132,7 @@ const AsesoriaTable = ({
                 <span>
                   {record.nombres} {record.apellidos}
                 </span>
-              );
+              )
             }}
           />
           <Column
@@ -143,7 +147,7 @@ const AsesoriaTable = ({
             dataIndex="created_at"
             key="created_at"
             render={(record) => {
-              return <Moment date={record} format="DD/MMMM/YYYY HH:mm" />;
+              return <Moment date={record} format="DD/MMMM/YYYY HH:mm" />
             }}
           />
           <Column
@@ -152,7 +156,7 @@ const AsesoriaTable = ({
             width="100px"
             key={(record) => `${record.carnet}-${record.nomcarrera}`}
             render={(record) => {
-              return <StatusTag key={record.carnet} status={record.estado} />;
+              return <StatusTag key={record.carnet} status={record.estado} />
             }}
           />
           <Column
@@ -183,11 +187,12 @@ const AsesoriaTable = ({
         user={selectCurrent}
         addSend={handlerSend}
         handlerOpen={setIsOpen}
+        typeUser={typeUserState}
         addSelectedKeys={addSelectedKeysHandler}
       />
     </>
-  );
-};
+  )
+}
 
 const mapDispathToProps = (dispatch) => {
   return {
@@ -196,7 +201,7 @@ const mapDispathToProps = (dispatch) => {
     addSelectedKeysHandler: (payload) =>
       dispatch({
         type: actionsType.ASESORIA_ADMIN_CURRENT_SELECT_ADD_KEYS,
-        payload,
+        payload
       }),
     paginator: (payload) =>
       dispatch({ type: actionsType.ASESORIA_ADMIN_LOADING, payload }),
@@ -208,19 +213,19 @@ const mapDispathToProps = (dispatch) => {
         payload: {
           type,
           data,
-          id,
-        },
-      }),
-  };
-};
+          id
+        }
+      })
+  }
+}
 
 const mapStateToProps = (state) => {
-  const { data, loading, current } = state.adminAsesoria;
+  const { data, loading, current } = state.adminAsesoria
   return {
     data,
     loading,
-    current,
-  };
-};
+    current
+  }
+}
 
-export default connect(mapStateToProps, mapDispathToProps)(AsesoriaTable);
+export default connect(mapStateToProps, mapDispathToProps)(AsesoriaTable)

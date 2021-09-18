@@ -1,7 +1,5 @@
 import { isEqual } from 'lodash'
 
-// types
-
 // loading all
 const PENSUM_LOADING_ALL = '[ASESORIA] ALL DATA RESPONSE ASESORIA'
 const PENSUM_LOADING_ALL_SUCCESS =

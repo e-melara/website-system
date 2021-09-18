@@ -1,12 +1,12 @@
-import { Tag } from "antd";
+import { Tag } from 'antd'
 import {
   CoffeeOutlined,
   CheckOutlined,
   FieldTimeOutlined,
   CloseCircleOutlined,
   CloudUploadOutlined,
-  DollarCircleOutlined,
-} from "@ant-design/icons";
+  DollarCircleOutlined
+} from '@ant-design/icons'
 
 const statusMap = {
   A: (
@@ -21,12 +21,17 @@ const statusMap = {
   ),
   V: (
     <Tag color="volcano" icon={<DollarCircleOutlined />}>
-      Colecturia
+      Impago
     </Tag>
   ),
-};
+  F: (
+    <Tag color="geekblue" icon={<DollarCircleOutlined />}>
+      UNI
+    </Tag>
+  )
+}
 
-export const StatusTag = ({ status }) => statusMap[status] || <p></p>;
+export const StatusTag = ({ status }) => statusMap[status] || <p></p>
 
 const asesoriaStatusMap = {
   D: (
@@ -43,8 +48,8 @@ const asesoriaStatusMap = {
     <Tag color="volcano" icon={<CloudUploadOutlined />}>
       Inicianda
     </Tag>
-  ),
-};
+  )
+}
 
 export const StatusTagAsesoria = ({ status }) =>
-  asesoriaStatusMap[status] || <p></p>;
+  asesoriaStatusMap[status] || <p></p>

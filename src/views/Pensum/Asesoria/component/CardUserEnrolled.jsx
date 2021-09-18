@@ -18,6 +18,7 @@ const messageAsesoria = {
   Pendiente:
     "Por el momento la asesoria tiene observaciones, estar pendiente por favor",
   Inscriptas: "La asesoria has sido validad y sus materias estas inscriptas",
+  "Validacion de pago": 'Su pago esta en proceso de validacion, de 3 a 4 dias habiles se aplicara su inscripcion de materias'
 };
 
 const messageAsesoriaColor = {

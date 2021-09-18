@@ -37,6 +37,7 @@ const initialState = {
   loading: false,
   current: {
     id: null,
+    pago: {},
     estado: "",
     enrolled: [],
     isSend: false,
@@ -84,9 +85,10 @@ const reducers = (state = initialState, { type, payload }) => {
         id: payload.id,
         loading: false,
         estado: payload.estado,
+        pago: payload.pago || {},
         enrolled: payload.enrolled,
-        isSend: payload.estado === "V",
         selectedRowsKeyArray: payload.selectedRowsKeyArray,
+        isSend: payload.estado === "V" || payload.estado === 'F',
       },
     };
   }

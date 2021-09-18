@@ -1,23 +1,30 @@
-import React from "react";
-import { Dropdown, Menu, Input, Col, Row } from "antd";
-import { DownOutlined, SearchOutlined } from "@ant-design/icons";
+import React from 'react'
+import { Dropdown, Menu, Input, Col, Row } from 'antd'
+import { DownOutlined, SearchOutlined } from '@ant-design/icons'
 
-const AsesoriaHeader = ({
-  handlerFilterDropdown,
-  handlerSearch,
-  valueSearch,
-}) => {
+const AsesoriaHeader = ({ typeUser, handlerSearch, handlerFilterDropdown }) => {
   const menu = (
     <Menu onClick={handlerFilterDropdown}>
-      <Menu.Item key="1">Estados Iniciandos</Menu.Item>
-      <Menu.Item key="2">Estados Pendientes</Menu.Item>
-      <Menu.Item key="4">Estados Completadas</Menu.Item>
-      <Menu.Divider />
-      <Menu.Item key="3">Limpiar filtro</Menu.Item>
-    </Menu>
-  );
+      {typeUser === 2 && (
+        <>
+          <Menu.Item key="1">Iniciandos</Menu.Item>
+          <Menu.Item key="2">Pendientes</Menu.Item>
+          <Menu.Item key="4">Validados</Menu.Item>
+        </>
+      )}
+      {typeUser === 1 && (
+        <>
+          <Menu.Item key="5">UNI</Menu.Item>
+          <Menu.Item key="4">Impago</Menu.Item>
+        </>
+      )}
 
-  const Search = Input.Search;
+      <Menu.Divider />
+      <Menu.Item key="3">Limpiar</Menu.Item>
+    </Menu>
+  )
+
+  const Search = Input.Search
 
   return (
     <header className="p-4">
@@ -29,9 +36,9 @@ const AsesoriaHeader = ({
           <Dropdown overlay={menu}>
             <span
               style={{
-                fontSize: "1rem",
-                color: "var(--antd-wave-shadow-color)",
-                cursor: "pointer",
+                fontSize: '1rem',
+                color: 'var(--antd-wave-shadow-color)',
+                cursor: 'pointer'
               }}
               className="ant-dropdown-link"
             >
@@ -51,7 +58,7 @@ const AsesoriaHeader = ({
         </Col>
       </Row>
     </header>
-  );
-};
+  )
+}
 
-export default AsesoriaHeader;
+export default AsesoriaHeader

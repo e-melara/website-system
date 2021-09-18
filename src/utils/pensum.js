@@ -3,7 +3,7 @@ const stringStatus = (status) => {
   const statusValues = {
     A: "Activa",
     V: "Validar",
-    F: "Facturar",
+    F: "Validacion de pago",
     P: "Pendiente",
     I: "Inscriptas",
   };
@@ -12,6 +12,7 @@ const stringStatus = (status) => {
 
 export const statusEnrolled = (status) => {
   let resolve = { message: "Activa", type: "info" };
+  console.log(status);
   if (status === "A") {
     return resolve;
   } else if (status === "D") {
@@ -19,7 +20,13 @@ export const statusEnrolled = (status) => {
       message: "Denegada",
       type: "error",
     };
+  }else if(status === 'F') {
+    return {
+      message: 'Facturada',
+      type: 'success'
+    }
   }
+  return resolve;
 };
 
 export const mapSubjectsActive = (materias) => {

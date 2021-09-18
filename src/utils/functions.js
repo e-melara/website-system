@@ -16,8 +16,10 @@ export const arancelesCuota = (data = [], codigo = '', precioCuota = 0.0) => {
 }
 
 export const AsesoriaTypeUser = (pathname) => {
-  if (pathname === 'admin/c/asesoria') {
-    return 'Colector'
+  if (pathname === '/admin/c/asesoria') {
+    // Colecturia
+    return 1;
   }
-  return 'Registro'
+  // Registro
+  return 2
 }

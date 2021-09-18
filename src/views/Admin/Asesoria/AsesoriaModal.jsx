@@ -1,62 +1,66 @@
-import React from "react";
-import { Modal, Button, Spin, Table, Row, Col, Card, Space } from "antd";
+import React from 'react'
+import { Modal, Button, Spin, Table, Row, Col, Card, Space } from 'antd'
 import {
   CloseOutlined,
   CheckCircleOutlined,
-  WarningOutlined,
-} from "@ant-design/icons";
+  WarningOutlined
+} from '@ant-design/icons'
 
-import { StatusTagAsesoria } from "../../../components/common/TagEstado";
-import CardUser from "../../../components/common/CardUser";
+import './modal.scss'
+import { ContentModalUNI } from './ContentModalUNI'
+import CardUser from '../../../components/common/CardUser'
+import { StatusTagAsesoria } from '../../../components/common/TagEstado'
 
 const columns = [
   {
-    title: "Codigo",
-    dataIndex: "codmate",
-    key: "codmate",
-    align: "left",
+    title: 'Codigo',
+    dataIndex: 'codmate',
+    key: 'codmate',
+    align: 'left'
   },
   {
-    title: "Nombre de materia",
-    dataIndex: "nommate",
-    key: "nommate",
+    title: 'Nombre de materia',
+    dataIndex: 'nommate',
+    key: 'nommate'
   },
   {
-    key: "dias",
-    title: "Dias",
-    dataIndex: "dias",
-    align: "center",
+    key: 'dias',
+    title: 'Dias',
+    dataIndex: 'dias',
+    align: 'center'
   },
   {
-    title: "Horas",
-    dataIndex: "hora",
-    key: "hora",
-    align: "center",
+    title: 'Horas',
+    dataIndex: 'hora',
+    key: 'hora',
+    align: 'center'
   },
   {
-    key: "estado",
-    title: "Estado",
-    dataIndex: "estado",
-    align: "center",
-    render: (record) => <StatusTagAsesoria status={record} />,
-  },
-];
+    key: 'estado',
+    title: 'Estado',
+    dataIndex: 'estado',
+    align: 'center',
+    render: (record) => <StatusTagAsesoria status={record} />
+  }
+]
 
 const AsesoriaModal = ({
   user,
   data,
   isOpen,
   addSend,
+  typeUser,
   handlerOpen,
-  addSelectedKeys,
+  addSelectedKeys
 }) => {
-  const { loading, isSend, id, enrolled, selectedRowsKeyArray } = data;
+  const { loading, isSend, id, enrolled, selectedRowsKeyArray, estado, pago } = data
 
   return (
     <>
       <Modal
         width="80%"
         visible={isOpen}
+        closable={false}
         title="Asesoria"
         key={user.carnet}
         footer={[
@@ -70,19 +74,29 @@ const AsesoriaModal = ({
             >
               Cancelar
             </Button>
-            {!isSend && (
+            {!isSend ? (
               <Button
                 size="large"
                 type="primary"
                 loading={loading}
                 icon={<CheckCircleOutlined />}
                 disabled={selectedRowsKeyArray.length === 0}
-                onClick={() => addSend("ACEPTADA", selectedRowsKeyArray, id)}
+                onClick={() => addSend('ACEPTADA', selectedRowsKeyArray, id)}
               >
                 Enviar
               </Button>
+            ) : (
+              <Button
+                size="large"
+                type="primary"
+                loading={loading}
+                disabled={typeUser === 2}
+                icon={<CheckCircleOutlined />}
+              >
+                Validar pago
+              </Button>
             )}
-          </Space>,
+          </Space>
         ]}
       >
         {loading ? (
@@ -90,68 +104,71 @@ const AsesoriaModal = ({
             <Spin size="large" tip="Cargando ..." />
           </div>
         ) : (
-          <Row gutter={[24, 16]}>
-            <Col flex="1">
-              <CardUser
-                user={{
-                  id: user.carnet,
-                  nombres: user.nombres,
-                  apellidos: user.apellidos,
-                }}
-                carrera={user.nomcarrera}
-              />
-            </Col>
-            <Col flex="3">
-              <Card
-                title="Materias solicitadas"
-                extra={[
-                  <Space wrap>
-                    {!isSend && (
-                      <Button
-                        size="large"
-                        type="primary"
-                        loading={loading}
-                        icon={<WarningOutlined />}
-                        onClick={() =>
-                          addSend("PENDIENTE", selectedRowsKeyArray, id)
-                        }
-                        disabled={
-                          selectedRowsKeyArray.length === 0 ||
-                          selectedRowsKeyArray.length === enrolled.length
-                        }
-                      >
-                        Pendientes
-                      </Button>
-                    )}
-                  </Space>,
-                ]}
-              >
-                <Table
-                  bordered
-                  size="middle"
-                  rowKey={(record) => record.id}
-                  columns={columns}
-                  pagination={false}
-                  dataSource={enrolled}
-                  rowSelection={
-                    !isSend && {
-                      onChange: (selectedKeyRows) => {
-                        addSelectedKeys(selectedKeyRows);
-                      },
-                      fixed: true,
-                      hideSelectAll: true,
-                      preserveSelectedRowKeys: true,
-                      selectedRowKeys: selectedRowsKeyArray,
-                    }
-                  }
+          <>
+            <Row gutter={[24, 16]}>
+              <Col flex="1">
+                <CardUser
+                  user={{
+                    id: user.carnet,
+                    nombres: user.nombres,
+                    apellidos: user.apellidos
+                  }}
+                  carrera={user.nomcarrera}
                 />
-              </Card>
-            </Col>
-          </Row>
+              </Col>
+              <Col flex="3">
+                <Card
+                  title="Materias solicitadas"
+                  extra={[
+                    <Space wrap>
+                      {!isSend && (
+                        <Button
+                          size="large"
+                          type="primary"
+                          loading={loading}
+                          icon={<WarningOutlined />}
+                          onClick={() =>
+                            addSend('PENDIENTE', selectedRowsKeyArray, id)
+                          }
+                          disabled={
+                            selectedRowsKeyArray.length === 0 ||
+                            selectedRowsKeyArray.length === enrolled.length
+                          }
+                        >
+                          Pendientes
+                        </Button>
+                      )}
+                    </Space>
+                  ]}
+                >
+                  <Table
+                    bordered
+                    size="middle"
+                    rowKey={(record) => record.id}
+                    columns={columns}
+                    pagination={false}
+                    dataSource={enrolled}
+                    rowSelection={
+                      !isSend && {
+                        onChange: (selectedKeyRows) => {
+                          addSelectedKeys(selectedKeyRows)
+                        },
+                        fixed: true,
+                        hideSelectAll: true,
+                        preserveSelectedRowKeys: true,
+                        selectedRowKeys: selectedRowsKeyArray
+                      }
+                    }
+                  />
+                </Card>
+              </Col>
+            </Row>
+            {typeUser === 1 && estado === 'F' && <ContentModalUNI pago={pago} />}
+          </>
         )}
       </Modal>
     </>
-  );
-};
+  )
+}
 
-export default AsesoriaModal;
+export default AsesoriaModal
