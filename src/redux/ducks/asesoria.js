@@ -164,7 +164,7 @@ function reducers(state = initialState, { type, payload }) {
         redirect: true,
         enrolled: {
           ...state.enrolled,
-          estado: 'Facturar'
+          estado: 'Validacion de pago'
         }
       }
     case SOLICITUD_ARANCELES:
