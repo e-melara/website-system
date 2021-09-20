@@ -49,7 +49,7 @@ function* asyncLoadingPensum() {
     payload.pensum = pensumArray
     yield put(pensumAddAllSuccess({ ...payload }))
   } catch (error) {
-    console.log(error)
+    console.error(error)
   } finally {
     yield put(changeLoading(false))
   }
@@ -69,7 +69,7 @@ function* asyncAsesoriaLoading() {
       yield put(loaderSubjects(valuesMaterias))
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
   } finally {
     yield put(changeLoading(false))
   }
@@ -127,16 +127,16 @@ function* asycnSolicitudAranceles() {
   try {
     yield put(changeLoading(true))
     const {
-      data: { aranceles, student, bancos }
+      data: { aranceles, bancos }
     } = yield DBConnection.instance.post('/asesoria/aranceles')
-    const arregloData = arancelesCuota(aranceles, student.codigo, student.cuota)
+    const arregloData = arancelesCuota(aranceles)
 
     yield put({
       type: actionsTypes.SOLICITUD_ARANCELES_SUCCESS,
       payload: { arregloData, bancos }
     })
   } catch (error) {
-    console.log(error)
+    console.error(error)
   } finally {
     yield put(changeLoading(false))
   }

@@ -1,18 +1,8 @@
-export const arancelesCuota = (data = [], codigo = '', precioCuota = 0.0) => {
-  const codigoCuota = `${codigo}020`
-  return data.map(({ idarancel, precio, descripcion }) => {
-    let returnObject = {
-      precio,
-      descripcion,
-      id: idarancel,
-      isCuota: false
-    }
-    if (idarancel.includes(codigoCuota)) {
-      returnObject['isCuota'] = true
-      returnObject['precio'] = precioCuota
-    }
-    return returnObject
-  })
+export const arancelesCuota = (data = []) => {
+  return {
+    default: data.slice(0, 3),
+    data: data.slice(3)
+  }
 }
 
 export const AsesoriaTypeUser = (pathname) => {

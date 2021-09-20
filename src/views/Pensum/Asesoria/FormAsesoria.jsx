@@ -1,6 +1,6 @@
+import React from 'react'
 import moment from 'moment'
 import { useHistory } from 'react-router'
-import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import {
@@ -51,26 +51,34 @@ const FormAsesoria = () => {
   //! dispatch
   const dispatch = useDispatch()
   const history = useHistory()
-  const { aranceles, bancos, redirect } = useSelector((state) => state.asesoria)
+  const { aranceles, bancos, redirect, loading } = useSelector(
+    (state) => state.asesoria
+  )
 
   //! useState fileList
   const [fileList, setFileList] = React.useState([])
   //! useState form referido
   const [referido, setReferido] = React.useState(false)
   //! useState form aranceles (Table)
-  const [arancelesTB, setArancelesTB] = useState([])
+  // aranceles.default
+  const [arancelesTB, setArancelesTB] = React.useState([])
   //! useState total aranceles
-  const [totalAranceles, setTotalAranceles] = useState(0)
+  const [totalAranceles, setTotalAranceles] = React.useState(0)
 
   //! Options for select option
-  let optionsArancel = aranceles
-    .map((a) => ({
-      value: a.id,
+  let optionsArancel = aranceles.data.map(function (a) {
+    return {
+      value: a.idarancel,
       title: a.descripcion
-    }))
-    .sort(function (a, b) {
-      return a.value.localeCompare(b.value)
-    })
+    }
+  })
+
+  //! useEffect loading data
+  React.useEffect(() => {
+    if (!loading) {
+      setArancelesTB(() => aranceles.default)
+    }
+  }, [loading, aranceles.default])
 
   //! useEffect para cargar los aranceles
   React.useEffect(() => {
@@ -78,9 +86,8 @@ const FormAsesoria = () => {
   }, [dispatch])
 
   //! useEffect para la redireccion del formulario
-  useEffect(() => {
+  React.useEffect(() => {
     if (redirect) {
-      console.log(redirect);
       history.push('/asesoria')
     }
   }, [redirect, history])
@@ -117,10 +124,9 @@ const FormAsesoria = () => {
 
   //! Handler form arancel (add arancel status)
   const handlerFinishArancel = ({ inputArancel }) => {
-    const arancel = aranceles.find(function (a) {
-      return a.id === inputArancel
+    const arancel = aranceles.data.find(function (a) {
+      return a.idarancel === inputArancel
     })
-
     formAranceles.resetFields()
     setArancelesTB((a) => [...a, arancel])
     dispatch(removeArancelItem(inputArancel))
@@ -128,7 +134,7 @@ const FormAsesoria = () => {
 
   //! handler remove arancel
   const handlerRemoveArancel = (item) => {
-    const arrayCopy = arancelesTB.filter((a) => a.id !== item.id)
+    const arrayCopy = arancelesTB.filter((a) => a.idarancel !== item.idarancel)
     setArancelesTB(arrayCopy)
     dispatch(addArancelItem(item))
   }
@@ -192,14 +198,18 @@ const FormAsesoria = () => {
       title: '',
       width: '100px',
       align: 'center',
-      render: (_, record) => (
-        <Button
-          type="primary"
-          onClick={() => handlerRemoveArancel(record)}
-          icon={<DeleteOutlined />}
-          danger
-        />
-      )
+      render: (_, record) => {
+        return (
+          <Button
+            danger
+            size="middle"
+            type="primary"
+            disabled={!record.isRemove}
+            onClick={() => handlerRemoveArancel(record)}
+            icon={<DeleteOutlined />}
+          />
+        )
+      }
     }
   ]
 
@@ -208,6 +218,7 @@ const FormAsesoria = () => {
       <Card title="Anexar informacion">
         <Row gutter={24}>
           <Col span={10}>
+            <h4 style={{ textAlign: 'center' }}>Informacion de pago</h4>
             <Form
               form={form}
               size="large"
@@ -340,6 +351,7 @@ const FormAsesoria = () => {
               size="large"
               onFinish={handlerFinishArancel}
             >
+              <h4 style={{ textAlign: 'center' }}>Aranceles</h4>
               <Divider />
               <Row justify="space-between">
                 <SelectInputType
@@ -369,8 +381,8 @@ const FormAsesoria = () => {
             </Form>
             <Table
               bordered
-              rowKey="id"
               size="small"
+              rowKey="idarancel"
               pagination={false}
               dataSource={arancelesTB}
               columns={columns}

@@ -94,6 +94,7 @@ export function ContentModalUNI({ pago }) {
                               <Image width={200} src={`${BaseAssets}${url}`} />
                             )
                           }
+                          return null;
                         })}
                     </Space>
                   </Image.PreviewGroup>

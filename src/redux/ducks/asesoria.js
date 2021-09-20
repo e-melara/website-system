@@ -144,7 +144,10 @@ const initialState = {
   enrolled: {},
   approved: [],
   active: false,
-  aranceles: [],
+  aranceles: {
+    data: [],
+    defautl: []
+  },
   redirect: false,
   loading: false,
   schulesStudents: []
@@ -170,24 +173,35 @@ function reducers(state = initialState, { type, payload }) {
     case SOLICITUD_ARANCELES:
       return {
         ...state,
-        aranceles: []
+        loading: true,
+        aranceles: {
+          data: [],
+          defautl: []
+        }
       }
     case SOLICITUD_ARANCELES_SUCCESS:
       return {
         ...state,
-        redict: false,
+        loading: false,
+        redirect: false,
         bancos: payload.bancos,
         aranceles: payload.arregloData
       }
     case SOLICITUD_ARANCELE_REMOVE_ITEM:
       return {
         ...state,
-        aranceles: state.aranceles.filter(({ id }) => id !== payload)
+        aranceles: {
+          ...state.aranceles,
+          data: state.aranceles.data.filter(({ idarancel }) => idarancel !== payload)
+        }
       }
     case SOLICITUD_ARANCELE_ADD_ITEM:
       return {
         ...state,
-        aranceles: [...state.aranceles, payload]
+        aranceles: {
+          ...state.aranceles,
+          data: [...state.aranceles.data, payload]
+        }
       }
     // checking data
     case CHECKING_DATA:

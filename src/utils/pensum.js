@@ -12,7 +12,6 @@ const stringStatus = (status) => {
 
 export const statusEnrolled = (status) => {
   let resolve = { message: "Activa", type: "info" };
-  console.log(status);
   if (status === "A") {
     return resolve;
   } else if (status === "D") {

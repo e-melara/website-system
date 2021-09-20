@@ -55,7 +55,7 @@ function* asyncLoadingCurrent(actions) {
       }
     })
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 
