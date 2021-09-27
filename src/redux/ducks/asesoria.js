@@ -146,7 +146,7 @@ const initialState = {
   active: false,
   aranceles: {
     data: [],
-    defautl: []
+    selections: []
   },
   redirect: false,
   loading: false,
@@ -176,7 +176,7 @@ function reducers(state = initialState, { type, payload }) {
         loading: true,
         aranceles: {
           data: [],
-          defautl: []
+          selections: []
         }
       }
     case SOLICITUD_ARANCELES_SUCCESS:
@@ -191,16 +191,20 @@ function reducers(state = initialState, { type, payload }) {
       return {
         ...state,
         aranceles: {
-          ...state.aranceles,
-          data: state.aranceles.data.filter(({ idarancel }) => idarancel !== payload)
+          data: state.aranceles.data.filter(
+            ({ idarancel }) => idarancel !== payload.id
+          ),
+          selections: [...state.aranceles.selections, payload.item]
         }
       }
     case SOLICITUD_ARANCELE_ADD_ITEM:
       return {
         ...state,
         aranceles: {
-          ...state.aranceles,
-          data: [...state.aranceles.data, payload]
+          data: [payload, ...state.aranceles.data],
+          selections: state.aranceles.selections.filter(
+            ({ idarancel }) => idarancel !== payload.idarancel
+          )
         }
       }
     // checking data

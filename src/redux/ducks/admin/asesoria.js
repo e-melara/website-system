@@ -1,16 +1,18 @@
-const ASESORIA_ADMIN_LOADING = "@admin/asesoria/page/loading";
-const ASESORIA_ADMIN_LOADING_SUCCESS = "@admin/asesoria/page/loading/success";
+const ASESORIA_ADMIN_LOADING = '@admin/asesoria/page/loading'
+const ASESORIA_ADMIN_LOADING_SUCCESS = '@admin/asesoria/page/loading/success'
 
-const ASESORIA_ADMIN_CURRENT_SELECT = "@admin/asesoria/select/current";
-const ASESORIA_ADMIN_CURRENT_SELECT_ADD_KEYS =
-  "@admin/asesoria/select/add/keys";
+const ASESORIA_ADMIN_CURRENT_SELECT = '@admin/asesoria/select/current'
+const ASESORIA_ADMIN_CURRENT_SELECT_ADD_KEYS = '@admin/asesoria/select/add/keys'
 const ASESORIA_ADMIN_CURRENT_SELECT_EMPTY =
-  "@admin/asesoria/select/current/empty";
+  '@admin/asesoria/select/current/empty'
 const ASESORIA_ADMIN_CURRENT_SELECT_SUCCESS =
-  "@admin/asesoria/select/current/success";
+  '@admin/asesoria/select/current/success'
 
-const ASESORIA_ADMIN_ADD_TYPE = "@admin/asesoria/add/type";
-const ASESORIA_ADMIN_ADD_TYPE_SUCCESS = "@admin/asesoria/add/type/success";
+const ASESORIA_ADMIN_ADD_TYPE = '@admin/asesoria/add/type'
+const ASESORIA_ADMIN_ADD_TYPE_SUCCESS = '@admin/asesoria/add/type/success'
+
+const ASESORIA_ADMIN_MATRICULAR = '@admin/asesoria/matricular'
+const ASESORIA_ADMIN_MATRICULAR_SUCCESS = '@admin/asesoria/matricular/success'
 
 export const actionsType = {
   ASESORIA_ADMIN_LOADING,
@@ -25,33 +27,45 @@ export const actionsType = {
   // add
   ASESORIA_ADMIN_ADD_TYPE,
   ASESORIA_ADMIN_ADD_TYPE_SUCCESS,
-};
+
+  // matricular alumno
+  ASESORIA_ADMIN_MATRICULAR,
+  ASESORIA_ADMIN_MATRICULAR_SUCCESS
+}
+
+// actions
+export const enrolledAsesoria = (payload) => {
+  return {
+    type: ASESORIA_ADMIN_MATRICULAR,
+    payload
+  }
+}
 
 const initialState = {
   data: [],
   page: {
     total: 0,
     current: 1,
-    pageSize: 10,
+    pageSize: 10
   },
   loading: false,
   current: {
     id: null,
     pago: {},
-    estado: "",
+    estado: '',
     enrolled: [],
     isSend: false,
     loading: false,
-    selectedRowsKeyArray: [],
-  },
-};
+    selectedRowsKeyArray: []
+  }
+}
 
 const reducers = (state = initialState, { type, payload }) => {
   if (type === ASESORIA_ADMIN_LOADING) {
     return {
       ...state,
-      loading: true,
-    };
+      loading: true
+    }
   }
 
   if (type === ASESORIA_ADMIN_LOADING_SUCCESS) {
@@ -62,9 +76,9 @@ const reducers = (state = initialState, { type, payload }) => {
       page: {
         pageSize: 10,
         total: payload.total,
-        current: payload.current,
-      },
-    };
+        current: payload.current
+      }
+    }
   }
 
   // current enrolled current
@@ -73,9 +87,9 @@ const reducers = (state = initialState, { type, payload }) => {
       ...state,
       current: {
         ...state.current,
-        loading: true,
-      },
-    };
+        loading: true
+      }
+    }
   }
 
   if (type === ASESORIA_ADMIN_CURRENT_SELECT_SUCCESS) {
@@ -88,23 +102,23 @@ const reducers = (state = initialState, { type, payload }) => {
         pago: payload.pago || {},
         enrolled: payload.enrolled,
         selectedRowsKeyArray: payload.selectedRowsKeyArray,
-        isSend: payload.estado === "V" || payload.estado === 'F',
-      },
-    };
+        isSend: payload.estado === 'V' || payload.estado === 'F'
+      }
+    }
   }
 
   if (type === ASESORIA_ADMIN_CURRENT_SELECT_EMPTY) {
     return {
       ...state,
       current: {
-        id: "",
-        estado: "",
+        id: '',
+        estado: '',
         enrolled: [],
         isSend: false,
         loading: false,
-        selectedRowsKeyArray: [],
-      },
-    };
+        selectedRowsKeyArray: []
+      }
+    }
   }
 
   if (type === ASESORIA_ADMIN_CURRENT_SELECT_ADD_KEYS) {
@@ -112,9 +126,9 @@ const reducers = (state = initialState, { type, payload }) => {
       ...state,
       current: {
         ...state.current,
-        selectedRowsKeyArray: payload,
-      },
-    };
+        selectedRowsKeyArray: payload
+      }
+    }
   }
   // fin enrolled current
 
@@ -122,18 +136,25 @@ const reducers = (state = initialState, { type, payload }) => {
     return {
       ...state,
       current: {
-        id: "",
-        estado: "",
+        id: '',
+        estado: '',
         enrolled: [],
         isSend: false,
         loading: false,
-        selectedRowsKeyArray: [],
+        selectedRowsKeyArray: []
       },
-      data: state.data.filter(({ id }) => id !== payload),
-    };
+      data: state.data.filter(({ id }) => id !== payload)
+    }
   }
 
-  return state;
-};
+  if (ASESORIA_ADMIN_MATRICULAR_SUCCESS === type) {
+    return {
+      ...state,
+      data: state.data.filter(({ id }) => id !== payload)
+    }
+  }
 
-export default reducers;
+  return state
+}
+
+export default reducers

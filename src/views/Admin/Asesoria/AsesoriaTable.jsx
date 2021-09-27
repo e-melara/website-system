@@ -1,11 +1,17 @@
 import Moment from 'react-moment'
 import { connect } from 'react-redux'
-import { Table, Space, Button } from 'antd'
 import { useLocation } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
-import { SearchOutlined, EyeOutlined } from '@ant-design/icons'
+import { Table, Button, Modal, Form, DatePicker, Row, Space } from 'antd'
+import {
+  SearchOutlined,
+  EyeOutlined,
+  FilePdfOutlined,
+  FunnelPlotOutlined
+} from '@ant-design/icons'
 
 import AsesoriaModal from './AsesoriaModal'
+import { BaseAssets } from '../../../consts'
 import AsesoriaHeader from './AsesoriaHeader'
 import { AsesoriaTypeUser } from '../../../utils/functions'
 import { StatusTag } from '../../../components/common/TagEstado'
@@ -20,6 +26,7 @@ const statusFilter = {
 }
 
 const { Column } = Table
+const { RangePicker } = DatePicker
 const AsesoriaTable = ({
   data,
   loading,
@@ -32,16 +39,19 @@ const AsesoriaTable = ({
 }) => {
   //! Para saber que tipo de usuario es
   const location = useLocation()
+  const [form] = Form.useForm()
   const typeUser = AsesoriaTypeUser(location.pathname)
 
   //! ---  Use state  --------
   const [typeUserState] = useState(typeUser)
   const [isOpen, setIsOpen] = useState(false)
   const [selectCurrent, setSelectCurrent] = useState({})
+  const [openFilterDate, setOpenFilterDate] = useState(false)
+
   const [filterObject, setFilterObject] = useState({
     search: '',
     type: typeUserState,
-    estado: '',
+    estado: ''
   })
 
   useEffect(() => {
@@ -71,7 +81,7 @@ const AsesoriaTable = ({
       setFilterObject({
         search: '',
         estado: '',
-        type: typeUserState,
+        type: typeUserState
       })
     } else {
       const statusTxt = statusFilter[key]
@@ -96,12 +106,38 @@ const AsesoriaTable = ({
     addType(type, data, id)
   }
 
+  // handler for modal
+  const handlerViewPdf = ({ carnet }) => {
+    window.open(`${BaseAssets}pdf/pago/${carnet}`)
+  }
+
+  const handlerViewPdfInscripcion = ({ carnet }) => {
+    window.open(`${BaseAssets}pdf/matricula/${carnet}`)
+  }
+
+  const handlerOpenModalFilter = () => {
+    setOpenFilterDate(true)
+  }
+
+  const onFinishFilter = (values) => {
+    const [primer, segundo] = values.range
+    const url = typeUser === 2 ? 'pdf/matriculas' : ''
+    form.resetFields();
+    setOpenFilterDate(false)
+    window.open(
+      `${BaseAssets}${url}?begin=${primer.format('YYYY-MM-DD')}&end=${segundo
+        .add(1, 'day')
+        .format('YYYY-MM-DD')}`
+    )
+  }
+
   return (
     <>
       <AsesoriaHeader
         typeUser={typeUserState}
         handlerSearch={handlerSearch}
         handlerFilterDropdown={handlerFilterDropdown}
+        handlerOpenModalFilter={handlerOpenModalFilter}
       />
       <div className="p-4">
         <Table
@@ -169,13 +205,37 @@ const AsesoriaTable = ({
           <Column
             align="center"
             key="action"
+            width="80px"
             render={(record) => (
-              <Space size="middle">
-                <Button
-                  type="dashed"
-                  icon={<EyeOutlined />}
-                  onClick={() => handlerOpen(record)}
-                />
+              <Space size="small" align="center">
+                {record.estado !== 'M' && (
+                  <Button
+                    type="dashed"
+                    icon={<EyeOutlined />}
+                    onClick={() => handlerOpen(record)}
+                  >
+                    Ver
+                  </Button>
+                )}
+                {record.estado === 'F' && (
+                  <Button
+                    onClick={() => handlerViewPdf(record)}
+                    type="dashed"
+                    icon={<FilePdfOutlined />}
+                  >
+                    Pago
+                  </Button>
+                )}
+                {record.estado === 'M' && (
+                  <Button
+                    onClick={() => handlerViewPdfInscripcion(record)}
+                    type="dashed"
+                    icon={<FilePdfOutlined />}
+                  >
+                    Hoja de inscripcion
+                  </Button>
+                )}
+                <Button />
               </Space>
             )}
           />
@@ -188,8 +248,47 @@ const AsesoriaTable = ({
         addSend={handlerSend}
         handlerOpen={setIsOpen}
         typeUser={typeUserState}
+        handlerViewPdf={handlerViewPdf}
         addSelectedKeys={addSelectedKeysHandler}
       />
+      <Modal
+        title="Seleccionar fechas"
+        visible={openFilterDate}
+        footer={[]}
+        onCancel={() => setOpenFilterDate(false)}
+      >
+        <Form
+          form={form}
+          name="form-date-range"
+          size="large"
+          layout="horizontal"
+          onFinish={onFinishFilter}
+        >
+          <Row justify="end">
+            <Form.Item
+              name="range"
+              style={{ width: '100%' }}
+              rules={[
+                {
+                  required: true,
+                  message: 'El rango de las fechas es requerido'
+                }
+              ]}
+            >
+              <RangePicker className="input-width" />
+            </Form.Item>
+            <Form.Item>
+              <Button
+                htmlType="submit"
+                type="primary"
+                icon={<FunnelPlotOutlined />}
+              >
+                Filtrar
+              </Button>
+            </Form.Item>
+          </Row>
+        </Form>
+      </Modal>
     </>
   )
 }

@@ -5,7 +5,8 @@ import {
   FieldTimeOutlined,
   CloseCircleOutlined,
   CloudUploadOutlined,
-  DollarCircleOutlined
+  DollarCircleOutlined,
+  DingtalkOutlined
 } from '@ant-design/icons'
 
 const statusMap = {
@@ -28,6 +29,11 @@ const statusMap = {
     <Tag color="geekblue" icon={<DollarCircleOutlined />}>
       UNI
     </Tag>
+  ),
+  M: (
+    <Tag color="green" icon={<DingtalkOutlined />}>
+      Matriculado
+    </Tag>
   )
 }
 
@@ -47,6 +53,11 @@ const asesoriaStatusMap = {
   I: (
     <Tag color="volcano" icon={<CloudUploadOutlined />}>
       Inicianda
+    </Tag>
+  ),
+  M: (
+    <Tag color="green" icon={<DingtalkOutlined />}>
+      Matriculado
     </Tag>
   )
 }

@@ -1,23 +1,16 @@
 import React from 'react'
 import Moment from 'react-moment'
-import {
-  Row,
-  Col,
-  Divider,
-  PageHeader,
-  Descriptions,
-  Table,
-  Image,
-  Space
-} from 'antd'
+import { Row, Col, Table, Divider, PageHeader, Descriptions } from 'antd'
 
 import { BaseAssets } from '../../../consts'
+import { FilePdfTwoTone, FileImageTwoTone } from '@ant-design/icons'
 
 const columns = [
   {
     key: 'descripcion',
     dataIndex: 'descripcion',
-    title: 'Concepto'
+    title: 'Concepto',
+    align: 'left'
   },
   {
     width: '150px',
@@ -55,8 +48,8 @@ export function ContentModalUNI({ pago }) {
             title="Pago"
             subTitle="Detalles del pago realizado por medio de UNI"
             footer={
-              <Row className="tabs" gutter={24}>
-                <Col span={12}>
+              <Row className="tabs" gutter={[24, 24]}>
+                <Col span={24}>
                   <h4>Aranceles</h4>
                   <Table
                     bordered
@@ -73,31 +66,45 @@ export function ContentModalUNI({ pago }) {
                       return (
                         <Table.Summary.Row>
                           <Table.Summary.Cell>
-                            <span>Total</span>
+                            <h5>Total</h5>
                           </Table.Summary.Cell>
                           <Table.Summary.Cell align="right">
-                            <span>$ {total.toFixed(2)}</span>
+                            <h5>$ {total.toFixed(2)}</h5>
                           </Table.Summary.Cell>
                         </Table.Summary.Row>
                       )
                     }}
                   />
                 </Col>
-                <Col span={12}>
+                <Col span={10}>
                   <h4>Archivos</h4>
-                  <Image.PreviewGroup>
-                    <Space wrap={true}>
-                      {archivos &&
-                        archivos.map(({ tipo, url }) => {
-                          if (tipo === 'jpg' || tipo === 'png') {
-                            return (
-                              <Image width={200} src={`${BaseAssets}${url}`} />
-                            )
-                          }
-                          return null;
-                        })}
-                    </Space>
-                  </Image.PreviewGroup>
+                  <ul className='ul-files'>
+                    {archivos.map(({ url, tipo }) => {
+                      return (
+                        <li key={url}>
+                          <a rel="noreferrer" href={`${BaseAssets}${url}`} target="_blank">
+                            {tipo === 'pdf' ? (
+                              <>
+                                <FilePdfTwoTone
+                                  style={{ fontSize: '1.8rem' }}
+                                  size="large"
+                                />
+                                <span>{url}</span>
+                              </>
+                            ) : (
+                              <>
+                                <FileImageTwoTone
+                                  style={{ fontSize: '1.8rem' }}
+                                  size="large"
+                                />
+                                <span>{url}</span>
+                              </>
+                            )}
+                          </a>
+                        </li>
+                      )
+                    })}
+                  </ul>
                 </Col>
               </Row>
             }
@@ -108,7 +115,9 @@ export function ContentModalUNI({ pago }) {
               </Descriptions.Item>
               <Descriptions.Item
                 label={
-                  banco.is_referido ? '# de referencia' : 'Cuenta bancaria a nombre de'
+                  banco.is_referido
+                    ? '# de referencia'
+                    : 'Cuenta bancaria a nombre de'
                 }
               >
                 <span>{nombre_titular}</span>

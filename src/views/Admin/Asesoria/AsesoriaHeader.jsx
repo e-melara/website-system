@@ -1,8 +1,12 @@
 import React from 'react'
-import { Dropdown, Menu, Input, Col, Row } from 'antd'
-import { DownOutlined, SearchOutlined } from '@ant-design/icons'
+import { Dropdown, Menu, Input, Col, Row, Button, Space } from 'antd'
+import {
+  DownOutlined,
+  SearchOutlined,
+  CalendarOutlined
+} from '@ant-design/icons'
 
-const AsesoriaHeader = ({ typeUser, handlerSearch, handlerFilterDropdown }) => {
+const AsesoriaHeader = ({ typeUser, handlerSearch, handlerFilterDropdown, handlerOpenModalFilter }) => {
   const menu = (
     <Menu onClick={handlerFilterDropdown}>
       {typeUser === 2 && (
@@ -33,18 +37,24 @@ const AsesoriaHeader = ({ typeUser, handlerSearch, handlerFilterDropdown }) => {
           <h2>Solicitudes</h2>
         </Col>
         <Col flex={4} className="d-flex justify-content-end align-items-center">
-          <Dropdown overlay={menu}>
-            <span
-              style={{
-                fontSize: '1rem',
-                color: 'var(--antd-wave-shadow-color)',
-                cursor: 'pointer'
-              }}
-              className="ant-dropdown-link"
-            >
-              Filtrar por <DownOutlined />
-            </span>
-          </Dropdown>
+          <Space>
+            <Dropdown overlay={menu}>
+              <span
+                style={{
+                  fontSize: '1rem',
+                  color: 'var(--antd-wave-shadow-color)',
+                  cursor: 'pointer'
+                }}
+                className="ant-dropdown-link"
+              >
+                Filtrar por <DownOutlined />
+              </span>
+            </Dropdown>
+
+            <Button size='large ' onClick={handlerOpenModalFilter} icon={<CalendarOutlined />} type="dashed">
+              Reportes
+            </Button>
+          </Space>
           <div style={{ marginLeft: 10 }}>
             <Search
               size="large"

@@ -6,7 +6,7 @@
   color: white;
   &.default { color: black; }
   &.aprobadas{ background-color: #00d200; }
-  &.inscriptas{ background-color:#3158e6; }
+  &.inscriptas{ background-color:#3158e6 !important; }
   &.take{ background-color:#efef4a; }
   &.reprobada { background-color: red !important; }
 }

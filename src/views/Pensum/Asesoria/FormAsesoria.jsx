@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   SendOutlined,
   PlusOutlined,
-  DeleteOutlined,
   CloudUploadOutlined
 } from '@ant-design/icons'
 import {
@@ -14,13 +13,11 @@ import {
   Col,
   Card,
   Form,
-  Table,
   Modal,
   Upload,
   Button,
   message,
-  Divider,
-  Typography
+  Divider
 } from 'antd'
 
 import {
@@ -38,66 +35,59 @@ import {
   InputTypeDatepicker
 } from '../../../components/common'
 
-const disabledDateFn = (current) => {
-  return (
-    (current && current < moment().subtract('15', 'days').endOf('day')) ||
-    current > moment().endOf('day')
-  )
-}
+import { FormAsesoriaTableAranceles } from './component/FormAsesoriaTableAranceles'
 
-const { Title } = Typography
+const disabledDateFn = (current) => {
+  return current && current > moment().endOf('day')
+}
 
 const FormAsesoria = () => {
   //! dispatch
   const dispatch = useDispatch()
   const history = useHistory()
-  const { aranceles, bancos, redirect, loading } = useSelector(
-    (state) => state.asesoria
-  )
+  const {
+    aranceles: { selections, data },
+    bancos,
+    redirect
+  } = useSelector((state) => state.asesoria)
 
-  //! useState fileList
+  // useState fileList
   const [fileList, setFileList] = React.useState([])
-  //! useState form referido
+  // useState form referido
   const [referido, setReferido] = React.useState(false)
-  //! useState form aranceles (Table)
-  // aranceles.default
-  const [arancelesTB, setArancelesTB] = React.useState([])
-  //! useState total aranceles
-  const [totalAranceles, setTotalAranceles] = React.useState(0)
+  // use state for modal otros
+  const [isOpenModalOther, setIsOpenModalOther] = React.useState(false)
 
-  //! Options for select option
-  let optionsArancel = aranceles.data.map(function (a) {
+  // Options for select option
+  let optionsArancel = data.map(function (a) {
     return {
       value: a.idarancel,
       title: a.descripcion
     }
   })
 
-  //! useEffect loading data
-  React.useEffect(() => {
-    if (!loading) {
-      setArancelesTB(() => aranceles.default)
-    }
-  }, [loading, aranceles.default])
-
-  //! useEffect para cargar los aranceles
+  // useEffect para cargar los aranceles
   React.useEffect(() => {
     dispatch(loadingAranceles())
   }, [dispatch])
 
-  //! useEffect para la redireccion del formulario
+  // useEffect para la redireccion del formulario
   React.useEffect(() => {
     if (redirect) {
       history.push('/asesoria')
     }
   }, [redirect, history])
 
-  //! form
+  // form
   const [form] = Form.useForm()
-  //! Form para los aranceles seleccionados
+
+  // Form para aranceles otros
+  const [formOther] = Form.useForm()
+
+  // Form para los aranceles seleccionados
   const [formAranceles] = Form.useForm()
 
-  //! Props uploadFile
+  // Props uploadFile
   const maximus = 3
   const handlerBeforeChange = (file) => {
     if (fileList.length + 1 <= maximus) {
@@ -108,7 +98,7 @@ const FormAsesoria = () => {
     return false
   }
 
-  //! handler remove upload
+  // handler remove upload
   const handlerRemove = (file) => {
     const index = fileList.indexOf(file)
     const newArray = fileList.slice()
@@ -116,34 +106,42 @@ const FormAsesoria = () => {
     setFileList([...newArray])
   }
 
-  //! change state banco
+  // change state banco
   const handlerChangeBanco = (valor) => {
     const referidoValue = bancos[valor - 1].is_referido
     setReferido(!!referidoValue)
   }
 
-  //! Handler form arancel (add arancel status)
+  // Handler form arancel (add arancel status)
   const handlerFinishArancel = ({ inputArancel }) => {
-    const arancel = aranceles.data.find(function (a) {
-      return a.idarancel === inputArancel
-    })
     formAranceles.resetFields()
-    setArancelesTB((a) => [...a, arancel])
-    dispatch(removeArancelItem(inputArancel))
+    if (inputArancel.endsWith('0403')) {
+      setIsOpenModalOther(true)
+    } else {
+      const itemArancel = data.find((i) => i.idarancel === inputArancel)
+      dispatch(
+        removeArancelItem({
+          item: itemArancel,
+          id: inputArancel
+        })
+      )
+    }
   }
 
-  //! handler remove arancel
+  // handler remove arancel
   const handlerRemoveArancel = (item) => {
-    const arrayCopy = arancelesTB.filter((a) => a.idarancel !== item.idarancel)
-    setArancelesTB(arrayCopy)
     dispatch(addArancelItem(item))
   }
 
-  //! handler save information
+  // handler save information
   const handlerSaveInformation = (values) => {
     const { monto } = values
     const count = fileList.length
-    const countAranceles = arancelesTB.length
+    const countAranceles = selections.length
+
+    const totalAranceles = selections.reduce(function (acc, record) {
+      return acc + record.precio
+    }, 0)
 
     if (count === 0) {
       Modal.error({
@@ -159,6 +157,7 @@ const FormAsesoria = () => {
       })
       return
     }
+
     if (monto !== totalAranceles) {
       Modal.error({
         title: 'Error',
@@ -167,7 +166,6 @@ const FormAsesoria = () => {
       return
     }
 
-    // armando los datos del formulario
     const formData = new FormData()
     fileList.forEach((file) => {
       formData.append('files[]', file)
@@ -176,42 +174,27 @@ const FormAsesoria = () => {
     // convirtiendo los datos del pago a json string
     formData.append('pago', JSON.stringify(values))
     // convirtiendo los datos de los aranceles a json string
-    formData.append('aranceles', JSON.stringify(arancelesTB))
+    formData.append('aranceles', JSON.stringify(selections))
 
     dispatch(pagoSave(formData))
   }
 
-  const columns = [
-    {
-      dataIndex: 'descripcion',
-      title: 'Concepto',
-      key: 'descripcion'
-    },
-    {
-      dataIndex: 'precio',
-      title: 'Precio',
-      key: 'precio',
-      render: (precio) => <span>$ {parseFloat(precio).toFixed(2)}</span>
-    },
-    {
-      dataIndex: 'actions',
-      title: '',
-      width: '100px',
-      align: 'center',
-      render: (_, record) => {
-        return (
-          <Button
-            danger
-            size="middle"
-            type="primary"
-            disabled={!record.isRemove}
-            onClick={() => handlerRemoveArancel(record)}
-            icon={<DeleteOutlined />}
-          />
-        )
-      }
-    }
-  ]
+  // handler save arancel other
+  const handlerOtherAdd = (values) => {
+    setIsOpenModalOther(false)
+    formAranceles.resetFields()
+    const item = data.find((i) => i.idarancel.endsWith('0403'))
+    const resolve = Object.assign(item, {
+      precio: values.monto
+    })
+
+    dispatch(
+      removeArancelItem({
+        item: resolve,
+        id: resolve.idarancel
+      })
+    )
+  }
 
   return (
     <>
@@ -379,38 +362,47 @@ const FormAsesoria = () => {
               </Row>
               <Divider />
             </Form>
-            <Table
-              bordered
-              size="small"
-              rowKey="idarancel"
-              pagination={false}
-              dataSource={arancelesTB}
-              columns={columns}
-              summary={(pageData) => {
-                let totalPrice = 0
-                pageData.forEach(({ precio }) => {
-                  totalPrice += precio
-                })
-                setTotalAranceles(totalPrice)
-                return (
-                  <Table.Summary>
-                    <Table.Summary.Row>
-                      <Table.Summary.Cell>
-                        <Title level={5}>Total</Title>
-                      </Table.Summary.Cell>
-                      <Table.Summary.Cell colSpan={2}>
-                        <Title align="center" level={4} type="success">
-                          $ {totalPrice.toFixed(2)}
-                        </Title>
-                      </Table.Summary.Cell>
-                    </Table.Summary.Row>
-                  </Table.Summary>
-                )
-              }}
+            {/* Component para la tabla */}
+            <FormAsesoriaTableAranceles
+              aranceles={selections}
+              handlerRemoveArancel={handlerRemoveArancel}
             />
           </Col>
         </Row>
       </Card>
+      <Modal
+        visible={isOpenModalOther}
+        footer={[]}
+        title="Agregrar otra cantidad"
+        onCancel={() => setIsOpenModalOther(false)}
+      >
+        <Form
+          form={formOther}
+          onFinish={handlerOtherAdd}
+          initialValues={{
+            monto: null
+          }}
+        >
+          <InputNumberType
+            column={{ span: 24 }}
+            item={{
+              name: 'monto',
+              label: 'Monto',
+              rules: [{ required: true, message: 'El monto es requerido' }]
+            }}
+            input={{
+              min: 0.05,
+              precision: 2,
+              placeholder: 'Monto agregar $ (minimo: $0.05)'
+            }}
+          />
+          <Row justify="end">
+            <Button htmlType="submit" icon={<PlusOutlined />} type="primary">
+              Agregar
+            </Button>
+          </Row>
+        </Form>
+      </Modal>
     </>
   )
 }

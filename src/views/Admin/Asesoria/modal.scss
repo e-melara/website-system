@@ -14,3 +14,16 @@
 .tabs {
   padding: 30px 0;
 }
+
+.ul-files {
+  margin: 0px;
+  padding: 5px 0px;
+  li {
+    display: block;
+    padding: 5px 0px;
+    a {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}

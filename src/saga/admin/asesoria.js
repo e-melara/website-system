@@ -76,6 +76,27 @@ function* asyncLoadingAddType(actions) {
   }
 }
 
+function* asyncAsesoriaEnrolled(actions) {
+  const { payload } = actions
+  try {
+    yield put(changeLoading(true))
+    const { id } = yield DBConnection.instance.post(
+      '/admin/asesoria/enrolled',
+      {
+        id: payload
+      }
+    )
+    message.success('La inscripcion fue un exito!')
+    yield put({
+      type: actionsType.ASESORIA_ADMIN_MATRICULAR_SUCCESS,
+      payload: id
+    })
+  } catch (error) {
+  } finally {
+    yield put(changeLoading(false))
+  }
+}
+
 function* watchAdminAsesoria() {
   yield takeEvery(actionsType.ASESORIA_ADMIN_LOADING, asycnLoadingAdminAsesoria)
 }
@@ -91,10 +112,16 @@ function* watchAdminAsesoriaAddType() {
   yield takeEvery(actionsType.ASESORIA_ADMIN_ADD_TYPE, asyncLoadingAddType)
 }
 
+// matricular alumno
+function* watchAdminEnrolled() {
+  yield takeEvery(actionsType.ASESORIA_ADMIN_MATRICULAR, asyncAsesoriaEnrolled)
+}
+
 const rootAdminAsesoria = [
   fork(watchAdminAsesoria),
   fork(watchAdminAsesoriaCurrent),
-  fork(watchAdminAsesoriaAddType)
+  fork(watchAdminAsesoriaAddType),
+  fork(watchAdminEnrolled)
 ]
 
 export default rootAdminAsesoria

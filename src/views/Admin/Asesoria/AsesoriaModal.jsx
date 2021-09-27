@@ -1,14 +1,17 @@
 import React from 'react'
-import { Modal, Button, Spin, Table, Row, Col, Card, Space } from 'antd'
 import {
   CloseOutlined,
+  WarningOutlined,
+  FilePdfOutlined,
   CheckCircleOutlined,
-  WarningOutlined
 } from '@ant-design/icons'
+import { useDispatch } from 'react-redux'
+import { Modal, Button, Spin, Table, Row, Col, Card, Space } from 'antd'
 
 import './modal.scss'
 import { ContentModalUNI } from './ContentModalUNI'
 import CardUser from '../../../components/common/CardUser'
+import { enrolledAsesoria } from '../../../redux/ducks/admin/asesoria'
 import { StatusTagAsesoria } from '../../../components/common/TagEstado'
 
 const columns = [
@@ -51,9 +54,18 @@ const AsesoriaModal = ({
   addSend,
   typeUser,
   handlerOpen,
+  handlerViewPdf,
   addSelectedKeys
 }) => {
-  const { loading, isSend, id, enrolled, selectedRowsKeyArray, estado, pago } = data
+  const { loading, isSend, id, enrolled, selectedRowsKeyArray, estado, pago } =
+    data
+
+  const dispatch = useDispatch()
+
+  const handlerValidatedPago = () => {
+    dispatch(enrolledAsesoria(id))
+    handlerOpen(false)
+  }
 
   return (
     <>
@@ -90,6 +102,7 @@ const AsesoriaModal = ({
                 size="large"
                 type="primary"
                 loading={loading}
+                onClick={handlerValidatedPago}
                 disabled={typeUser === 2}
                 icon={<CheckCircleOutlined />}
               >
@@ -118,6 +131,7 @@ const AsesoriaModal = ({
               </Col>
               <Col flex="3">
                 <Card
+                  key="1-card-content"
                   title="Materias solicitadas"
                   extra={[
                     <Space wrap>
@@ -138,6 +152,11 @@ const AsesoriaModal = ({
                           Pendientes
                         </Button>
                       )}
+                      {
+                        typeUser === 1 && estado === 'F' && (
+                          <Button onClick={() => handlerViewPdf(user)} type='dashed' size='large' icon={<FilePdfOutlined />} />
+                        )
+                      }
                     </Space>
                   ]}
                 >
@@ -148,6 +167,7 @@ const AsesoriaModal = ({
                     columns={columns}
                     pagination={false}
                     dataSource={enrolled}
+                    expandedRowKeys='nommate'
                     rowSelection={
                       !isSend && {
                         onChange: (selectedKeyRows) => {
@@ -163,7 +183,9 @@ const AsesoriaModal = ({
                 </Card>
               </Col>
             </Row>
-            {typeUser === 1 && estado === 'F' && <ContentModalUNI pago={pago} />}
+            {typeUser === 1 && estado === 'F' && (
+              <ContentModalUNI pago={pago} />
+            )}
           </>
         )}
       </Modal>
