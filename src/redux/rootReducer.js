@@ -1,16 +1,17 @@
-import { combineReducers, compose } from "redux";
+import { combineReducers, compose } from 'redux'
 
-import reducerUi from "./ducks/ui";
-import reducerNotes from "./ducks/notes";
-import reducerLogin from "./ducks/login";
-import reducerEventos from "./ducks/eventos";
-import reducerAsesoria from "./ducks/asesoria";
-import reducerSolicitud from "./ducks/solicitud";
+import reducerUi from './ducks/ui'
+import reducerNotes from './ducks/notes'
+import reducerLogin from './ducks/login'
+import reducerEventos from './ducks/eventos'
+import reducerAsesoria from './ducks/asesoria'
+import reducerSolicitud from './ducks/solicitud'
 
 // reducers for admin
-import reducersAdminAsesoria from "./ducks/admin/asesoria";
+import reducersAdminAsesoria from './ducks/admin/asesoria'
+import reducersAdminSolicitudes from './ducks/admin/solicitudes'
 
-import { RESET_STORE } from "../consts";
+import { RESET_STORE } from '../consts'
 
 const appReducer = combineReducers({
   ui: reducerUi,
@@ -21,14 +22,15 @@ const appReducer = combineReducers({
   solicitud: reducerSolicitud,
   // admin
   adminAsesoria: reducersAdminAsesoria,
-});
+  adminSolicitud: reducersAdminSolicitudes
+})
 
 const rootReducer = (state, action) => {
   if (action.type === RESET_STORE) {
-    state = undefined;
+    state = undefined
   }
-  return appReducer(state, action);
-};
+  return appReducer(state, action)
+}
 
-export const composeEnhancers = compose;
-export default rootReducer;
+export const composeEnhancers = compose
+export default rootReducer

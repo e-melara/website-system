@@ -34,7 +34,7 @@ const AsesoriaHeader = ({ typeUser, handlerSearch, handlerFilterDropdown, handle
     <header className="p-4">
       <Row>
         <Col flex={1}>
-          <h2>Solicitudes</h2>
+          <h2>Asesorias</h2>
         </Col>
         <Col flex={4} className="d-flex justify-content-end align-items-center">
           <Space>

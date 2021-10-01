@@ -6,9 +6,14 @@ export const arancelesCuota = (data = []) => {
 }
 
 export const AsesoriaTypeUser = (pathname) => {
-  if (pathname === '/admin/c/asesoria') {
+  if (pathname === '/admin/c/asesoria' || pathname === '/admin/c/solicitudes') {
     // Colecturia
     return 1
+  }
+
+  if (pathname === '/admin/a/asesoria') {
+    // registro
+    return 3
   }
   // Registro
   return 2

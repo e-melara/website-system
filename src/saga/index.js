@@ -1,13 +1,14 @@
-import { all } from "redux-saga/effects";
+import { all } from 'redux-saga/effects'
 
-import rootNotes from "./notes";
-import rootAuthSaga from "./auth";
-import rootEventos from "./eventos";
-import rootAsesoria from "./asesoria";
-import rootSolicitud from "./solicitud";
+import rootNotes from './notes'
+import rootAuthSaga from './auth'
+import rootEventos from './eventos'
+import rootAsesoria from './asesoria'
+import rootSolicitud from './solicitud'
 
 // admin for saga
-import rootAdminAsesoria from "./admin/asesoria";
+import rootAdminAsesoria from './admin/asesoria'
+import rootAdminSolicitud from './admin/solicitud'
 
 export default function* rootSaga() {
   yield all([
@@ -16,6 +17,7 @@ export default function* rootSaga() {
     ...rootEventos,
     ...rootAsesoria,
     ...rootSolicitud,
-    ...rootAdminAsesoria
-  ]);
+    ...rootAdminAsesoria,
+    ...rootAdminSolicitud
+  ])
 }

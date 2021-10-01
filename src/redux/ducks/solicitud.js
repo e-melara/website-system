@@ -1,21 +1,21 @@
-const SOLICITUD_LOADER = "[SOLICITUD] LOADER PAGE";
-const SOLICITUD_LOADER_DATA = "[SOLICITUD] LOADER PAGE SUCCESS";
+const SOLICITUD_LOADER = '[SOLICITUD] LOADER PAGE'
+const SOLICITUD_LOADER_DATA = '[SOLICITUD] LOADER PAGE SUCCESS'
 
-const SOLICITUD_ADD_POST = "[SOLICITUD] ADD POST";
-const SOLICITUD_ADD_SUCCESS = "[SOLICITUD] ADD POST SUCCESS";
+const SOLICITUD_ADD_POST = '[SOLICITUD] ADD POST'
+const SOLICITUD_ADD_SUCCESS = '[SOLICITUD] ADD POST SUCCESS'
 
-const SOLICITUD_RESET = "[SOLICITUD] INITIAL STATE";
-const SOLICITUD_SAVE = "[SOLICITUD] SAVE INFORMATION";
-const SOLICITUD_ADD_OBJECT = "[SOLICITUD ADD] ADD OBJECT STATE";
-const SOLICITUD_SIXTH_SUBJECT = "[SOLICITUD SIXTH] ADD SIXTH SUBJECT";
+const SOLICITUD_RESET = '[SOLICITUD] INITIAL STATE'
+const SOLICITUD_SAVE = '[SOLICITUD] SAVE INFORMATION'
+const SOLICITUD_ADD_OBJECT = '[SOLICITUD ADD] ADD OBJECT STATE'
+const SOLICITUD_SIXTH_SUBJECT = '[SOLICITUD SIXTH] ADD SIXTH SUBJECT'
 const SOLICITUD_SIXTH_SUBJECT_SUCCESS =
-  "[SOLICITUD SIXTH] ADD SIXTH SUBJECT SUCESSS";
+  '[SOLICITUD SIXTH] ADD SIXTH SUBJECT SUCESSS'
 
 const SOLICITUD_SIXTH_SUBJECT_ERROR =
-  "[SOLICITUD SIXTH] ADD SIXTH SUBJECT ERROR";
+  '[SOLICITUD SIXTH] ADD SIXTH SUBJECT ERROR'
 
-const SOLICITUD_INITIAL = "[SOLICITUD] INITIAL STATE";
-const SOLICITUD_INITIAL_SUCCESS = "[SOLICITUD] INITIAL STATE SUCCESS";
+const SOLICITUD_INITIAL = '[SOLICITUD] INITIAL STATE'
+const SOLICITUD_INITIAL_SUCCESS = '[SOLICITUD] INITIAL STATE SUCCESS'
 
 export const actionsType = {
   SOLICITUD_SAVE,
@@ -30,51 +30,51 @@ export const actionsType = {
   SOLICITUD_INITIAL_SUCCESS,
   SOLICITUD_SIXTH_SUBJECT_ERROR,
   SOLICITUD_SIXTH_SUBJECT_SUCCESS,
-};
+}
 
 export const paginator = (payload) => ({
   type: SOLICITUD_LOADER,
-  payload,
-});
+  payload
+})
 
 export const addObjectState = (payload) => ({
   type: SOLICITUD_ADD_OBJECT,
-  payload,
-});
+  payload
+})
 
-export const reset = () => ({ type: SOLICITUD_RESET });
+export const reset = () => ({ type: SOLICITUD_RESET })
 export const initialStateSolicitud = () => ({ type: SOLICITUD_INITIAL })
-export const saveSolicitud = (payload) => ({ type: SOLICITUD_SAVE, payload });
-export const addSolictud = (payload) => ({ type: SOLICITUD_ADD_POST, payload });
+export const saveSolicitud = (payload) => ({ type: SOLICITUD_SAVE, payload })
+export const addSolictud = (payload) => ({ type: SOLICITUD_ADD_POST, payload })
 export const addSixthSubject = (payload) => ({
   type: SOLICITUD_SIXTH_SUBJECT,
-  payload,
-});
+  payload
+})
 
 const initialState = {
   add: {
-    type: "",
+    type: '',
     data: false,
-    subject: "",
+    subject: '',
     object: null,
     save: false,
     error: false,
     resolve: true,
-    observacion: "",
-    sixthSubject: null,
+    observacion: '',
+    sixthSubject: null
   },
   list: {
     data: [],
     pagination: {
       current: 1,
       pageSize: 5,
-      total: 0,
+      total: 0
     },
-    loading: true,
+    loading: true
   },
   estadistica: [],
-  materias: [],
-};
+  materias: []
+}
 
 const reducers = (state = initialState, { type, payload }) => {
   switch (type) {
@@ -82,19 +82,19 @@ const reducers = (state = initialState, { type, payload }) => {
       return {
         ...state,
         materias: payload.materias,
-        estadistica: payload.stadistic,
-      };
+        estadistica: payload.stadistic
+      }
     case SOLICITUD_RESET:
-      return initialState;
+      return initialState
     case SOLICITUD_ADD_SUCCESS:
-      return { ...state, ...payload };
+      return { ...state, ...payload }
     case SOLICITUD_ADD_OBJECT:
       return {
         ...state,
         add: Object.assign({}, state.add, payload, {
-          data: true,
-        }),
-      };
+          data: true
+        })
+      }
 
     case SOLICITUD_LOADER_DATA:
       return {
@@ -105,14 +105,14 @@ const reducers = (state = initialState, { type, payload }) => {
           pagination: {
             pageSize: 5,
             current: payload.current_page,
-            total: payload.total,
+            total: payload.total
           },
-          loading: false,
-        },
-      };
+          loading: false
+        }
+      }
 
     case SOLICITUD_SIXTH_SUBJECT_SUCCESS:
-      return initialState;
+      return initialState
 
     case SOLICITUD_SIXTH_SUBJECT_ERROR:
       return {
@@ -120,21 +120,21 @@ const reducers = (state = initialState, { type, payload }) => {
         add: {
           ...state.add,
           save: true,
-          error: true,
-        },
-      };
+          error: true
+        }
+      }
 
     case SOLICITUD_SIXTH_SUBJECT:
       return {
         ...state,
         add: {
           ...state.add,
-          sixthSubject: payload,
-        },
-      };
+          sixthSubject: payload
+        }
+      }
     default:
-      return state;
+      return state
   }
-};
+}
 
-export default reducers;
+export default reducers

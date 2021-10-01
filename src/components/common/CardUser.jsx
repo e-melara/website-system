@@ -5,7 +5,7 @@ import ImageProfile from "../../assets/images/profile/3.png";
 
 export default function CardUser({ user, carrera }) {
   return (
-    <Card hoverable>
+    <Card>
       <figure className="d-flex justify-content-center">
         <img
           src={ImageProfile}

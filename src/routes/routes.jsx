@@ -1,75 +1,97 @@
-import React from "react";
-import { map } from "lodash";
-import { Switch, Route } from "react-router-dom";
+import React from 'react'
+import { map } from 'lodash'
+import { Switch, Route } from 'react-router-dom'
 
-import Error404 from "../views/Error404";
+import Error404 from '../views/Error404'
 
 // Routes for students
-import HomePage from "../views/Home";
-import NotesPages from "../views/Notes";
-import PensumPage from "../views/Pensum";
-import HorarioPage from "../views/Horario";
-import Solicitud from "../views/Solicitud";
-import Calendario from "../views/Calendario";
-import FormAsesoria from "../views/Pensum/Asesoria/FormAsesoria";
-import SolicitudNuevaPage from "../views/Solicitud/SolicitudNuevaPage";
+import HomePage from '../views/Home'
+import NotesPages from '../views/Notes'
+import PensumPage from '../views/Pensum'
+import HorarioPage from '../views/Horario'
+import Solicitud from '../views/Solicitud'
+import Calendario from '../views/Calendario'
+import { SolicitudAdd } from '../views/Solicitud/SolicitudAdd'
+import FormAsesoria from '../views/Pensum/Asesoria/FormAsesoria'
+import SolicitudNuevaPage from '../views/Solicitud/SolicitudNuevaPage'
 
 // Routes administrado
-import AsesoriaTable from "../views/Admin/Asesoria/AsesoriaTable";
+import AsesoriaTable from '../views/Admin/Asesoria/AsesoriaTable'
+import { TableSolicitudes } from '../views/Admin/Solicitud/TableSolicitudes'
 
 const routes = [
   {
-    to: "/notes",
-    key: "/notes",
-    component: <NotesPages />,
+    to: '/notes',
+    key: '/notes',
+    component: <NotesPages />
   },
   {
-    to: "/asesoria",
-    key: "/asesoria",
-    component: <PensumPage />,
+    to: '/asesoria',
+    key: '/asesoria',
+    component: <PensumPage />
   },
   {
-    key: "/asesoria",
-    to: "/asesoria/form",
-    component: <FormAsesoria />,
+    key: '/asesoria',
+    to: '/asesoria/form',
+    component: <FormAsesoria />
   },
   {
-    to: "/solicitud",
-    key: "/solicitud",
-    component: <Solicitud />,
+    to: '/solicitud',
+    key: '/solicitud',
+    component: <Solicitud />
   },
   {
-    key: "/solicitud",
-    to: "/solicitud/s/new",
-    component: <SolicitudNuevaPage />,
+    key: '/solicitud',
+    to: '/solicitud/s/new',
+    component: <SolicitudNuevaPage />
   },
   {
-    to: "/calendario",
-    key: "/calendario",
-    component: <Calendario />,
+    key: '/solicitud',
+    to: '/solicitud/s/add',
+    component: <SolicitudAdd />
   },
   {
-    to: "/horario",
-    key: "/horario",
-    component: <HorarioPage />,
+    to: '/calendario',
+    key: '/calendario',
+    component: <Calendario />
   },
   {
-    key: "/admin/r/asesoria",
-    to: "/admin/r/asesoria",
-    component: <AsesoriaTable />,
+    to: '/horario',
+    key: '/horario',
+    component: <HorarioPage />
+  },
+  {
+    key: '/admin/r/asesoria',
+    to: '/admin/r/asesoria',
+    component: <AsesoriaTable />
   },
   {
     key: '/admin/c/asesoria',
     to: '/admin/c/asesoria',
     component: <AsesoriaTable />
+  },
+  {
+    key: '/admin/a/asesoria',
+    to: '/admin/a/asesoria',
+    component: <AsesoriaTable />
+  },
+  {
+    key: '/admin/r/solicitudes',
+    to: '/admin/r/solicitudes',
+    component: <TableSolicitudes />
+  },
+  {
+    key: '/admin/c/solicitudes',
+    to: '/admin/c/solicitudes',
+    component: <TableSolicitudes />
   }
-];
+]
 
 const RouteComponent = ({ routesState }) => {
-  const array = map(routesState, "short_name");
+  const array = map(routesState, 'short_name')
   const routeComponent = routes
     .filter(function (route) {
-      return array.includes(route.key);
+      return array.includes(route.key)
     })
     .map((route) => (
       <Route
@@ -78,7 +100,7 @@ const RouteComponent = ({ routesState }) => {
         path={route.to}
         component={() => route.component}
       />
-    ));
+    ))
 
   return (
     <>
@@ -88,7 +110,7 @@ const RouteComponent = ({ routesState }) => {
         <Route path="*" component={Error404} />
       </Switch>
     </>
-  );
-};
+  )
+}
 
-export default RouteComponent;
+export default RouteComponent

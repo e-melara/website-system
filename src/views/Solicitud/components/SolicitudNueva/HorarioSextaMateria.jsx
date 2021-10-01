@@ -1,9 +1,9 @@
-import React from "react";
-import { PageHeader, Button, List } from "antd";
-import { RightOutlined } from "@ant-design/icons";
+import React from 'react'
+import { PageHeader, Button, List } from 'antd'
+import { RightOutlined } from '@ant-design/icons'
 
 const HorarioSextaMateria = ({ handler, sixthValidated }) => {
-  const { subjects } = sixthValidated;
+  const { subjects } = sixthValidated
 
   return (
     <div className="form-select-subject">
@@ -21,8 +21,8 @@ const HorarioSextaMateria = ({ handler, sixthValidated }) => {
           <PageItemschules key={index} handler={handler} {...element} />
         ))}
     </div>
-  );
-};
+  )
+}
 
 const PageItemschules = ({ materia, nommate, schules, handler }) => {
   return (
@@ -32,19 +32,27 @@ const PageItemschules = ({ materia, nommate, schules, handler }) => {
         itemLayout="horizontal"
         dataSource={schules}
         renderItem={(item) => (
-          <List.Item actions={[
-            <Button type='primary' icon={<RightOutlined />} onClick={() =>  handler({
-              codmate: materia,
-              nommate,
-              item
-            })} />
-          ]}>
+          <List.Item
+            actions={[
+              <Button
+                type="primary"
+                icon={<RightOutlined />}
+                onClick={() =>
+                  handler({
+                    codmate: materia,
+                    nommate,
+                    item
+                  })
+                }
+              />
+            ]}
+          >
             Dias: {item.dias} | Hora: {item.hora} | Turno: {item.turno}
           </List.Item>
         )}
       />
     </PageHeader>
-  );
-};
+  )
+}
 
-export default HorarioSextaMateria;
+export default HorarioSextaMateria

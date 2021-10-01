@@ -1,4 +1,5 @@
 import { map } from "lodash";
+import { message } from "antd";
 import { put, takeEvery, fork } from "redux-saga/effects";
 
 import DBConnection from "../api/Connection";
@@ -13,6 +14,7 @@ function* asycnSaveSolicitud(actions) {
     yield put({
       type: actionsType.SOLICITUD_SIXTH_SUBJECT_SUCCESS,
     });
+    message.success('La solicitud ha sido enviada con exito')
   } catch (error) {
     yield put({
       type: actionsType.SOLICITUD_SIXTH_SUBJECT_ERROR,
