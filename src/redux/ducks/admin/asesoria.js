@@ -74,8 +74,8 @@ const reducers = (state = initialState, { type, payload }) => {
       loading: false,
       data: payload.data,
       page: {
-        pageSize: 10,
         total: payload.total,
+        pageSize: payload.to,
         current: payload.current
       }
     }

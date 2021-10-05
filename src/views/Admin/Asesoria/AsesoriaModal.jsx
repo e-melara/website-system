@@ -167,7 +167,7 @@ const AsesoriaModal = ({
                     columns={columns}
                     pagination={false}
                     dataSource={enrolled}
-                    expandedRowKeys='nommate'
+                    // expandedRowKeys='id'
                     rowSelection={
                       !isSend && {
                         onChange: (selectedKeyRows) => {

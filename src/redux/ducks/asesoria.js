@@ -140,6 +140,7 @@ export const initialStateAsesoria = () => ({ type: ASESORIA_EMPTY })
 const initialState = {
   bancos: [],
   pensum: [],
+  exist: false,
   subjects: [],
   enrolled: {},
   approved: [],
@@ -164,6 +165,11 @@ function reducers(state = initialState, { type, payload }) {
     case SOLICITUD_ARANCELES_POST_SAVE_SUCCESS:
       return {
         ...state,
+        exist: false,
+        aranceles: {
+          data: [],
+          selections: []
+        },
         redirect: true,
         enrolled: {
           ...state.enrolled,
@@ -174,6 +180,7 @@ function reducers(state = initialState, { type, payload }) {
       return {
         ...state,
         loading: true,
+        exist: false,
         aranceles: {
           data: [],
           selections: []
@@ -184,6 +191,7 @@ function reducers(state = initialState, { type, payload }) {
         ...state,
         loading: false,
         redirect: false,
+        exist: payload.exist,
         bancos: payload.bancos,
         aranceles: payload.arregloData
       }

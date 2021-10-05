@@ -19,14 +19,16 @@ function* asycnLoadingAdminAsesoria({ payload }) {
     type: 1
   }
   try {
-    const { data, current_page, total } = yield DBConnection.instance.get(
-      `admin/asesoria?page=${page}&estado=${estado}&search=${search}&type=${type}`
-    )
+    const { data, current_page, total, per_page } =
+      yield DBConnection.instance.get(
+        `admin/asesoria?page=${page}&estado=${estado}&search=${search}&type=${type}`
+      )
     yield put({
       type: actionsType.ASESORIA_ADMIN_LOADING_SUCCESS,
       payload: {
         data,
         total,
+        to: per_page,
         current: current_page
       }
     })

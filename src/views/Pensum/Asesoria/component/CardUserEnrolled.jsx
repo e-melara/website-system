@@ -18,7 +18,7 @@ const messageAsesoria = {
   Activa: 'Se ha enviado la asesoria al proceso de validacion',
   Matriculado: 'La asesoria ha sido matriculada con exito',
   Validar:
-    'Su asesoria ha sido validad, puede realizar el pago en ventanilla o por medio de tranferencia electronica dando click al boton de pago',
+    'Su asesoria ha sido validad, puede realizar el pago en ventanilla o por medio de tranferencia electronica (PxT) dando click al boton de pago',
   Pendiente:
     'Por el momento la asesoria tiene observaciones, estar pendiente por favor',
   Inscriptas: 'La asesoria has sido validad y sus materias estas inscriptas',
@@ -58,7 +58,8 @@ export default function CardUserEnrolled({ enrolled }) {
   const { schules, estado } = enrolled
 
   const handlerOnViewPdf = ({ carnet }) => {
-    window.open(`${BaseAssets}pdf/matricula/${carnet}`)
+    const token = localStorage.getItem('token')
+    window.open(`${BaseAssets}pdf/matricula/${carnet}?token=${token}`)
   }
 
   const columns = [

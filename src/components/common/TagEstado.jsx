@@ -27,7 +27,7 @@ const statusMap = {
   ),
   F: (
     <Tag color="geekblue" icon={<DollarCircleOutlined />}>
-      UNI
+      PxT
     </Tag>
   ),
   M: (

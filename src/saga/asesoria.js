@@ -127,13 +127,17 @@ function* asycnSolicitudAranceles() {
   try {
     yield put(changeLoading(true))
     const {
+      exist,
       data: { aranceles, bancos }
     } = yield DBConnection.instance.post('/asesoria/aranceles')
-    const arregloData = arancelesCuota(aranceles)
+    let arregloData = [];
+    if(!exist) {
+      arregloData = arancelesCuota(aranceles)
+    }
 
     yield put({
       type: actionsTypes.SOLICITUD_ARANCELES_SUCCESS,
-      payload: { arregloData, bancos }
+      payload: { arregloData, bancos, exist }
     })
   } catch (error) {
     console.error(error)

@@ -48,9 +48,9 @@ const FormAsesoria = () => {
   const {
     aranceles: { selections, data },
     bancos,
-    redirect
+    redirect,
+    exist
   } = useSelector((state) => state.asesoria)
-
   // useState fileList
   const [fileList, setFileList] = React.useState([])
   // useState form referido
@@ -59,7 +59,7 @@ const FormAsesoria = () => {
   const [isOpenModalOther, setIsOpenModalOther] = React.useState(false)
 
   // Options for select option
-  let optionsArancel = data.map(function (a) {
+  let optionsArancel = data?.map(function (a) {
     return {
       value: a.idarancel,
       title: a.descripcion
@@ -78,6 +78,14 @@ const FormAsesoria = () => {
     }
   }, [redirect, history])
 
+  // useEffect para redireccionar si la solicitud ya ha sido enviada
+  React.useEffect(() => {
+    if (exist) {
+      message.info('Solo se puede enviar una vez el pago')
+      history.push('/asesoria')
+    }
+  }, [exist, history])
+
   // form
   const [form] = Form.useForm()
 
@@ -90,10 +98,16 @@ const FormAsesoria = () => {
   // Props uploadFile
   const maximus = 3
   const handlerBeforeChange = (file) => {
-    if (fileList.length + 1 <= maximus) {
-      setFileList([...fileList, file])
+    // Maximum File Size (2MB)
+    const fileSize = file.size / 1048576 // 1,048,576 -> 1024 * 1024 (Kb -> Mega)
+    if (fileSize <= 2) {
+      if (fileList.length + 1 <= maximus) {
+        setFileList([...fileList, file])
+      } else {
+        message.error(`${maximus} es la cantidad de archivos maximos aceptados`)
+      }
     } else {
-      message.error(`${maximus} es la cantidad de archivos maximos aceptados`)
+      message.error(`El peso maximo para el archivo debe ser 2MB`)
     }
     return false
   }

@@ -29,6 +29,7 @@ const { Column } = Table
 const { RangePicker } = DatePicker
 const AsesoriaTable = ({
   data,
+  page,
   loading,
   current,
   addType,
@@ -49,9 +50,10 @@ const AsesoriaTable = ({
   const [openFilterDate, setOpenFilterDate] = useState(false)
 
   const [filterObject, setFilterObject] = useState({
+    page: 1,
+    estado: '',
     search: '',
-    type: typeUserState,
-    estado: ''
+    type: typeUserState
   })
 
   useEffect(() => {
@@ -73,12 +75,18 @@ const AsesoriaTable = ({
   }
 
   //! Pagination
-  const handlerChange = (record) => {}
+  const handlerChange = (record) => {
+    setFilterObject((status) => ({
+      ...status,
+      page: record.current
+    }))
+  }
 
   //! Handler filter
   const handlerFilterDropdown = ({ key }) => {
     if (key === '3') {
       setFilterObject({
+        page: 1,
         search: '',
         estado: '',
         type: typeUserState
@@ -108,11 +116,15 @@ const AsesoriaTable = ({
 
   // handler for modal
   const handlerViewPdf = ({ carnet }) => {
-    window.open(`${BaseAssets}pdf/pago/${carnet}`)
+    // token
+    const token = localStorage.getItem('token')
+    window.open(`${BaseAssets}pdf/pago/${carnet}?token=${token}`)
   }
 
   const handlerViewPdfInscripcion = ({ carnet }) => {
-    window.open(`${BaseAssets}pdf/matricula/${carnet}`)
+    // token
+    const token = localStorage.getItem('token')
+    window.open(`${BaseAssets}pdf/matricula/${carnet}?token=${token}`)
   }
 
   const handlerOpenModalFilter = () => {
@@ -120,14 +132,20 @@ const AsesoriaTable = ({
   }
 
   const onFinishFilter = (values) => {
-    const [primer, segundo] = values.range
-    const url = typeUser === 2 ? 'pdf/matriculas' : ''
-    form.resetFields();
+    // token
+    const token = localStorage.getItem('token')
+    // form
+    form.resetFields()
     setOpenFilterDate(false)
+
+    // parametros
+    const [primer, segundo] = values.range
+    const url = typeUser === 2 || typeUser === 3 ? 'pdf/matriculas' : ''
+
     window.open(
       `${BaseAssets}${url}?begin=${primer.format('YYYY-MM-DD')}&end=${segundo
         .add(1, 'day')
-        .format('YYYY-MM-DD')}`
+        .format('YYYY-MM-DD')}&token=${token}`
     )
   }
 
@@ -139,15 +157,20 @@ const AsesoriaTable = ({
         handlerFilterDropdown={handlerFilterDropdown}
         handlerOpenModalFilter={handlerOpenModalFilter}
       />
-      <div className="p-4">
+      <>
         <Table
           bordered
-          size="small"
+          size="large"
           rowKey="carnet"
           dataSource={data}
           loading={loading}
           onChange={handlerChange}
-          pagination={{ position: ['none', 'bottomCenter'] }}
+          pagination={{
+            total: page.total,
+            current: page.current,
+            pageSize: page.pageSize,
+            position: ['none', 'bottomCenter']
+          }}
         >
           <Column
             align="center"
@@ -240,7 +263,7 @@ const AsesoriaTable = ({
             )}
           />
         </Table>
-      </div>
+      </>
       <AsesoriaModal
         data={current}
         isOpen={isOpen}
@@ -319,9 +342,10 @@ const mapDispathToProps = (dispatch) => {
 }
 
 const mapStateToProps = (state) => {
-  const { data, loading, current } = state.adminAsesoria
+  const { data, loading, current, page } = state.adminAsesoria
   return {
     data,
+    page,
     loading,
     current
   }

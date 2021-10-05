@@ -6,8 +6,9 @@ import {
   HomeFilled,
   RadarChartOutlined,
 } from "@ant-design/icons";
+import { BaseAssets } from "../../consts";
 
-import LogoUtla from "../../assets/images/logo/utla.png";
+// import LogoUtla from "../../assets/images/logo/utla.png";
 
 const { SubMenu } = Menu;
 
@@ -16,7 +17,7 @@ export const SiderBar = ({ routes, theme }) => {
   return (
     <>
       <div className="logo">
-        <img src={LogoUtla} alt="imgs for logo" />
+        <img src={`${BaseAssets}files/utla.png`} alt="imgs for logo" />
       </div>
       <Menu theme={theme} mode="inline" selectedKeys={[location.pathname]}>
         <Menu.Item icon={<HomeFilled />} key="/">

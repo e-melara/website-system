@@ -2,7 +2,6 @@ import React from 'react'
 import Moment from 'react-moment'
 import { Row, Col, Table, Divider, PageHeader, Descriptions } from 'antd'
 
-import { BaseAssets } from '../../../consts'
 import { FilePdfTwoTone, FileImageTwoTone } from '@ant-design/icons'
 
 const columns = [
@@ -78,18 +77,22 @@ export function ContentModalUNI({ pago }) {
                 </Col>
                 <Col span={10}>
                   <h4>Archivos</h4>
-                  <ul className='ul-files'>
-                    {archivos.map(({ url, tipo }) => {
+                  <ul className="ul-files">
+                    {archivos.map(({ url, tipo, fileUrl }, index) => {
                       return (
                         <li key={url}>
-                          <a rel="noreferrer" href={`${BaseAssets}${url}`} target="_blank">
+                          <a
+                            rel="noreferrer"
+                            href={`${fileUrl}`}
+                            target="_blank"
+                          >
                             {tipo === 'pdf' ? (
                               <>
                                 <FilePdfTwoTone
                                   style={{ fontSize: '1.8rem' }}
                                   size="large"
                                 />
-                                <span>{url}</span>
+                                <span>Archivo {index + 1}</span>
                               </>
                             ) : (
                               <>
@@ -97,7 +100,7 @@ export function ContentModalUNI({ pago }) {
                                   style={{ fontSize: '1.8rem' }}
                                   size="large"
                                 />
-                                <span>{url}</span>
+                                <span>Archivo {index + 1}</span>
                               </>
                             )}
                           </a>

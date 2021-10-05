@@ -1,19 +1,19 @@
-import { connect } from "react-redux";
-import React, { useEffect } from "react";
-import { Row, Col, Card, Table, Alert } from "antd";
+import { connect } from 'react-redux'
+import React, { useEffect } from 'react'
+import { Row, Col, Card, Table, Alert } from 'antd'
 
-import { checking } from "../../redux/ducks/notes";
-import { statusEnrolled } from "../../utils/pensum";
-import CardUser from "../../components/common/CardUser";
+import { checking } from '../../redux/ducks/notes'
+import { statusEnrolled } from '../../utils/pensum'
+import CardUser from '../../components/common/CardUser'
 
-const { Column } = Table;
+const { Column } = Table
 
-const HorarioPage = ({ schules, user, carrera, loading, validated }) => {
+const HorarioPage = ({ schules, user, carrera, loading, validated, ciclo }) => {
   useEffect(() => {
     if (!loading) {
-      validated(loading);
+      validated(loading)
     }
-  }, [loading, validated]);
+  }, [loading, validated])
 
   return (
     <div className="p-4">
@@ -24,10 +24,13 @@ const HorarioPage = ({ schules, user, carrera, loading, validated }) => {
         <Col xs={16}>
           {schules.length === 0 ? (
             <div>
-              <Alert  type='info' message='Por el momento no tienes una horarios asignado' />
+              <Alert
+                type="info"
+                message="Por el momento no tienes una horarios asignado"
+              />
             </div>
           ) : (
-            <Card title="Horario ciclo 02-2021">
+            <Card title={`Horario ciclo ${ciclo}`}>
               <Table
                 size="small"
                 dataSource={schules}
@@ -44,8 +47,8 @@ const HorarioPage = ({ schules, user, carrera, loading, validated }) => {
                   dataIndex="estado"
                   key="estado"
                   render={(estado) => {
-                    const r = statusEnrolled(estado);
-                    return <Alert type={r.type} message={r.message} />;
+                    const r = statusEnrolled(estado)
+                    return <Alert type={r.type} message={r.message} />
                   }}
                 />
               </Table>
@@ -54,24 +57,25 @@ const HorarioPage = ({ schules, user, carrera, loading, validated }) => {
         </Col>
       </Row>
     </div>
-  );
-};
+  )
+}
 
 const mapStateToProps = (state) => {
-  const { schules, loading } = state.notes;
-  const { data, carrera } = state.auth;
+  const { schules, loading } = state.notes
+  const { data, carrera, ciclo } = state.auth
   return {
-    schules,
-    user: data,
+    ciclo,
     carrera,
+    schules,
     loading,
-  };
-};
+    user: data
+  }
+}
 
 const mapDispathToProps = (dispatch) => {
   return {
-    validated: (loading) => dispatch(checking(loading)),
-  };
-};
+    validated: (loading) => dispatch(checking(loading))
+  }
+}
 
-export default connect(mapStateToProps, mapDispathToProps)(HorarioPage);
+export default connect(mapStateToProps, mapDispathToProps)(HorarioPage)

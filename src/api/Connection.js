@@ -15,14 +15,13 @@ class DBConnection {
     this.base_url = baseUrl
     this.urlLogin = urlLogin
     this.axiosConfig = axios.create({
-      timeout: 1000,
       baseURL: this.base_url
     })
     this.axiosConfig.interceptors.request.use(function (config) {
       const token = localStorage.getItem(KeyLocalStorage)
       if (token) {
         const headers = {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`
           // Accept: 'application/json'
         }
         config.headers = headers
@@ -34,7 +33,7 @@ class DBConnection {
   async login(username, password) {
     return new Promise(async (resolve, reject) => {
       try {
-        const { token, carrera, usuario, rol } = await this.post(
+        const { token, carrera, usuario, rol, ciclo } = await this.post(
           this.urlLogin,
           {
             username,
@@ -43,9 +42,10 @@ class DBConnection {
         )
         localStorage.setItem(KeyLocalStorage, token)
         resolve({
+          rol,
+          ciclo,
           carrera,
           usuario,
-          rol
         })
       } catch (error) {
         reject({

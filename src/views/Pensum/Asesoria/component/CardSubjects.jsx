@@ -14,7 +14,7 @@ import {
 } from "../../../../redux/ducks/asesoria";
 import { verificatedSubject } from "../../../../utils/verificatedAdvisory";
 
-function CardSubjects({ subjects, schulesStudents, title, add, drop }) {
+function CardSubjects({ subjects, schulesStudents, title, add, drop, ciclo }) {
   const [isOpen, setisOpen] = useState(false);
 
   const handlerAddSubjectStatus = (record) => {
@@ -37,7 +37,7 @@ function CardSubjects({ subjects, schulesStudents, title, add, drop }) {
     <>
       <div className="row">
         <div className="col">
-          <Card title="Materias del ciclo 02-2021">
+          <Card title={`Materias del ciclo ${ciclo}`}>
             {subjects
               .filter((e) => e.visible)
               .map((e) => (
@@ -86,8 +86,9 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const mapStateToProps = (state) => {
-  const { asesoria } = state;
+  const { asesoria, auth } = state;
   return {
+    ciclo: auth.ciclo,
     subjects: asesoria.subjects,
     schulesStudents: asesoria.schulesStudents,
   };
