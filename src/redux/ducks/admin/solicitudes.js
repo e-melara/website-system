@@ -8,16 +8,6 @@ const SOLICITUD_ADMIN_CURRENT_SELECT_SUCCESS =
 const SOLICITUD_ADMIN_SEND = '@admin/solicitud/send'
 const SOLICITUD_ADMIN_SEND_SUCCESS = '@admin/solicitud/send/success'
 
-// const SOLICITUD_ADMIN_CURRENT_SELECT_ADD_KEYS = '@admin/solicitud/select/add/keys'
-// const SOLICITUD_ADMIN_CURRENT_SELECT_EMPTY =
-//   '@admin/solicitud/select/current/empty'
-
-// const SOLICITUD_ADMIN_ADD_TYPE = '@admin/solicitud/add/type'
-// const SOLICITUD_ADMIN_ADD_TYPE_SUCCESS = '@admin/solicitud/add/type/success'
-
-// const SOLICITUD_ADMIN_MATRICULAR = '@admin/solicitud/matricular'
-// const SOLICITUD_ADMIN_MATRICULAR_SUCCESS = '@admin/solicitud/matricular/success'
-
 export const actionsType = {
   SOLICITUD_ADMIN_LOADING,
   SOLICITUD_ADMIN_LOADING_SUCCESS,
@@ -28,16 +18,6 @@ export const actionsType = {
 
   SOLICITUD_ADMIN_SEND,
   SOLICITUD_ADMIN_SEND_SUCCESS
-  // SOLICITUD_ADMIN_CURRENT_SELECT_EMPTY,
-  // SOLICITUD_ADMIN_CURRENT_SELECT_ADD_KEYS,
-
-  // // add
-  // SOLICITUD_ADMIN_ADD_TYPE,
-  // SOLICITUD_ADMIN_ADD_TYPE_SUCCESS,
-
-  // // matricular alumno
-  // SOLICITUD_ADMIN_MATRICULAR,
-  // SOLICITUD_ADMIN_MATRICULAR_SUCCESS
 }
 
 const initialState = {

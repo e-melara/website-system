@@ -7,6 +7,7 @@ import rootAsesoria from './asesoria'
 import rootSolicitud from './solicitud'
 
 // admin for saga
+import rootAdminUser from './admin/users'
 import rootAdminAsesoria from './admin/asesoria'
 import rootAdminSolicitud from './admin/solicitud'
 
@@ -16,6 +17,7 @@ export default function* rootSaga() {
     ...rootAuthSaga,
     ...rootEventos,
     ...rootAsesoria,
+    ...rootAdminUser,
     ...rootSolicitud,
     ...rootAdminAsesoria,
     ...rootAdminSolicitud

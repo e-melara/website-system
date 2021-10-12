@@ -5,9 +5,7 @@ import { connect } from "react-redux";
 import React, { useState } from "react";
 
 import { actionLogin } from "../../redux/ducks/login";
-
 import { MessageError } from "../../components/common/MessageError";
-import { BaseAssets } from "../../consts";
 
 const signInSchema = Yup.object().shape({
   carnet: Yup.string()
@@ -34,13 +32,13 @@ const LoginForm = ({ loading, login }) => {
           >
             <img
               className="img-fluid for-light"
-              src={`${BaseAssets}files/utla.png`}
+              src={`https://utla.sfo3.digitaloceanspaces.com/assets/imgs/utla.png`}
               alt="looginpage"
               style={{ height: "120px" }}
             />
             <img
               className="img-fluid for-dark"
-              src={`${BaseAssets}files/utla.png`}
+              src={`https://utla.sfo3.digitaloceanspaces.com/assets/imgs/utla.png`}
               alt="looginpage"
               style={{ height: "120px" }}
             />

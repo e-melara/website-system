@@ -1,8 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { BaseAssets } from "../../consts";
-
 import "./login.scss";
 
 import LoginForm from "./LoginForm";
@@ -14,11 +12,11 @@ const LoginPage = ({ loading }) => {
       {loading && <Loading />}
       <div className="row">
         <div className="col-7 login__image_cover"  style={{
-          backgroundImage: `url(${BaseAssets}files/portada.jpg)`
+          backgroundImage: `url(https://utla.sfo3.digitaloceanspaces.com/assets/imgs/portada.jpg)`
         }} ></div>
         <div className="col-5 p-0">
           <div className="login-card p-0"  style={{
-            backgroundImage: `url(${BaseAssets}files/login_bg.jpg)`
+            backgroundImage: `url(https://utla.sfo3.digitaloceanspaces.com/assets/imgs/login_bg.jpg)`
           }}>
             <>
               <LoginForm loading={loading} />

@@ -18,6 +18,7 @@ import SolicitudNuevaPage from '../views/Solicitud/SolicitudNuevaPage'
 // Routes administrado
 import AsesoriaTable from '../views/Admin/Asesoria/AsesoriaTable'
 import { TableSolicitudes } from '../views/Admin/Solicitud/TableSolicitudes'
+import { TableUsers } from "../views/Admin/Configuracion/Usuarios/TableUsers";
 
 const routes = [
   {
@@ -84,6 +85,12 @@ const routes = [
     key: '/admin/c/solicitudes',
     to: '/admin/c/solicitudes',
     component: <TableSolicitudes />
+  },
+  // admin user
+  {
+    key: '/admin/a/usuarios',
+    to: '/admin/a/usuarios',
+    component: <TableUsers />
   }
 ]
 

@@ -8,6 +8,7 @@ import reducerAsesoria from './ducks/asesoria'
 import reducerSolicitud from './ducks/solicitud'
 
 // reducers for admin
+import reducersAdminUsers from './ducks/admin/users'
 import reducersAdminAsesoria from './ducks/admin/asesoria'
 import reducersAdminSolicitudes from './ducks/admin/solicitudes'
 
@@ -21,6 +22,7 @@ const appReducer = combineReducers({
   asesoria: reducerAsesoria,
   solicitud: reducerSolicitud,
   // admin
+  adminUser: reducersAdminUsers,
   adminAsesoria: reducersAdminAsesoria,
   adminSolicitud: reducersAdminSolicitudes
 })
