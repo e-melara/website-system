@@ -31,10 +31,13 @@ import { InpuType, SelectInputType } from '../../../../components/common'
 import {
   pageLoading,
   darBajaUser,
+  userNewAction,
   onChangePerfil,
   onChangePassword,
   changeUserNombresApellidos
 } from '../../../../redux/ducks/admin/users'
+
+import DBConnection from '../../../../api/Connection'
 
 const objectStatus = {
   1: <Tag color="#108ee9">Activado</Tag>,
@@ -48,6 +51,7 @@ export const TableUsers = () => {
   // object form
   const [form] = Form.useForm()
   const [formPerfil] = Form.useForm()
+  const [formUserNew] = Form.useForm()
   const [formEditForm] = Form.useForm()
 
   const dispatch = useDispatch()
@@ -58,9 +62,11 @@ export const TableUsers = () => {
   // useState
   const [user, setUser] = useState({})
   const [formEdit, setFormEdit] = useState(false)
+  const [visibleUser, setVisibleUser] = useState(false)
   const [visiblePerfil, setVisiblePerfil] = useState(false)
   const [perfilesPosibles, setPerfilesPosibles] = useState([])
   const [visiblePassword, setVisiblePassword] = useState(false)
+  const [isVisibleFormUser, setIsVisibleFormUser] = useState(false)
   const [filters, setFilters] = React.useState({
     page: 1,
     search: ''
@@ -83,6 +89,15 @@ export const TableUsers = () => {
       formPerfil.resetFields()
     },
     [formPerfil, perfiles]
+  )
+
+  const handlerOpenVisibleUser = React.useCallback(
+    (open = true) => {
+      setVisibleUser(open)
+      formUserNew.resetFields()
+      setIsVisibleFormUser(false)
+    },
+    [setVisibleUser, formUserNew]
   )
 
   const handlerOpenPassword = React.useCallback((options = true, user = {}) => {
@@ -110,15 +125,18 @@ export const TableUsers = () => {
     [dispatch]
   )
 
-  const handlerEditForm = React.useCallback((users, options = true) => {
-    setUser(users)
-    setFormEdit(options)
+  const handlerEditForm = React.useCallback(
+    (users, options = true) => {
+      setUser(users)
+      setFormEdit(options)
 
-    formEditForm.setFieldsValue({
-      nombres: users.nomuser,
-      apellidos: users.apeuser
-    })
-  }, [formEditForm])
+      formEditForm.setFieldsValue({
+        nombres: users.nomuser,
+        apellidos: users.apeuser
+      })
+    },
+    [formEditForm]
+  )
 
   // finish formulario
   const handlerFinishPassword = (values) => {
@@ -154,6 +172,15 @@ export const TableUsers = () => {
       })
     )
   }
+
+  const onFinishUserNew = (values) => {
+    setVisibleUser(false)
+    dispatch(
+      userNewAction({
+        user: { ...values }
+      })
+    )
+  }
   // ========================================
 
   // formulario component
@@ -169,6 +196,37 @@ export const TableUsers = () => {
       ...filter,
       page: current
     }))
+  }
+
+  // function validate
+  const validateFun = (value) => {
+    const chartFirst = value[0]
+    const regValue = /[^a-zA-Z0-9._]/
+    const regChartFirst = /[^a-zA-Z0-9]/
+
+    setIsVisibleFormUser(false)
+
+    if (regChartFirst.test(chartFirst)) {
+      return Promise.reject(
+        'El usuario no puede comenzar con un caracter especial'
+      )
+    }
+
+    if (regValue.test(value)) {
+      return Promise.reject(
+        'El usuario solo puede contener letras en minusculas o mayusculas, numeros, . (punto) y _ (guion bajo)'
+      )
+    }
+    return DBConnection.instance
+      .validate(value)
+      .then(() => {
+        setIsVisibleFormUser(true)
+        return Promise.resolve()
+      })
+      .catch(() => {
+        setIsVisibleFormUser(false)
+        return Promise.reject(`El usuario: ${value}, ya existe`)
+      })
   }
 
   // columns
@@ -266,7 +324,7 @@ export const TableUsers = () => {
     <>
       <Row gutter={[24, 24]} className="p-4" justify="space-between">
         <Col span={10}>
-          <h2>Solicitudes</h2>
+          <h2>Usuarios</h2>
         </Col>
         <Col span={14}>
           <Space style={{ float: 'right' }}>
@@ -278,14 +336,19 @@ export const TableUsers = () => {
               enterButton={<SearchOutlined />}
               style={{ width: 300, float: 'right' }}
             />
-            <Button type="primary" size="large" icon={<PlusOutlined />}>
+            <Button
+              size="large"
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={handlerOpenVisibleUser}
+            >
               Nuevo
             </Button>
           </Space>
         </Col>
       </Row>
       <Table
-        size="middle"
+        size="large"
         bordered
         dataSource={data}
         loading={loading}
@@ -404,7 +467,6 @@ export const TableUsers = () => {
           </Row>
         </Form>
       </Modal>
-
       {/* Modal Cambiar contraseña */}
       <Modal
         centered
@@ -458,8 +520,124 @@ export const TableUsers = () => {
           </Row>
         </Form>
       </Modal>
-      <Modal title='Nuevo usuario'>
+      {/* Modal para un nuevo usuario */}
+      <Modal
+        width="50%"
+        footer={[]}
+        title="Nuevo usuario"
+        visible={visibleUser}
+        onCancel={() => handlerOpenVisibleUser(false)}
+      >
+        <Form
+          size="large"
+          autoComplete="off"
+          form={formUserNew}
+          name="form-user-new"
+          onFinish={onFinishUserNew}
+        >
+          <Row gutter={[24, 12]}>
+            <InpuType
+              column={{ span: 24 }}
+              input={{
+                placeholder: 'Digite el usuario asignar'
+              }}
+              item={{
+                label: '',
+                name: 'username',
+                validateFirst: true,
+                validateTrigger: 'onBlur',
+                rules: [
+                  { required: true, message: 'El usuario es requirido' },
+                  {
+                    min: 5,
+                    max: 12,
+                    message:
+                      'El tamaño minimo es de 5 caracteres y el maximo de 12 caracteres'
+                  },
+                  () => ({
+                    validator(_, value) {
+                      return validateFun(value)
+                    }
+                  })
+                ]
+              }}
+            />
+            {isVisibleFormUser && (
+              <>
+                <InpuType
+                  column={{ span: 12 }}
+                  input={{
+                    placeholder: 'Digite los nombres del usuario'
+                  }}
+                  item={{
+                    label: '',
+                    name: 'nombres',
+                    rules: [
+                      { required: true, message: 'Los nombres son requeridos' }
+                    ]
+                  }}
+                />
+                <InpuType
+                  column={{ span: 12 }}
+                  input={{
+                    placeholder: 'Digite los apellidos del usuario'
+                  }}
+                  item={{
+                    label: '',
+                    name: 'apellidos',
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Los apellidos son requeridos'
+                      }
+                    ]
+                  }}
+                />
 
+                <InpuType
+                  column={{ span: 12 }}
+                  input={{
+                    type: 'password',
+                    placeholder: 'Contraseña'
+                  }}
+                  item={{
+                    label: '',
+                    name: 'password',
+                    rules: [
+                      { required: true, message: 'La contraseña es requirida' },
+                      {
+                        min: 8,
+                        message: 'El tamaño minimo es de 8 caracteres'
+                      },
+                      {
+                        max: 16,
+                        message: 'El tamaño maximo es de 16 caracteres'
+                      }
+                    ]
+                  }}
+                />
+                <SelectInputType
+                  column={{ span: 12 }}
+                  item={{
+                    name: 'perfil',
+                    rules: [
+                      { required: true, message: 'El perfil es necesario' }
+                    ],
+                    placeholder: 'Seleccione el perfil asignar'
+                  }}
+                  options={perfiles}
+                />
+              </>
+            )}
+          </Row>
+          {isVisibleFormUser && (
+            <Row justify="end">
+              <Button type="primary" icon={<PlusOutlined />} htmlType="submit">
+                Crear
+              </Button>
+            </Row>
+          )}
+        </Form>
       </Modal>
     </>
   )

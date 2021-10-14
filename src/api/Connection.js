@@ -45,7 +45,7 @@ class DBConnection {
           rol,
           ciclo,
           carrera,
-          usuario,
+          usuario
         })
       } catch (error) {
         reject({
@@ -102,6 +102,10 @@ class DBConnection {
           })
         })
     })
+  }
+
+  validate(username = '', url = '/admin/users/validate-user') {
+    return this.axiosConfig.post(url, { username })
   }
 
   upload(url = '', data) {

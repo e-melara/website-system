@@ -107,6 +107,21 @@ function* asynNameLastChange(action) {
   }
 }
 
+function* asynNewUser(action) {
+  try {
+    const { user } = action.payload
+    const { data } = yield DBConnection.instance.post('/admin/users/new-user', {
+      user
+    })
+    yield put({
+      type: actionsType.newUserSuccess,
+      payload: { ...data }
+    })
+  } catch (error) {
+    message.error('Por el momento tenemos un problema intenta mas tarde')
+  }
+}
+
 // watcth
 function* watchPageUser() {
   yield takeEvery(actionsType.page, asyncPageUser)
@@ -128,8 +143,13 @@ function* watchChangeNameLast() {
   yield takeEvery(actionsType.nameLast, asynNameLastChange)
 }
 
+function* watchUserNew() {
+  yield takeEvery(actionsType.newUser, asynNewUser)
+}
+
 const rootSagaRouter = [
   fork(watchPageUser),
+  fork(watchUserNew),
   fork(watchUserDarBaja),
   fork(watchChangePerfil),
   fork(watchChangePassword),

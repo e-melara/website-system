@@ -2,11 +2,13 @@ export const actionsType = {
   page: '@admin/users/page',
   perfil: '@admin/users/perfil',
   darBaja: '@admin/users/darbaja',
+  newUser: '@admin/users/newuser',
   password: '@admin/users/password',
   nameLast: '@admin/users/changeNameLast',
   // success
   pageSuccess: '@admin/users/page/success',
   perfilSuccess: '@admin/users/perfil/success',
+  newUserSuccess: '@admin/users/newuser/success',
   darBajaSuccess: '@admin/users/darbaja/success',
   passwordSuccess: '@admin/users/password/success',
   nameLastSuccess: '@admin/users/changeNameLast/success'
@@ -38,6 +40,11 @@ export const changeUserNombresApellidos = (payload) => ({
   payload
 })
 
+export const userNewAction = (payload) => ({
+  type: actionsType.newUser,
+  payload
+})
+
 const initialState = {
   data: [],
   page: {
@@ -59,6 +66,7 @@ const reducers = (state = initialState, { type, payload }) => {
       page: initialState.page
     }
   }
+
   if (type === actionsType.pageSuccess) {
     return {
       ...state,
@@ -73,21 +81,19 @@ const reducers = (state = initialState, { type, payload }) => {
     }
   }
 
-  if (type === actionsType.darBaja) {
+  if (type === actionsType.passwordSuccess) {
     return {
       ...state,
-      loading: true
+      loading: false
     }
   }
 
-  if (type === actionsType.password || type === actionsType.passwordSuccess) {
-    return {
-      ...state,
-      loading: payload.loading
-    }
-  }
-
-  if (type === actionsType.perfil) {
+  if (
+    type === actionsType.password ||
+    type === actionsType.darBaja ||
+    type === actionsType.perfil ||
+    type === actionsType.nameLast
+  ) {
     return {
       ...state,
       loading: true
@@ -127,13 +133,6 @@ const reducers = (state = initialState, { type, payload }) => {
     }
   }
 
-  if (type === actionsType.nameLast) {
-    return {
-      ...state,
-      loading: true
-    }
-  }
-
   if (type === actionsType.nameLastSuccess) {
     return {
       ...state,
@@ -148,6 +147,14 @@ const reducers = (state = initialState, { type, payload }) => {
         }
         return item
       })
+    }
+  }
+
+  if (type === actionsType.newUserSuccess) {
+    return {
+      ...state,
+      loading: false,
+      data: [payload, ...state.data]
     }
   }
 
