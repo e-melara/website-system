@@ -18,3 +18,12 @@ export const AsesoriaTypeUser = (pathname) => {
   // Registro
   return 2
 }
+
+export const sliceModulosIsAdminOrStudent = (data = [], isAdmin = true) => {
+  return data.filter(function ({ short_name }) {
+    if (isAdmin) {
+      return short_name.includes('/admin/')
+    }
+    return !short_name.includes('/admin/')
+  })
+}

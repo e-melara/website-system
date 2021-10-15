@@ -1,4 +1,5 @@
 import { message } from 'antd'
+import moment from 'moment'
 import { fork, put, takeEvery } from '@redux-saga/core/effects'
 
 import DBConnection from '../../api/Connection'
@@ -99,6 +100,46 @@ function* asyncAsesoriaEnrolled(actions) {
   }
 }
 
+function* asyncAsesoriaConfiguration() {
+  try {
+    const { data } = yield DBConnection.instance.get('/config')
+    yield put({
+      type: actionsType.ASESORIA_CONFIGURACION_SUCCESS,
+      payload: {
+        extra: data.extra,
+        valor: data.valor,
+        loading: true
+      }
+    })
+  } catch (error) {}
+}
+
+function* asyncSaveConfiguration(action) {
+  try {
+    yield put(changeLoading(true))
+    const { asesoria, fecha_max } = action.payload
+    const dateValidad = moment(fecha_max).format('YYYY-MM-DD')
+    const {
+      object: { valor, extra }
+    } = yield DBConnection.instance.post('/config', {
+      asesoria,
+      fecha: dateValidad
+    })
+    yield put({
+      type: actionsType.ASESORIA_CONFIGURATION_SAVE_SUCCESS,
+      payload: {
+        valor,
+        extra
+      }
+    })
+    message.info('El proceso fue realizado con exito')
+  } catch (error) {
+    message.error('Por el momento tenemos un error intenta mas tarde')
+  } finally {
+    yield put(changeLoading(false))
+  }
+}
+
 function* watchAdminAsesoria() {
   yield takeEvery(actionsType.ASESORIA_ADMIN_LOADING, asycnLoadingAdminAsesoria)
 }
@@ -119,11 +160,27 @@ function* watchAdminEnrolled() {
   yield takeEvery(actionsType.ASESORIA_ADMIN_MATRICULAR, asyncAsesoriaEnrolled)
 }
 
+function* watchDataAsesoria() {
+  yield takeEvery(
+    actionsType.ASESORIA_CONFIGURACION,
+    asyncAsesoriaConfiguration
+  )
+}
+
+function* watchSaveConfiguration() {
+  yield takeEvery(
+    actionsType.ASESORIA_CONFIGURATION_SAVE,
+    asyncSaveConfiguration
+  )
+}
+
 const rootAdminAsesoria = [
+  fork(watchDataAsesoria),
   fork(watchAdminAsesoria),
+  fork(watchAdminEnrolled),
   fork(watchAdminAsesoriaCurrent),
   fork(watchAdminAsesoriaAddType),
-  fork(watchAdminEnrolled)
+  fork(watchSaveConfiguration)
 ]
 
 export default rootAdminAsesoria

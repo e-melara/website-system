@@ -14,9 +14,22 @@ const ASESORIA_ADMIN_ADD_TYPE_SUCCESS = '@admin/asesoria/add/type/success'
 const ASESORIA_ADMIN_MATRICULAR = '@admin/asesoria/matricular'
 const ASESORIA_ADMIN_MATRICULAR_SUCCESS = '@admin/asesoria/matricular/success'
 
+const ASESORIA_CONFIGURACION = '@admin/asesoria/data'
+const ASESORIA_CONFIGURACION_SUCCESS = '@admin/asesoria/data/success'
+
+const ASESORIA_CONFIGURATION_SAVE = '@admin/asesoria/save/configuration'
+const ASESORIA_CONFIGURATION_SAVE_SUCCESS =
+  '@admin/asesoria/save/configuration/success'
+
 export const actionsType = {
   ASESORIA_ADMIN_LOADING,
   ASESORIA_ADMIN_LOADING_SUCCESS,
+
+  ASESORIA_CONFIGURACION,
+  ASESORIA_CONFIGURACION_SUCCESS,
+
+  ASESORIA_CONFIGURATION_SAVE,
+  ASESORIA_CONFIGURATION_SAVE_SUCCESS,
 
   // current
   ASESORIA_ADMIN_CURRENT_SELECT,
@@ -41,6 +54,18 @@ export const enrolledAsesoria = (payload) => {
   }
 }
 
+export const loadingDataAsesoria = (payload) => {
+  return {
+    type: ASESORIA_CONFIGURACION,
+    payload
+  }
+}
+
+export const saveConfiguration = (payload) => ({
+  type: ASESORIA_CONFIGURATION_SAVE,
+  payload
+})
+
 const initialState = {
   data: [],
   page: {
@@ -49,6 +74,11 @@ const initialState = {
     pageSize: 10
   },
   loading: false,
+  configuration: {
+    extra: '2000-01-20',
+    valor: false,
+    loading: false
+  },
   current: {
     id: null,
     pago: {},
@@ -65,6 +95,13 @@ const reducers = (state = initialState, { type, payload }) => {
     return {
       ...state,
       loading: true
+    }
+  }
+
+  if (type === ASESORIA_CONFIGURACION_SUCCESS) {
+    return {
+      ...state,
+      configuration: payload
     }
   }
 
@@ -88,6 +125,17 @@ const reducers = (state = initialState, { type, payload }) => {
       current: {
         ...state.current,
         loading: true
+      }
+    }
+  }
+
+  if (type === ASESORIA_CONFIGURATION_SAVE_SUCCESS) {
+    return {
+      ...state,
+      configuration: {
+        ...state.configuration,
+        valor: payload.valor,
+        extra: payload.extra
       }
     }
   }

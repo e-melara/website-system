@@ -18,7 +18,10 @@ import SolicitudNuevaPage from '../views/Solicitud/SolicitudNuevaPage'
 // Routes administrado
 import AsesoriaTable from '../views/Admin/Asesoria/AsesoriaTable'
 import { TableSolicitudes } from '../views/Admin/Solicitud/TableSolicitudes'
-import { TableUsers } from "../views/Admin/Configuracion/Usuarios/TableUsers";
+import { PerfilView } from '../views/Admin/Configuracion/Perfiles/PerfilView'
+import { TableUsers } from '../views/Admin/Configuracion/Usuarios/TableUsers'
+import { Configuration } from '../views/Admin/Configuracion/Aseoria/Configuration'
+import { PerfilesTable } from '../views/Admin/Configuracion/Perfiles/PerfilesTable'
 
 const routes = [
   {
@@ -91,6 +94,21 @@ const routes = [
     key: '/admin/a/usuarios',
     to: '/admin/a/usuarios',
     component: <TableUsers />
+  },
+  {
+    key: '/admin/a/perfiles',
+    to: '/admin/a/perfiles',
+    component: <PerfilesTable />
+  },
+  {
+    to: '/admin/a/view/:id',
+    key: '/admin/a/perfiles',
+    component: <PerfilView />
+  },
+  {
+    to: '/admin/a/configurati',
+    key: '/admin/a/configurati',
+    component: <Configuration />
   }
 ]
 
