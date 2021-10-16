@@ -2,17 +2,24 @@ export const actionsType = {
   all: '@admin/perfiles/page',
   add: '@admin/perfiles/add',
   newPerfil: '@admin/perfiles/new',
+  editPerfil: '@admin/perfiles/edit',
   findById: '@admin/perfiles/findById',
   deleteModulo: '@admin/perfiles/delete',
-  editPerfil: '@admin/perfiles/edit',
+  deletePerfil: '@admin/perfiles/perfil/delete',
 
   addSuccess: '@admin/perfiles/add/success',
   allSuccess: '@admin/perfiles/page/success',
   newPerfilSuccess: '@admin/perfiles/new/success',
   editPerfilSuccess: '@admin/perfiles/edit/success',
   findByIdSuccess: '@admin/perfiles/findById/success',
-  deleteModuloSuccess: '@admin/perfiles/delete/success'
+  deleteModuloSuccess: '@admin/perfiles/delete/success',
+  deletePerfilSuccess: '@admin/perfiles/perfil/delete/success'
 }
+
+export const deletePerfilAction = (payload) => ({
+  type: actionsType.deletePerfil,
+  payload
+})
 
 export const deleteModulo = (payload) => ({
   type: actionsType.deleteModulo,

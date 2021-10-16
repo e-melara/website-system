@@ -130,6 +130,31 @@ function* asyncEditPerfil(action) {
   }
 }
 
+function* asyncDeletePerfil(action) {
+  try {
+    const { payload } = action
+    yield put(changeLoading(true))
+    const resolve = yield DBConnection.instance.post(
+      '/admin/perfiles/delete-perfil',
+      { id: payload }
+    )
+    message.info('El perfil fue eliminado con exito')
+  } catch (error) {
+    const { status } = error
+    if (status === 406) {
+      message.error(
+        'Para poder eliminar el perfil no debe tener usuarios ni modulos registrados'
+      )
+    } else {
+      message.error(
+        'Lo sentimos tenemos un problema con el servidor en este momento'
+      )
+    }
+  } finally {
+    yield put(changeLoading(false))
+  }
+}
+
 // watchs
 function* watchPageLoading() {
   yield takeEvery(actionsType.all, asyncPageLoading)
@@ -155,12 +180,18 @@ function* watchEditPerfil() {
   yield takeEvery(actionsType.editPerfil, asyncEditPerfil)
 }
 
+function* watchDeletePerfil() {
+  yield takeEvery(actionsType.deletePerfil, asyncDeletePerfil)
+}
+
 const rootPerfiles = [
   fork(watchFindById),
   fork(watchEditPerfil),
   fork(watchPageLoading),
   fork(watchAddPerfilNew),
   fork(watchDeleteModulo),
+  fork(watchDeleteModulo),
+  fork(watchDeletePerfil),
   fork(watchAddPerfilModulo)
 ]
 
