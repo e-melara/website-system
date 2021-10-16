@@ -25,11 +25,12 @@ function* asyncLoadingPensum() {
       subjects: [],
       enrolled: {},
       pensum: [],
-      active: false
+      active: false,
+      work: true
     }
 
     yield put(changeLoading(true))
-    const { active, pensum, take, approved, enrolleds, reprobadas } =
+    const { active, pensum, take, approved, enrolleds, reprobadas, work } =
       yield DBConnection.instance.get('/asesoria/pensum')
 
     payload.active = active
@@ -47,6 +48,7 @@ function* asyncLoadingPensum() {
       reprobadas
     )
     payload.pensum = pensumArray
+    payload.work = work
     yield put(pensumAddAllSuccess({ ...payload }))
   } catch (error) {
     console.error(error)
@@ -130,8 +132,8 @@ function* asycnSolicitudAranceles() {
       exist,
       data: { aranceles, bancos }
     } = yield DBConnection.instance.post('/asesoria/aranceles')
-    let arregloData = [];
-    if(!exist) {
+    let arregloData = []
+    if (!exist) {
       arregloData = arancelesCuota(aranceles)
     }
 

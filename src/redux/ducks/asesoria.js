@@ -219,6 +219,7 @@ function reducers(state = initialState, { type, payload }) {
     case CHECKING_DATA:
       return { ...state, loading: true }
     case PENSUM_LOADING_ALL_SUCCESS:
+      console.log(payload);
       return {
         ...state,
         ...payload,
